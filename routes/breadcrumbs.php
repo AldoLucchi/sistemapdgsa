@@ -142,3 +142,21 @@ Breadcrumbs::for('admin.menuAsignado.show', function (BreadcrumbTrail $trail, Me
 });
 
 
+Breadcrumbs::for('testjardines.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Test JArdines', route('dashboard'));
+});
+// Home > Dashboard > testjardines > Proyectos15
+Breadcrumbs::for('Proyectos15.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('testjardines.index');
+    $trail->push('Proyectos', route('testjardines.Proyectos15.index'));
+});
+
+use App\Models\Proyectos15;
+
+Breadcrumbs::for('Proyectos15.show', function (BreadcrumbTrail $trail, Proyectos15 $Proyectos15) {
+    $trail->parent('testjardines.index');
+    $trail->push('Proyectos Detalle', route('testjardines.Proyectos15.show', $Proyectos15));
+});
+
+
