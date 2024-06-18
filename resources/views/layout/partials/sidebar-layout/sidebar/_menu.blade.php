@@ -47,15 +47,14 @@
 					</div>
 					<!--end:Menu item-->
 					@endforeach
-					
 				</div>
 				<!--end:Menu sub-->
 			</div>
+			
 			<!--end:Menu item-->
 
 			@endforeach
 			@endif
-
 		</div>
 		<!--end::Menu-->
 	</div>

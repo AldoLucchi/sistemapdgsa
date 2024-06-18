@@ -24,11 +24,12 @@
                 <div class="d-flex flex-center flex-wrap px-5">
                     <!--begin::Links-->
                     <div class="d-flex fw-semibold text-primary fs-base">
-                        <a href="#" class="px-5" target="_blank">Terms</a>
+                        <span href="javascript;" class="px-5" target="_blank" style="cursor:unset !important; color: #E55929 !important">Inicio</span>|
 
-                        <a href="#" class="px-5" target="_blank">Plans</a>
+                        <span href="javascript;" class="px-5" target="_blank" style="cursor:unset !important; color: #E55929 !important">Aula Virtual</span>|
 
-                        <a href="#" class="px-5" target="_blank">Contact Us</a>
+                        <span href="javascript;" class="px-5" target="_blank" style="cursor:unset !important; color: #E55929 !important">Soporte</span>
+                        <br>
                     </div>
                     <!--end::Links-->
                 </div>
@@ -42,12 +43,12 @@
                 <div class="d-flex flex-column flex-center py-7 py-lg-15 px-5 px-md-15 w-100">
                     <!--begin::Logo-->
                     <a href="{{ route('dashboard') }}" class="mb-12">
-                        <img alt="Logo" src="{{ image('logos/custom-1.png') }}" class="h-60px h-lg-75px"/>
+                        <img alt="Logo" src="{{ image('logos/custom-1.png') }}" class="h-45px h-lg-50px"/>
                     </a>
                     <!--end::Logo-->
 
                     <!--begin::Image-->
-                    <img class="d-none d-lg-block mx-auto w-275px w-md-50 w-xl-500px mb-10 mb-lg-20" src="{{ image('misc/auth-screens.png') }}" alt=""/>
+                    <img class="d-none d-lg-block mx-auto w-275px w-md-50 w-xl-500px mb-10 mb-lg-20" src="{{ image('misc/auth-screens.png') }}" style="width: 100% !important" alt=""/>
                     <!--end::Image-->
 
                     <!--begin::Title-->

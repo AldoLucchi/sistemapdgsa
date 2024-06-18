@@ -142,21 +142,21 @@ Breadcrumbs::for('admin.menuAsignado.show', function (BreadcrumbTrail $trail, Me
 });
 
 
-Breadcrumbs::for('testjardines.index', function (BreadcrumbTrail $trail) {
+Breadcrumbs::for('crm.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
-    $trail->push('Test JArdines', route('dashboard'));
+    $trail->push('CRM', route('dashboard'));
 });
-// Home > Dashboard > testjardines > Proyectos15
-Breadcrumbs::for('Proyectos15.index', function (BreadcrumbTrail $trail) {
-    $trail->parent('testjardines.index');
-    $trail->push('Proyectos', route('testjardines.Proyectos15.index'));
+// Home > Dashboard > crm > Contactos4
+Breadcrumbs::for('Contactos4.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('crm.index');
+    $trail->push('Contactos Registrados', route('crm.Contactos4.index'));
 });
 
-use App\Models\Proyectos15;
+use App\Models\Contactos4;
 
-Breadcrumbs::for('Proyectos15.show', function (BreadcrumbTrail $trail, Proyectos15 $Proyectos15) {
-    $trail->parent('testjardines.index');
-    $trail->push('Proyectos Detalle', route('testjardines.Proyectos15.show', $Proyectos15));
+Breadcrumbs::for('Contactos4.show', function (BreadcrumbTrail $trail, Contactos4 $Contactos4) {
+    $trail->parent('crm.index');
+    $trail->push('Contactos Registrados Detalle', route('crm.Contactos4.show', $Contactos4));
 });
 
 

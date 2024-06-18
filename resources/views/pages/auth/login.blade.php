@@ -6,14 +6,16 @@
         <!--begin::Heading-->
         <div class="text-center mb-11">
             <!--begin::Title-->
-            <h1 class="text-gray-900 fw-bolder mb-3">
-                Inicia Sesión
+            <h1 class="text-gray-900 fw-bolder mb-3" style="padding-right:3rem">
+                VTC
             </h1>
             <!--end::Title-->
 
             <!--begin::Subtitle-->
             <div class="text-gray-500 fw-semibold fs-6">
-                PDGSA
+                <span href="javascript;" class="px-5" target="_blank" style="cursor:unset !important;">Ventas</span>|
+                <span href="javascript;" class="px-5" target="_blank" style="cursor:unset !important;">Tramites</span>|
+                <span href="javascript;" class="px-5" target="_blank" style="cursor:unset !important;">Construcción</span>
             </div>
             <!--end::Subtitle--->
         </div>

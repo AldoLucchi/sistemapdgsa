@@ -2,8 +2,8 @@
 
 
 
-        use App\Http\Controllers\Crud\Proyectos15Controller;
-        Route::name('testjardines.')->group(function () {
-            Route::resource('/testjardines/Proyectos15', Proyectos15Controller::class);
+        use App\Http\Controllers\Crud\Contactos4Controller;
+        Route::name('crm.')->group(function () {
+            Route::resource('/crm/Contactos4', Contactos4Controller::class);
         }); 
         

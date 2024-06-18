@@ -7,6 +7,7 @@ use App\Services\MenuService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
@@ -36,6 +37,12 @@ class DashboardController extends Controller
         Session::put('menues', $menues);
 
         return view('pages/dashboards.index', $proyectos);
+    }
+
+    public function accordion()
+    {
+        $users = User::all();
+        return view('pages/dashboards.accordion', compact('users'));
     }
 
     public function dashboardProyecto($id)

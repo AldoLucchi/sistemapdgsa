@@ -25,11 +25,12 @@ Route::get('/google/callback', [GoogleLoginController::class, 'handleGoogleCallb
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/', [DashboardController::class, 'index']);
-
+    /* Rutas protegidas */
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/accordion', [DashboardController::class, 'accordion'])->name('accordion');
     
     Route::get('/proyecto/{id}', [DashboardController::class, 'dashboardProyecto'])->name('dashboardProyecto');
-
+    /* Grupo de rutas para la gestión de usuarios, roles y permisos: */
     Route::name('user-management.')->group(function () {
         Route::resource('/user-management/users', UserManagementController::class);
         Route::resource('/user-management/roles', RoleManagementController::class);
@@ -50,3 +51,5 @@ Route::get('/error', function () {
 Route::get('/auth/redirect/{provider}', [SocialiteController::class, 'redirect']);
 
 require __DIR__ . '/auth.php';
+
+
