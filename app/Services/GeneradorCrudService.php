@@ -458,8 +458,13 @@ class GeneradorCrudService
         $template_columns = $this->generateCrudReplace($template_columns, $data);
         $template_columns_all = '';
         foreach ($data['table_columns'] as $column) {
+            $datatable_column_field_name = $column['name'];
+            if(isset($column['alias'])){
+                $datatable_column_field_name = $column['alias'];   
+            }
+
             $template_columns_replace = $template_columns;
-            $template_columns_replace = str_replace('%FIELD%', $column['name'], $template_columns_replace);
+            $template_columns_replace = str_replace('%FIELD%', $datatable_column_field_name, $template_columns_replace);
             $template_columns_all .=  $template_columns_replace;
         }
 
