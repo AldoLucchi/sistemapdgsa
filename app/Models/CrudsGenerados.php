@@ -10,10 +10,10 @@ class CrudsGenerados extends Model
     use HasFactory;
 
     protected $table = "adm_cruds_generados";
-	
-	protected $fillable = [
-        'id','nombre','nombre_componente','alias_opcion','created_at','updated_at',
-    ];	
+
+    protected $fillable = [
+        'id', 'nombre', 'nombre_componente', 'alias_opcion', 'estatus', 'created_at', 'updated_at', 'alias_opcion_individual', 'campos',
+    ];
 
     /**
      * The primary key associated with the table.
@@ -22,7 +22,5 @@ class CrudsGenerados extends Model
      */
     protected $primaryKey = 'id';
 
-    public $timestamps = false; 
-
-		
+    public $timestamps = false;
 }

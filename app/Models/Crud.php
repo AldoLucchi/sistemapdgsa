@@ -26,6 +26,8 @@ class Crud extends Model
         'alias_opcion',
         'nombre_componente',
         'estatus',
+        'alias_opcion_individual',
+        'campos',
     ];
 
     //relations

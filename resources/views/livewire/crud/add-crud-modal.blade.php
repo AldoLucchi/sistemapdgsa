@@ -19,47 +19,62 @@
             <div class="modal-body px-5 my-7">
                 <!--begin::Form-->
                 <form id="kt_modal_add_crud_form" class="form" action="{{ route('admin.crud.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <input type="hidden" name="method" value="POST">
+                    @csrf
+                    <input type="hidden" name="method" value="POST">
 
                     <!--begin::Scroll-->
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_crud_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_crud_header" data-kt-scroll-wrappers="#kt_modal_add_crud_scroll" data-kt-scroll-offset="300px">
-                    <div class="row">
-                        <!--begin::Input group-->
-                        <div class="mb-7 col-12 col-lg-6">
-                            <!--begin::Label-->
-                            <label class="required fw-semibold fs-6 mb-5">Tabla</label>
-                            <!--end::Label-->
-                            @error('nombre')
-                            <span class="text-danger">{{ $message }}</span> 
-                            @enderror
-                            <!--begin::Crud-->
-                            <select name="nombre" id="nombre" class="form-select form-select-transparent" aria-label="Seleccione una opción" onchange="changeName()">
-                                <option value="">Elija una opción</option>
-                                @foreach($cruds_filtered as $crud_table)
-                                <option id="{{ $crud_table }}" value="{{ $crud_table }}">{{ $crud_table }}</option>
-                                @endforeach
-                            </select>
-                            <!--end::Crud-->
+                        <div class="row">
+                            <!--begin::Input group-->
+                            <div class="mb-7 col-12 col-lg-4">
+                                <!--begin::Label-->
+                                <label class="required fw-semibold fs-6 mb-5">Tabla</label>
+                                <!--end::Label-->
+                                @error('nombre')
+                                <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                                <!--begin::Crud-->
+                                <select name="nombre" id="nombre" class="form-select form-select-transparent" aria-label="Seleccione una opción" onchange="changeName()">
+                                    <option value="">Elija una opción</option>
+                                    @foreach($cruds_filtered as $crud_table)
+                                    <option id="{{ $crud_table }}" value="{{ $crud_table }}">{{ $crud_table }}</option>
+                                    @endforeach
+                                </select>
+                                <!--end::Crud-->
+                            </div>
+                            <!--end::Input group-->
+
+
+                            <!--begin::Input group-->
+                            <div class="mb-7 col-12 col-lg-4">
+                                <!--begin::Label-->
+                                <label class="required fw-semibold fs-6 mb-5">Alias opción</label>
+                                <!--end::Label-->
+                                @error('alias_opcion')
+                                <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                                <!--begin::Crud-->
+                                <input type="text" class="form-control" name="alias_opcion" id="alias_opcion" placeholder="" />
+                                <!--end::Crud-->
+                            </div>
+                            <!--end::Input group-->
+
+                            <!--begin::Input group-->
+                            <div class="mb-7 col-12 col-lg-4">
+                                <!--begin::Label-->
+                                <label class="required fw-semibold fs-6 mb-5">Alias individual</label>
+                                <!--end::Label-->
+                                @error('alias_opcion_individual')
+                                <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                                <!--begin::Crud-->
+                                <input type="text" class="form-control" name="alias_opcion_individual" id="alias_opcion_individual" placeholder="" />
+                                <!--end::Crud-->
+                            </div>
+                            <!--end::Input group-->
+
+
                         </div>
-                        <!--end::Input group-->
-
-
-                         <!--begin::Input group-->
-                         <div class="mb-7 col-12 col-lg-6">
-                            <!--begin::Label-->
-                            <label class="required fw-semibold fs-6 mb-5">Alias opción</label>
-                            <!--end::Label-->
-                            @error('alias_opcion')
-                            <span class="text-danger">{{ $message }}</span> 
-                            @enderror
-                            <!--begin::Crud-->
-                            <input type="text" class="form-control" name="alias_opcion" id="alias_opcion" placeholder=""/>
-                            <!--end::Crud-->
-                        </div>
-                        <!--end::Input group-->
-
-                    </div>
                     </div>
                     <!--end::Scroll-->
 
@@ -67,10 +82,11 @@
                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_crud_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_crud_header" data-kt-scroll-wrappers="#kt_modal_add_crud_scroll" data-kt-scroll-offset="300px">
 
                         @foreach($cruds_filtered_columns as $key => $crud_table)
-                        <div class=".crud-table d-none table-responsive text-center" id="crud-table-{{ $key }}" >
+                        <div class=".crud-table d-none table-responsive text-center" id="crud-table-{{ $key }}">
                             <h3 class="text-center mb-3"><b>Tabla: {{ $key }}</b></h3>
                             <p>Nota: si ningún campo esta marcado para incluir, automáticamente se incluyen todos</p>
-                            <table class="table table-bordered table-striped table-hover g-1 text-center">
+                            <fieldset id="crud-fieldset-{{ $key }}" disabled>
+                            <table class="table table-bordered table-striped table-hover g-1 text-center"  >
                                 <thead class="text-uppercase">
                                     <tr>
                                         <td><b>Field</b></td>
@@ -79,7 +95,9 @@
                                         <td><b>Key</b></td>
                                         <td><b>Default</b></td>
                                         <td><b>Extra</b></td>
-                                        <td><b>Incluir campo</b></td>
+                                        <td><b>Incluir <br>campo</b></td>
+                                        <td><b>Incluir <br>list</b></td>
+                                        <td><b>Alias</b></td>
                                         <td><b>Seleccionar FK</b></td>
                                     </tr>
                                 </thead>
@@ -96,7 +114,13 @@
                                             <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field }}" id="{{ $key.'_'.$column->Field }}">
                                         </td>
                                         <td>
-                                            <select name="{{ $key.'_'.$column->Field.'_select' }}" id="{{ $key.'_'.$column->Field.'_select' }}" class="form-select form-select-transparent" aria-label="Seleccione una opción" >
+                                            <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field.'_list' }}" id="{{ $key.'_list_'.$column->Field }}">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_alias' }}" id="{{ $key.'_alias_'.$column->Field }}" >
+                                        </td>
+                                        <td>
+                                            <select name="{{ $key.'_'.$column->Field.'_select' }}" id="{{ $key.'_'.$column->Field.'_select' }}" class="form-select form-select-transparent" aria-label="Seleccione una opción">
                                                 <option></option>
                                                 @foreach($cruds_availables as $crud_table)
                                                 <option id="{{ $crud_table }}">{{ $crud_table }}</option>
@@ -107,6 +131,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            </fieldset>
                         </div>
                         @endforeach
 
@@ -137,10 +162,12 @@
 
 <script>
     function changeName() {
-        replaceClassInContainer(".crud-table", "d-none");        
+        replaceClassInContainer(".crud-table", "d-none");
         var table_selected = document.getElementById("nombre").value;
-        var element = "crud-table-"+table_selected;
-        document.getElementById(element ).classList.remove("d-none");
+        var element = "crud-table-" + table_selected;
+        var element_fieldset = "crud-fieldset-" + table_selected;
+        document.getElementById(element).classList.remove("d-none");
+        document.getElementById(element_fieldset).disabled = false;
     }
 
     function replaceClassInContainer(selector, content) {

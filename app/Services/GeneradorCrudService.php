@@ -49,6 +49,8 @@ class GeneradorCrudService
             foreach ($table_crud_columns as $colum) {
                 $column_request = $table_crud . '_' . $colum->Field;
                 $column_select_request = $table_crud . '_' . $colum->Field . '_select';
+                $column_select_alias = $table_crud . '_' . $colum->Field . '_alias';
+                $column_select_list = $table_crud . '_' . $colum->Field . '_list';
 
                 $type_html = 'text'; //varchar text
 
@@ -66,10 +68,23 @@ class GeneradorCrudService
                     $type_html = 'checkbox';
                 }
 
-                $table_column_detail = ['name' => $colum->Field, 'type' => $colum->Type, 'type_html' => $type_html];
+                $table_column_detail = [
+                    'name' => $colum->Field,
+                    'type' => $colum->Type,
+                    'type_html' => $type_html
+                ];
+
+                if (isset($request[$column_select_alias]) && !empty($request[$column_select_alias]) &&  $column_select_alias && $column_select_alias != 'NULL' && $column_select_alias != NULL) {
+                    $table_column_detail['alias'] = $request[$column_select_alias];
+                }
+
                 if (isset($request[$column_select_request]) && !empty($request[$column_select_request]) &&  $column_select_request && $column_select_request != 'NULL' && $column_select_request != NULL) {
                     $table_column_detail['select'] = $request[$column_select_request];
                     $tables_fk[$colum->Field] = $request[$column_select_request];
+                }
+
+                if (isset($request[$column_select_list]) && !empty($request[$column_select_list]) &&  $column_select_list && $column_select_list != 'NULL' && $column_select_list != NULL) {
+                    $table_column_detail['list'] = $request[$column_select_list];
                 }
 
                 //selected
@@ -194,7 +209,7 @@ class GeneradorCrudService
     public function generateRutaBreadcrumb($crudMenu)
     {
         $data = [];
-        if($crudMenu->menu && $crudMenu->crud){
+        if ($crudMenu->menu && $crudMenu->crud) {
             $data = [
                 'menu' => ['nombre' => $crudMenu->menu->menu, 'ruta' => $crudMenu->menu->ruta],
                 'item' => ['nombre' => $crudMenu->crud->nombre_componente, 'alias' => $crudMenu->crud->alias_opcion],
@@ -203,14 +218,14 @@ class GeneradorCrudService
             $this->generateRoute($data);
             $this->generateBreadcrumb($data);
             $this->replaceActions($data);
-    
+
             //dd($table_columns);
-    
+
             $this->limpiarCache();
         }
     }
 
-    
+
 
     public function generateCrudModelFK($data)
     {
@@ -243,19 +258,18 @@ class GeneradorCrudService
 
         $relations = '';
         foreach ($data['tables_fk'] as $key => $table) {
-            $relation ='';
+            $relation = '';
 
-            if($table['table_name_fk'] == 'Users'){
+            if ($table['table_name_fk'] == 'Users') {
                 $relation = '
                 public function ' . $table['table_name_fk'] . '() { return $this->hasMany(' . $table['model_name'] . '::class,"id","' . $key . '"); }
                     ';
-            }
-            else{
+            } else {
                 $relation = '
                 public function ' . $table['table_name_fk'] . '() { return $this->hasMany(' . $table['model_name'] . '::class,"' . $key . '","' . $key . '"); }
                     ';
             }
-            
+
             $relations .=  $relation;
         }
 
@@ -332,7 +346,11 @@ class GeneradorCrudService
         $fields_all = '';
         foreach ($data['table_columns'] as $column) {
             $template = $template_fields;
-            $template = str_replace('%FIELD%', $column['name'], $template);
+            $show_column_name = $column['name'];
+            if(isset($column['alias'])){
+                $show_column_name =$column['alias'];
+            }
+            $template = str_replace('%FIELD%', $show_column_name, $template);
 
             $value = '';
             if (isset($column['select'])) {
@@ -406,9 +424,13 @@ class GeneradorCrudService
         Log::info('generateCrudDatatable---------');
         //Log::info($data['table_columns']);
         foreach ($data['table_columns'] as $column) {
+            $datatable_column_name = $column['name'];
+            if(isset($column['alias'])){
+                $datatable_column_name = $column['alias'];   
+            }
             if (isset($column['select'])) {
                 $template_fields_replace = $template_fields;
-                $template_fields_replace = str_replace('%FIELD%', $column['name'], $template_fields_replace);
+                $template_fields_replace = str_replace('%FIELD%', $datatable_column_name, $template_fields_replace);
                 $model_name = $data['tables_fk'][$column['name']]['table_name_fk'];
                 $column_name = $data['tables_fk'][$column['name']]['table_column_fk_name'];
                 $return = '$%OBJETO_VARIABLE%->' . $model_name . '->first()?->' . $column_name; //ucwords($user->roles->first()?->name);
@@ -417,7 +439,7 @@ class GeneradorCrudService
                 $template_fields_all .=  $template_fields_replace;
             } else {
                 $template_fields_replace = $template_fields;
-                $template_fields_replace = str_replace('%FIELD%', $column['name'], $template_fields_replace);
+                $template_fields_replace = str_replace('%FIELD%', $datatable_column_name, $template_fields_replace);
                 if ($column['type_html'] == 'checkbox') {
                     $return = '($%OBJETO_VARIABLE%->' . $column['name'] . '?"ON":"OFF")';
                 } else if ($column['type_html'] == 'password') {
@@ -476,17 +498,16 @@ class GeneradorCrudService
             $column_name = $column['name'];
             $column_type_html = $column['type_html'];
 
-            if($column['type_html'] == 'checkbox'){
+            if ($column['type_html'] == 'checkbox') {
                 $columnConst = '
                 public bool $' . $column['name'] . ';
                 ';
-            }
-            else{
+            } else {
                 $columnConst = '
                 public $' . $column['name'] . ';
                 ';
             }
-            
+
             $columns .= $columnConst;
 
             $data1 = ' $data [ "';
@@ -572,11 +593,15 @@ class GeneradorCrudService
         $template_modal_fields = '<div class="row">';
         foreach ($data['table_columns'] as $column) {
             $column_name = $column['name'];
+            $livewire_column_name = $column['name'];
+            if(isset( $column['alias'])){
+                $livewire_column_name = $column['alias'];
+            }
             $column_type_html = $column['type_html'];
 
             if ($column_name != $data['table_column_id']) {
                 $template = $template_fields;
-                $template = str_replace('%FIELD%', $column_name, $template);
+                $template = str_replace('%FIELD%', $livewire_column_name, $template);
 
                 $class = 'form-control form-control-solid mb-3 mb-lg-0';
 
@@ -633,13 +658,14 @@ class GeneradorCrudService
         }
     }
 
-    public function replaceActions($data){
+    public function replaceActions($data)
+    {
         $menu_ruta = $data['menu']['ruta'];
         $item_nombre = $data['item']['nombre'];
 
         $content = file_get_contents('../resources/views/cruds/' . $item_nombre . '/columns/_actions.blade.php');
 
-        
+
         $file = fopen("../resources/views/cruds/" . $item_nombre . "/columns/_actions.blade.php", "w") or die("Unable to open file - view actions.blade.php");
         $content = str_replace('%MENU_RUTA%', $menu_ruta, $content);
 
