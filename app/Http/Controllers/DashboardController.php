@@ -26,15 +26,21 @@ class DashboardController extends Controller
         $user = Auth::user();
 
         $proyectos = [];
-        
-        if ($user && $user->cliente && $user->cliente->proyectos) {
-            $proyectos = $user->cliente->proyectos;
+
+        if ($user) {
+            Session::put('idcliente', $user->idcliente);
+            Session::put('idrol', $user->idrol);
+
+            if ($user->cliente && $user->cliente->proyectos) {
+                $proyectos = $user->cliente->proyectos;
+            }
         }
 
         $menues = $this->menuService->getMenuDashboard();
 
         Session::put('usuario_proyectos', $proyectos);
         Session::put('menues', $menues);
+        Session::put('proyecto_seleccionado', null);
 
         return view('pages/dashboards.index', $proyectos);
     }
@@ -66,6 +72,4 @@ class DashboardController extends Controller
 
         return view('pages/dashboards.dashboard-proyecto', $data);
     }
-
-    
 }

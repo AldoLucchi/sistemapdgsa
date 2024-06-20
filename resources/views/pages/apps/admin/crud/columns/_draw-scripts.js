@@ -1,7 +1,14 @@
 // Initialize KTMenu
 KTMenu.init();
 
-
+// Add click event listener to delete buttons
+document.querySelectorAll('[data-kt-action="delete_row"]').forEach(function (element) {
+    element.addEventListener('click', function () {
+        if (confirm('Are you sure you want to remove?')) {
+            Livewire.dispatch('delete_crud', [this.getAttribute('data-kt-crud-id')]);
+        }
+    });
+});
 
 // Add click event listener to update buttons
 document.querySelectorAll('[data-kt-action="update_row"]').forEach(function (element) {

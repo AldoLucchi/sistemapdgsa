@@ -101,7 +101,17 @@ class AddOpciones98Modal extends Component
         }
 
         // Delete the record with the specified ID
-        Opciones98::destroy($id);
+        //Opciones98::destroy($id);
+
+        $opcion = Opciones98::find($id);
+
+        if($opcion->OpcionesMenues){
+            foreach($opcion->OpcionesMenues as $OpcionMenu){
+                $OpcionMenu->delete();
+            }
+        }
+
+        $opcion->delete();
 
         // Emit a success event with a message
         $this->dispatch('success', 'Eliminado correctamente');

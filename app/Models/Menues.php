@@ -24,7 +24,11 @@ class Menues extends Model
 
     public $timestamps = false; 
 
-    public function opciones() { return $this->belongsToMany(Opciones::class,"adm_opciones_menues", "idmenu","idopcion")->wherePivot('estatus', 1)->orderByPivot('posicion', 'asc'); }
-    public function cruds() { return $this->belongsToMany(CrudsGenerados::class,"adm_cruds_generados_menues", "idmenu","idcrudgen")->wherePivot('estatus', 1)->orderByPivot('posicion', 'asc'); }
+    public function opciones() { return $this->belongsToMany(Opciones::class,"adm_opciones_menues", "idmenu","idopcion")->wherePivot('estatus', 1)->withPivot('posicion')->orderByPivot('posicion', 'asc'); }
+    public function cruds() { return $this->belongsToMany(CrudsGenerados::class,"adm_cruds_generados_menues", "idmenu","idcrudgen")->wherePivot('estatus', 1)->withPivot('posicion')->orderByPivot('posicion', 'asc'); }
+
+    public function opciones_menues() { return $this->hasMany(OpcionesMenues99::class,"idmenu","idmenu"); }
+    public function cruds_menues() { return $this->hasMany(CrudsGeneradosMenues100::class,"idmenu","idmenu"); }
+
 		
 }

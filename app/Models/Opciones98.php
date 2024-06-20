@@ -10,20 +10,24 @@ class Opciones98 extends Model
     use HasFactory;
 
     protected $table = "adm_opciones";
-	
-	protected $fillable = [
-        'idopcion','opcion','ruta',
-    ];	
 
-        /**
+    protected $fillable = [
+        'idopcion', 'opcion', 'ruta',
+    ];
+
+    /**
      * The primary key associated with the table.
      *
      * @var string
      */
     protected $primaryKey = 'idopcion';
 
-    public $timestamps = false; 
+    public $timestamps = false;
 
-	//relations
-    
+    //relations
+
+    public function OpcionesMenues()
+    {
+        return $this->hasMany(OpcionesMenues99::class, "idopcion", "idopcion");
+    }
 }

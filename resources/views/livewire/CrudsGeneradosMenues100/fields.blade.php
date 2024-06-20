@@ -8,7 +8,7 @@
                     <select wire:model="idcrudgen" name="idcrudgen" class="form-select mb-3 mb-lg-0" placeholder="idcrudgen" />
                     <option value="">-</option>
                     @foreach($CrudsGenerados as $item)
-                    <option value="{{ $item->id }}">{{ $item->nombre}}</option>
+                    <option value="{{ $item->id }}">{{ $item->alias_opcion }} | {{ $item->nombre_componente }} ({{ $item->nombre}})</option>
                     @endforeach
                     </select>
                     

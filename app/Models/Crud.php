@@ -27,4 +27,11 @@ class Crud extends Model
         'nombre_componente',
         'estatus',
     ];
+
+    //relations
+
+    public function CrudGeneradosMenues()
+    {
+        return $this->hasMany(CrudsGeneradosMenues100::class, "idcrudgen", "id");
+    }
 }

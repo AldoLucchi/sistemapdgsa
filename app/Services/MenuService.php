@@ -44,6 +44,7 @@ class MenuService
                                             'nombre' => $opcion->opcion,
                                             'ruta' => $opcion->ruta,
                                             'ruta_laravel' => $ruta_laravel,
+                                            'posicion' => $opcion->pivot->posicion,
                                             'tipo' => 'opcion',
                                         ];
                                     }
@@ -54,10 +55,13 @@ class MenuService
                                         $items[] = [
                                             'nombre' => $crud->alias_opcion,
                                             'ruta' => $crud->nombre_componente,
+                                            'posicion' => $crud->pivot->posicion,
                                             'tipo' => 'crud',
                                         ];
                                     }
                                 }
+
+                                usort($items, fn($a, $b) => $a['posicion'] <=> $b['posicion']);
 
                                 $menues[] = [
                                     'nombre' => $menu_nombre,

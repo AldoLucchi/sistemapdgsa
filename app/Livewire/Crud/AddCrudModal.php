@@ -4,6 +4,7 @@ namespace App\Livewire\Crud;
 
 use App\Models\Crud;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
@@ -25,6 +26,7 @@ class AddCrudModal extends Component
     ];
 
     protected $listeners = [
+        'delete_crud' => 'deleteCrud',
         'new_crud' => 'hydrate',
     ];
 
@@ -91,6 +93,31 @@ class AddCrudModal extends Component
 
         // Reset the form fields after successful submission
         $this->reset();
+    }
+
+    public function deleteCrud($id)
+    {
+        // Prevent deletion 
+        /*
+        if ($id == Auth::id()) {
+            $this->dispatch('error', 'No se puede eliminar');
+            return;
+        }
+            */
+
+        // Delete the record with the specified ID
+        $crud = Crud::find($id);
+
+        if($crud->CrudGeneradosMenues){
+            foreach($crud->CrudGeneradosMenues as $CrudMenu){
+                $CrudMenu->delete();
+            }
+        }
+
+        $crud->delete();
+
+        // Emit a success event with a message
+        $this->dispatch('success', 'Eliminado correctamente');
     }
 
     public function hydrate()

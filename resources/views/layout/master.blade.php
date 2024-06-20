@@ -39,6 +39,12 @@
     <!--end::Custom Stylesheets-->
 
     @livewireStyles
+
+    <style>
+        .breadcrumb{
+            display:none;
+        }
+    </style>
 </head>
 <!--end::Head-->
 

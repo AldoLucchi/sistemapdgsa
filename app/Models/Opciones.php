@@ -10,10 +10,10 @@ class Opciones extends Model
     use HasFactory;
 
     protected $table = "adm_opciones";
-	
-	protected $fillable = [
-        'idopcion','opcion','ruta','created_at','updated_at',
-    ];	
+
+    protected $fillable = [
+        'idopcion', 'opcion', 'ruta', 'created_at', 'updated_at',
+    ];
 
     /**
      * The primary key associated with the table.
@@ -22,7 +22,12 @@ class Opciones extends Model
      */
     protected $primaryKey = 'idopcion';
 
-    public $timestamps = false; 
+    public $timestamps = false;
 
-		
+    //relations
+
+    public function OpcionesMenues()
+    {
+        return $this->hasMany(OpcionesMenues99::class, "idopcion", "idopcion");
+    }
 }

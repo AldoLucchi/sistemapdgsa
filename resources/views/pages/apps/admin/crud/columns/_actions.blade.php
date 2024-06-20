@@ -14,7 +14,14 @@
     </div>
     <!--end::Menu item-->
 
+    <!--begin::Menu item-->
+    <div class="menu-item px-3">
+        <a href="#" class="menu-link px-3" data-kt-crud-id="{{ $crud->id }}" data-kt-action="delete_row">
+            Eliminar
+        </a>
+    </div>
+    <!--end::Menu item-->
+
 
 </div>
 <!--end::Menu-->
-
