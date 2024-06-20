@@ -421,7 +421,7 @@ class GeneradorCrudService
         $template_fields = $this->generateCrudReplace($template_fields, $data);
         $template_fields_all = '';
         $incluir_list = false;
-        $template_fields_list = [];
+        $template_fields_list = '';
 
         Log::info('generateCrudDatatable---------');
         //Log::info($data['table_columns']);
@@ -469,7 +469,7 @@ class GeneradorCrudService
         $template_columns = $this->generateCrudReplace($template_columns, $data);
         $template_columns_all = '';
         $incluir_list = false;
-        $template_columns_list = [];
+        $template_columns_list = '';
 
         foreach ($data['table_columns'] as $column) {
             $datatable_column_field_name = $column['name'];
