@@ -84,7 +84,7 @@ class GeneradorCrudService
                 }
 
                 if (isset($request[$column_select_list]) && !empty($request[$column_select_list]) &&  $column_select_list && $column_select_list != 'NULL' && $column_select_list != NULL) {
-                    $table_column_detail['list'] = $request[$column_select_list];
+                    $table_column_detail['incluir_list'] = $request[$column_select_list];
                 }
 
                 //selected
@@ -347,8 +347,8 @@ class GeneradorCrudService
         foreach ($data['table_columns'] as $column) {
             $template = $template_fields;
             $show_column_name = $column['name'];
-            if(isset($column['alias'])){
-                $show_column_name =$column['alias'];
+            if (isset($column['alias'])) {
+                $show_column_name = $column['alias'];
             }
             $template = str_replace('%FIELD%', $show_column_name, $template);
 
@@ -420,13 +420,15 @@ class GeneradorCrudService
         $template_fields = file_get_contents('../app/Crud/template_datatable_datatable.php');
         $template_fields = $this->generateCrudReplace($template_fields, $data);
         $template_fields_all = '';
+        $incluir_list = false;
+        $template_fields_list = [];
 
         Log::info('generateCrudDatatable---------');
         //Log::info($data['table_columns']);
         foreach ($data['table_columns'] as $column) {
             $datatable_column_name = $column['name'];
-            if(isset($column['alias'])){
-                $datatable_column_name = $column['alias'];   
+            if (isset($column['alias'])) {
+                $datatable_column_name = $column['alias'];
             }
             if (isset($column['select'])) {
                 $template_fields_replace = $template_fields;
@@ -434,9 +436,7 @@ class GeneradorCrudService
                 $model_name = $data['tables_fk'][$column['name']]['table_name_fk'];
                 $column_name = $data['tables_fk'][$column['name']]['table_column_fk_name'];
                 $return = '$%OBJETO_VARIABLE%->' . $model_name . '->first()?->' . $column_name; //ucwords($user->roles->first()?->name);
-                $template_fields_replace = str_replace('%DATATABLE_RETURN%', $return, $template_fields_replace);
-                $template_fields_replace = $this->generateCrudReplace($template_fields_replace, $data);
-                $template_fields_all .=  $template_fields_replace;
+
             } else {
                 $template_fields_replace = $template_fields;
                 $template_fields_replace = str_replace('%FIELD%', $datatable_column_name, $template_fields_replace);
@@ -447,25 +447,48 @@ class GeneradorCrudService
                 } else {
                     $return = '$%OBJETO_VARIABLE%->' . $column['name'];
                 }
-                $template_fields_replace = str_replace('%DATATABLE_RETURN%', $return, $template_fields_replace);
-                $template_fields_replace = $this->generateCrudReplace($template_fields_replace, $data);
-                $template_fields_all .=  $template_fields_replace;
             }
+           
+            $template_fields_replace = str_replace('%DATATABLE_RETURN%', $return, $template_fields_replace);
+            $template_fields_replace = $this->generateCrudReplace($template_fields_replace, $data);
+            $template_fields_all .=  $template_fields_replace;
+
+            if (isset($column['incluir_list'])) {
+                $incluir_list = true;
+                $template_fields_list .=  $template_fields_replace;
+            }
+
+        }
+
+        if ($incluir_list) {
+            $template_fields_all = $template_fields_list;
         }
 
         //columns
         $template_columns = file_get_contents('../app/Crud/template_datatable_getcolumns.php');
         $template_columns = $this->generateCrudReplace($template_columns, $data);
         $template_columns_all = '';
+        $incluir_list = false;
+        $template_columns_list = [];
+
         foreach ($data['table_columns'] as $column) {
             $datatable_column_field_name = $column['name'];
-            if(isset($column['alias'])){
-                $datatable_column_field_name = $column['alias'];   
+            if (isset($column['alias'])) {
+                $datatable_column_field_name = $column['alias'];
             }
 
             $template_columns_replace = $template_columns;
             $template_columns_replace = str_replace('%FIELD%', $datatable_column_field_name, $template_columns_replace);
             $template_columns_all .=  $template_columns_replace;
+
+            if (isset($column['incluir_list'])) {
+                $incluir_list = true;
+                $template_columns_list .=  $template_columns_replace;
+            }
+        }
+
+        if ($incluir_list) {
+            $template_columns_all = $template_columns_list;
         }
 
         $template = file_get_contents('../app/Crud/template_datatable.php');
@@ -599,7 +622,7 @@ class GeneradorCrudService
         foreach ($data['table_columns'] as $column) {
             $column_name = $column['name'];
             $livewire_column_name = $column['name'];
-            if(isset( $column['alias'])){
+            if (isset($column['alias'])) {
                 $livewire_column_name = $column['alias'];
             }
             $column_type_html = $column['type_html'];
