@@ -44,11 +44,13 @@
     <!--begin::Card body-->
     <div class="card-body py-4">
         <!--begin::Table-->
-        <div class="row">
+        
         <fieldset id="show-fieldset-%OBJETO_LABEL_INDIVIDUAL%" disabled>
+        <div class="row">
         @include('cruds.%OBJETO_VIEW%.fields')
-        </fieldset>
         </div>
+        </fieldset>
+        
         <!--end::Table-->
     </div>
     <!--end::Card body-->

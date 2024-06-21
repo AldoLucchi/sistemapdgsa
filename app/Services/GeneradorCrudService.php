@@ -377,11 +377,11 @@ class GeneradorCrudService
             if (isset($column['select'])) {
                 $model_name = $data['tables_fk'][$column['name']]['table_name_fk'];
                 $column_name = $data['tables_fk'][$column['name']]['table_column_fk_name'];
-                $value = '$' . $data['table_name'] . '->' . $model_name . '->first()?->' . $column_name;
+                $value = '(isset($' . $data['table_name'] .') ? $' . $data['table_name'] . '->' . $model_name . '->first()?->' . $column_name.':"")';
             } else {
                 $value = '$' . $data['table_name'] . '->' . $column['name'];
                 if ($column['type_html'] == 'checkbox') {
-                    $value = '($' . $data['table_name'] . '->' . $column['name'] . '?"ON":"OFF")';
+                    $value = '(isset($' . $data['table_name'] .') && $' . $data['table_name'] . '->' . $column['name'] . '?"ON":"OFF")';
                 }
                 if ($column['type_html'] == 'password') {
                     $value = '"---"';
