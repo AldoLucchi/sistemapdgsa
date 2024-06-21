@@ -221,6 +221,7 @@ class GeneradorCrudService
             $this->generateRoute($data);
             $this->generateBreadcrumb($data);
             $this->replaceActions($data);
+            $this->replaceviews($data);
 
             //dd($table_columns);
 
@@ -731,6 +732,30 @@ class GeneradorCrudService
 
         fwrite($file, $content);
         fclose($file);
+    }
+
+    public function replaceviews($data)
+    {
+        $menu_ruta = $data['menu']['ruta'];
+        $item_nombre = $data['item']['nombre'];
+
+        //create
+        $content = file_get_contents('../resources/views/cruds/' . $item_nombre . '/create.blade.php');
+
+        $file = fopen("../resources/views/cruds/" . $item_nombre . "/create.blade.php", "w") or die("Unable to open file - view create.blade.php");
+        $content = str_replace('%MENU_RUTA%', $menu_ruta, $content);
+
+        fwrite($file, $content);
+        fclose($file);
+
+        //edit
+        $content = file_get_contents('../resources/views/cruds/' . $item_nombre . '/edit.blade.php');
+
+        $file = fopen("../resources/views/cruds/" . $item_nombre . "/edit.blade.php", "w") or die("Unable to open file - view edit.blade.php");
+        $content = str_replace('%MENU_RUTA%', $menu_ruta, $content);
+
+        fwrite($file, $content);
+        fclose($file);        
     }
 
 

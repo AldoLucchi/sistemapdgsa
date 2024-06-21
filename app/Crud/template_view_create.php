@@ -3,10 +3,6 @@
 %OBJETO_LABEL%
 @endsection
 
-@section('breadcrumbs')
-{{ Breadcrumbs::render('%OBJETO_ROUTE%.show', $%OBJETO_VARIABLE%) }}
-@endsection
-
 <div class="card">
     <!--begin::Card header-->
     <div class="card-header border-0 pt-6">
@@ -40,8 +36,8 @@
     <!--begin::Card body-->
     <div class="card-body py-4">
         <!--begin::Table-->
-        <form id="add_%OBJETO_ROUTE%_form" name="add_%OBJETO_ROUTE%_form" class="form" action="{{ route('%OBJETO_ROUTE%.store') }}" method="POST" enctype="multipart/form-data">
-
+        <form id="add_%OBJETO_ROUTE%_form" name="add_%OBJETO_ROUTE%_form" class="form" action="{{ route('%MENU_RUTA%.%OBJETO_ROUTE%.creation') }}" method="POST" enctype="multipart/form-data">
+        @csrf
         <div class="row">
         @include('cruds.%OBJETO_VIEW%.fields')
         </div>

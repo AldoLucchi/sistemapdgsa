@@ -34,7 +34,7 @@ class %OBJETO_CONTROLLER% extends Controller
     {
       $data = [];
       
-      return view('cruds/%OBJETO_VIEW%.edit', $data);
+      return view('cruds/%OBJETO_VIEW%.create', $data);
     }
 
     /**
