@@ -11,18 +11,19 @@ use Illuminate\Support\Facades\Log;
 class GeneradorCrudService
 {
 
-    public function getTableName($table_name){
+    public function getTableName($table_name)
+    {
         $table_name_substr = substr($table_name, 4);
-            if ($table_name == 'users') {
-                $table_name_substr = $table_name;
-            }
-            $table_name_array = explode("_", $table_name_substr);
-            $table_name_format = '';
-            foreach ($table_name_array as $tring) {
-                $table_name_format .= ucfirst($tring);
-            }
+        if ($table_name == 'users') {
+            $table_name_substr = $table_name;
+        }
+        $table_name_array = explode("_", $table_name_substr);
+        $table_name_format = '';
+        foreach ($table_name_array as $tring) {
+            $table_name_format .= ucfirst($tring);
+        }
 
-            return  $table_name_format;
+        return  $table_name_format;
     }
 
     /**
@@ -33,7 +34,7 @@ class GeneradorCrudService
         Log::info('GeneradorCrudServices - store');
         Log::info($request);
 
-        try {   
+        try {
             $table_name_label = $this->getTableName($request['nombre']);
             $table_name_format = $table_name_label . $request['crud_id'];
 
@@ -58,13 +59,23 @@ class GeneradorCrudService
 
                 $type_html = 'text'; //varchar text
 
+                $fields_password_env = env('FIELDS_PASSWORD', 'password,clave');
+                $fields_password = explode(',', $fields_password_env);
+
+                $fields_media_env = env('FIELDS_MEDIA', 'imagen,logo,avatar,archivo');
+                $fields_media = explode(',', $fields_media_env);
+
                 if (str_contains($colum->Type, 'tinyint')) {
                     $type_html = 'checkbox';
-                } else if (str_contains($colum->Type, 'varchar') && (strtolower($colum->Field) == 'password')) {
+                } else if (str_contains($colum->Type, 'varchar') &&   in_array(strtolower($colum->Field), $fields_password)) {
                     $type_html = 'password';
+                } else if (str_contains($colum->Type, 'varchar') &&   in_array(strtolower($colum->Field), $fields_media)) {
+                    $type_html = 'file';
                 } else if (str_contains($colum->Type, 'varchar')) {
                     $type_html = 'text';
                 } else if (str_contains($colum->Type, 'timestamp')) {
+                    $type_html = 'datetime-local';
+                } else if (str_contains($colum->Type, 'date')) {
                     $type_html = 'datetime-local';
                 } else if (str_contains($colum->Type, 'int')) {
                     $type_html = 'number';
@@ -351,7 +362,7 @@ class GeneradorCrudService
         $template_create = $this->generateCrudReplace($template_create, $data);
 
         fwrite($file_create, $template_create);
-        fclose($file_create);        
+        fclose($file_create);
 
         //edit-------------------
         $file_edit = fopen("../resources/views/cruds/" . $data['table_name'] . "/edit.blade.php", "w") or die("Unable to open file - view edit.blade.php");
@@ -359,36 +370,58 @@ class GeneradorCrudService
         $template_edit = $this->generateCrudReplace($template_edit, $data);
 
         fwrite($file_edit, $template_edit);
-        fclose($file_edit);          
+        fclose($file_edit);
 
-        //show field------------------
+        // field------------------
         $file_fields = fopen("../resources/views/cruds/" . $data['table_name'] . "/fields.blade.php", "w") or die("Unable to open file - view fields.blade.php");
         $template_fields = file_get_contents('../app/Crud/template_view_show_field.php');
+        $template_fields_select = file_get_contents('../app/Crud/template_view_show_field_select.php');
+
         $fields_all = '';
         foreach ($data['table_columns'] as $column) {
-            $template = $template_fields;
+            $template = '';
+
             $show_column_name = $column['name'];
+            $show_column_name_alias = $column['name'];
+
             if (isset($column['alias'])) {
-                $show_column_name = $column['alias'];
+                $show_column_name_alias = $column['alias'];
             }
-            $template = str_replace('%FIELD%', $show_column_name, $template);
 
             $value = '';
+
             if (isset($column['select'])) {
+                $template = $template_fields_select;
                 $model_name = $data['tables_fk'][$column['name']]['table_name_fk'];
                 $column_name = $data['tables_fk'][$column['name']]['table_column_fk_name'];
-                $value = '(isset($' . $data['table_name'] .') ? $' . $data['table_name'] . '->' . $model_name . '->first()?->' . $column_name.':"")';
+                $column_id = $data['tables_fk'][$column['name']]['table_column_fk_id'];
+
+                //$value = '(isset($' . $data['table_name'] . ') ? $' . $data['table_name'] . '->' . $model_name . '->first()?->' . $column_name . ':"")';
+                $value = '
+                    @foreach($' . $model_name . ' as $item)
+                    <option value="{{ $item->' . $column_id . ' }}">{{ $item->' . $column_name . ' }})</option>
+                    @endforeach';
+
+                $template = str_replace('%FIELD_SELECT_OPTIONS%', $value, $template);
             } else {
-                $value = '$' . $data['table_name'] . '->' . $column['name'];
+                $template = $template_fields;
+                $show_column_type = $column['type_html'];
+                $template = str_replace('%FIELD_TYPE%', $show_column_type, $template);
+
+                $value = '( isset($' . $data['table_name'] . ')?$' . $data['table_name'] . '->' . $column['name'] . ':"")';
+
                 if ($column['type_html'] == 'checkbox') {
-                    $value = '(isset($' . $data['table_name'] .') && $' . $data['table_name'] . '->' . $column['name'] . '?"ON":"OFF")';
+                    $value = '(isset($' . $data['table_name'] . ') && $' . $data['table_name'] . '->' . $column['name'] . '?"ON":"OFF")';
                 }
                 if ($column['type_html'] == 'password') {
                     $value = '"---"';
                 }
+
+                $template = str_replace('%FIELD_VALUE_SHOW%', $value, $template);
             }
 
-            $template = str_replace('%FIELD_VALUE_SHOW%', $value, $template);
+            $template = str_replace('%FIELD%', $show_column_name, $template);
+            $template = str_replace('%FIELD_ALIAS%', $show_column_name_alias, $template);
 
             $fields_all .= $template;
         }
@@ -469,7 +502,7 @@ class GeneradorCrudService
                     $return = '$%OBJETO_VARIABLE%->' . $column['name'];
                 }
             }
-           
+
             $template_fields_replace = str_replace('%DATATABLE_RETURN%', $return, $template_fields_replace);
             $template_fields_replace = $this->generateCrudReplace($template_fields_replace, $data);
             $template_fields_all .=  $template_fields_replace;
@@ -478,7 +511,6 @@ class GeneradorCrudService
                 $incluir_list = true;
                 $template_fields_list .=  $template_fields_replace;
             }
-
         }
 
         if ($incluir_list) {
@@ -494,7 +526,7 @@ class GeneradorCrudService
 
         $template_queries = file_get_contents('../app/Crud/template_datatable_queries.php');
         $template_queries_all = '';
-        $datatables_fields_query = env('DATATABLES_FIELDS_QUERY','idcliente,idproyecto,idrol');
+        $datatables_fields_query = env('DATATABLES_FIELDS_QUERY', 'idcliente,idproyecto,idrol');
         $datatables_queries = explode(',', $datatables_fields_query);
 
         foreach ($data['table_columns'] as $column) {
@@ -512,9 +544,9 @@ class GeneradorCrudService
                 $template_columns_list .=  $template_columns_replace;
             }
 
-            if (in_array($column['name'],$datatables_queries)) {
+            if (in_array($column['name'], $datatables_queries)) {
                 $template_queries_replace = $template_queries;
-                $template_queries_replace = str_replace('%FIELD%',$column['name'], $template_queries_replace);
+                $template_queries_replace = str_replace('%FIELD%', $column['name'], $template_queries_replace);
                 $template_queries_all .=  $template_queries_replace;
             }
         }
@@ -755,7 +787,7 @@ class GeneradorCrudService
         $content = str_replace('%MENU_RUTA%', $menu_ruta, $content);
 
         fwrite($file, $content);
-        fclose($file);        
+        fclose($file);
     }
 
 
