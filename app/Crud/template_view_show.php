@@ -28,7 +28,7 @@
                 <!--begin::Add %OBJETO_ROUTE%-->
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_%OBJETO_ROUTE%">
                     {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                    Agregar %OBJETO%
+                    Agregar %OBJETO_LABEL_INDIVIDUAL%
                 </button>
                 <!--end::Add %OBJETO_ROUTE%-->
             </div>
