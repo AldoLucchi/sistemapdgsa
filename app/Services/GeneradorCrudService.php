@@ -38,7 +38,7 @@ class GeneradorCrudService
             $table_name_format = $table_name_label . $request['crud_id'];
 
             $table_crud = $request['nombre'];
-            $alias_opcion_indivual = $request['alias_opcion_indivual'];
+            $alias_opcion_individual = $request['alias_opcion_individual'];
 
             $table_crud_columns = DB::select("SHOW COLUMNS FROM " . $table_crud);
             $table_columns_string = "";
@@ -168,7 +168,7 @@ class GeneradorCrudService
                 'table_fullname' => $table_crud,
                 'table_name' => $table_name_format,
                 'table_name_label' => $table_name_label,
-                'table_name_label_individual' => $alias_opcion_indivual,
+                'table_name_label_individual' => $alias_opcion_individual,
                 'table_columns' =>  $table_columns,
                 'table_columns_string' =>  $table_columns_string,
                 'table_column_id' => $table_column_id,
