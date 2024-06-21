@@ -74,7 +74,8 @@ class %OBJETO_CONTROLLER% extends Controller
     public function show( $%OBJETO_VARIABLE%)
     {
         $data = [
-          '%OBJETO_VARIABLE%' => %OBJETO%::find($%OBJETO_VARIABLE%)
+          '%OBJETO_VARIABLE%' => %OBJETO%::find($%OBJETO_VARIABLE%),
+          %TABLAS_ASOCIADAS%
         ];
         return view('cruds/%OBJETO_VIEW%.show', $data);
 
@@ -89,7 +90,8 @@ class %OBJETO_CONTROLLER% extends Controller
     public function edit($%OBJETO_VARIABLE%)
     {
       $data = [
-        '%OBJETO_VARIABLE%' => %OBJETO%::find($%OBJETO_VARIABLE%)
+        '%OBJETO_VARIABLE%' => %OBJETO%::find($%OBJETO_VARIABLE%),
+        %TABLAS_ASOCIADAS%
       ];
 
       return view('cruds/%OBJETO_VIEW%.edit', $data);

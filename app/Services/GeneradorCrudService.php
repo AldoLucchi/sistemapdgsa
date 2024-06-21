@@ -309,6 +309,7 @@ class GeneradorCrudService
         $template_controller = $this->generateCrudReplace($template_controller, $data);
 
         $fields_checkobx = '';
+        $tablas_asociadas = '';
         foreach ($data['table_columns'] as $column) {
             if ($column['type_html'] == 'checkbox') {
                 $field_checkbox = '
@@ -316,9 +317,21 @@ class GeneradorCrudService
                 ';
                 $fields_checkobx .= $field_checkbox;
             }
+            if (isset($column['select'])) {
+                $model_name_fk = $data['tables_fk'][$column['name']]['table_name_fk'];
+                $column_name_fk = $data['tables_fk'][$column['name']]['table_column_fk_name'];
+                $column_id_fk = $data['tables_fk'][$column['name']]['table_column_fk_id'];
+                
+                $tabla = '
+                "'.$model_name_fk.'" => '.$model_name_fk.'::all(), 
+                ';
+
+                $tablas_asociadas .= $tabla;
+            }
         }
 
         $template_controller = str_replace('%FIELD_CHECKBOX%', $fields_checkobx, $template_controller);
+        $template_controller = str_replace('%TABLAS_ASOCIADAS%', $tablas_asociadas, $template_controller);
 
         fwrite($file_controller, $template_controller);
         fclose($file_controller);
