@@ -427,7 +427,7 @@ class GeneradorCrudService
         //Log::info($data['table_columns']);
         foreach ($data['table_columns'] as $column) {
             $datatable_column_name = $column['name'];
-            if (isset($column['alias'])) {
+            if (isset($column['alias']) && $column['name'] != $data['table_column_id']) {
                 $datatable_column_name = $column['alias'];
             }
             if (isset($column['select'])) {
@@ -473,7 +473,7 @@ class GeneradorCrudService
 
         foreach ($data['table_columns'] as $column) {
             $datatable_column_field_name = $column['name'];
-            if (isset($column['alias'])) {
+            if (isset($column['alias']) && $column['name'] != $data['table_column_id']) {
                 $datatable_column_field_name = $column['alias'];
             }
 
