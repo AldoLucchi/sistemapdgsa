@@ -40,7 +40,7 @@
     <!--begin::Card body-->
     <div class="card-body py-4">
         <!--begin::Table-->
-        <form id="add_%OBJETO_LABEL_INDIVIDUAL%_form" name="add_%OBJETO_LABEL_INDIVIDUAL%_form" class="form" action="{{ route('%OBJETO_ROUTE%.store') }}" method="POST" enctype="multipart/form-data">
+        <form id="add_%OBJETO_ROUTE%_form" name="add_%OBJETO_ROUTE%_form" class="form" action="{{ route('%OBJETO_ROUTE%.store') }}" method="POST" enctype="multipart/form-data">
 
         <div class="row">
         @include('cruds.%OBJETO_VIEW%.fields')

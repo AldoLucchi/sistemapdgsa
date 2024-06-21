@@ -41,7 +41,7 @@
     <div class="card-body py-4">
         <!--begin::Table-->
 
-        <form id="edit_%OBJETO_LABEL_INDIVIDUAL%_form" name="edit_%OBJETO_LABEL_INDIVIDUAL%_form" class="form" action="{{ route('%OBJETO_ROUTE%.update', $%FIEL_ID%) }}" method="POST" enctype="multipart/form-data">
+        <form id="edit_%OBJETO_ROUTE%_form" name="edit_%OBJETO_ROUTE%_form" class="form" action="{{ route('%OBJETO_ROUTE%.update', $%FIEL_ID%) }}" method="POST" enctype="multipart/form-data">
 
         <div class="row">
         @include('cruds.%OBJETO_VIEW%.fields')

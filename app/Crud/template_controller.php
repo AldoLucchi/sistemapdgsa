@@ -32,7 +32,9 @@ class %OBJETO_CONTROLLER% extends Controller
      */
     public function create()
     {
-       //
+      $data = [];
+      
+      return view('cruds/%OBJETO_VIEW%.edit', $data);
     }
 
     /**
@@ -71,8 +73,10 @@ class %OBJETO_CONTROLLER% extends Controller
      */
     public function show( $%OBJETO_VARIABLE%)
     {
-        $%OBJETO_VARIABLE% = %OBJETO%::find($%OBJETO_VARIABLE%);
-        return view('cruds/%OBJETO_VIEW%.show', compact('%OBJETO_VARIABLE%'));
+        $data = [
+          '%OBJETO_VARIABLE%' => %OBJETO%::find($%OBJETO_VARIABLE%)
+        ];
+        return view('cruds/%OBJETO_VIEW%.show', $data);
 
     }
 
@@ -82,9 +86,13 @@ class %OBJETO_CONTROLLER% extends Controller
      * @param  %OBJETO% $%OBJETO_VARIABLE%
      * @return \Illuminate\Http\Response
      */
-    public function edit(%OBJETO% $%OBJETO_VARIABLE%)
+    public function edit($%OBJETO_VARIABLE%)
     {
-		//
+      $data = [
+        '%OBJETO_VARIABLE%' => %OBJETO%::find($%OBJETO_VARIABLE%)
+      ];
+
+      return view('cruds/%OBJETO_VIEW%.edit', $data);
     }
 
     /**
