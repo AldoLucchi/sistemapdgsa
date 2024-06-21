@@ -11,6 +11,20 @@ use Illuminate\Support\Facades\Log;
 class GeneradorCrudService
 {
 
+    public function getTableName($table_name){
+        $table_name_substr = substr($table_name, 4);
+            if ($table_name == 'users') {
+                $table_name_substr = $table_name;
+            }
+            $table_name_array = explode("_", $table_name_substr);
+            $table_name_format = '';
+            foreach ($table_name_array as $tring) {
+                $table_name_format .= ucfirst($tring);
+            }
+
+            return  $table_name_format;
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -19,23 +33,13 @@ class GeneradorCrudService
         Log::info('GeneradorCrudServices - store');
         Log::info($request);
 
-        try {
-
-            $table_name_substr = substr($request['nombre'], 4);
-            if ($request['nombre'] == 'users') {
-                $table_name_substr = $request['nombre'];
-            }
-            $table_name_array = explode("_", $table_name_substr);
-            $table_name_format = '';
-            foreach ($table_name_array as $tring) {
-                $table_name_format .= ucfirst($tring);
-            }
-
-            $table_name_label = $table_name_format;
-            $table_name_format = $table_name_format . $request['crud_id'];
-
+        try {   
+            $table_name_label = $this->getTableName($request['nombre']);
+            $table_name_format = $table_name_label . $request['crud_id'];
 
             $table_crud = $request['nombre'];
+            $alias_opcion_indivual = $request['alias_opcion_indivual'];
+
             $table_crud_columns = DB::select("SHOW COLUMNS FROM " . $table_crud);
             $table_columns_string = "";
 
@@ -104,8 +108,6 @@ class GeneradorCrudService
                 $table_columns_all_null_string .= "'" . $colum->Field . "',";
             }
 
-
-
             if ($all_columns_null) {
                 $table_columns =  $table_columns_all_null;
                 $table_columns_string = $table_columns_all_null_string;
@@ -166,6 +168,7 @@ class GeneradorCrudService
                 'table_fullname' => $table_crud,
                 'table_name' => $table_name_format,
                 'table_name_label' => $table_name_label,
+                'table_name_label_individual' => $alias_opcion_indivual,
                 'table_columns' =>  $table_columns,
                 'table_columns_string' =>  $table_columns_string,
                 'table_column_id' => $table_column_id,
@@ -797,6 +800,7 @@ class GeneradorCrudService
     {
         $content = str_replace('%OBJETO%', $data['model_name'], $content);
         $content = str_replace('%OBJETO_LABEL%', $data['table_name_label'], $content);
+        $content = str_replace('%OBJETO_LABEL_INDIVIDUAL%', $data['table_name_label_individual'], $content);
         $content = str_replace('%TABLA%', $data['table_fullname'], $content);
         $content = str_replace('%TABLA_CAMPOS%', $data['table_columns_string'], $content);
         $content = str_replace('%FIELD_ID%', $data['table_column_id'], $content);

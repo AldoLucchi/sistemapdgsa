@@ -29,7 +29,7 @@
                     <!--begin::Add %OBJETO_VIEW%-->
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_%OBJETO_VIEW%">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                        Agregar %OBJETO_LABEL%
+                        Agregar %OBJETO_LABEL_INDIVIDUAL%
                     </button>
                     <!--end::Add %OBJETO_VIEW%-->
                 </div>
