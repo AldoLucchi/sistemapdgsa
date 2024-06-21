@@ -1,1 +1,1 @@
-Column::make('%FIELD%'),
+Column::make('%FIELD%')->orderable(false),

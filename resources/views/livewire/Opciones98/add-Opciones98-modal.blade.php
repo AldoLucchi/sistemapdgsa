@@ -6,7 +6,7 @@
             <!--begin::Modal header-->
             <div class="modal-header" id="kt_modal_add_Opciones98_header">
                 <!--begin::Modal title-->
-                <h2 class="fw-bold">Gestionar Opciones</h2>
+                <h2 class="fw-bold">Gestionar Opción</h2>
                 <!--end::Modal title-->
                 <!--begin::Close-->
                 <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">

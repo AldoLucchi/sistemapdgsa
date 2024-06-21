@@ -29,7 +29,7 @@
                     <!--begin::Add Opciones98-->
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_Opciones98">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                        Agregar Opciones
+                        Agregar Opción
                     </button>
                     <!--end::Add Opciones98-->
                 </div>

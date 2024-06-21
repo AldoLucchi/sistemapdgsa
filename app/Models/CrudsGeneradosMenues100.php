@@ -26,7 +26,7 @@ class CrudsGeneradosMenues100 extends Model
 
 	//relations
     
-            public function CrudsGenerados() { return $this->hasMany(CrudsGenerados::class,"idcrudgen","idcrudgen"); }
+            public function CrudsGenerados() { return $this->hasMany(CrudsGenerados::class,"id","idcrudgen"); }
                 
             public function Menues() { return $this->hasMany(Menues::class,"idmenu","idmenu"); }
 

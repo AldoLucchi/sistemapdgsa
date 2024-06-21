@@ -29,7 +29,7 @@
                     <!--begin::Add Menues97-->
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_Menues97">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                        Agregar Menues
+                        Agregar Menú
                     </button>
                     <!--end::Add Menues97-->
                 </div>

@@ -33,7 +33,11 @@ class %OBJETO_DATATABLE% extends DataTable
      */
     public function query(%OBJETO% $model): QueryBuilder
     {
-        return $model->newQuery();
+        $query = $model->newQuery();
+
+        %DATATABLE_QUERY_FILTERS%
+
+        return $query;
     }
 
     /**

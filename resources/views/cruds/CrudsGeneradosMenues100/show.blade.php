@@ -28,7 +28,7 @@ CrudsGeneradosMenues
                 <!--begin::Add CrudsGeneradosMenues100-->
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_CrudsGeneradosMenues100">
                     {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                    Agregar CrudsGeneradosMenues100
+                    Agregar Crud Menú
                 </button>
                 <!--end::Add CrudsGeneradosMenues100-->
             </div>

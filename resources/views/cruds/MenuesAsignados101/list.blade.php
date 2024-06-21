@@ -29,7 +29,7 @@
                     <!--begin::Add MenuesAsignados101-->
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_MenuesAsignados101">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                        Agregar MenuesAsignados
+                        Agregar Menú Asignado
                     </button>
                     <!--end::Add MenuesAsignados101-->
                 </div>
