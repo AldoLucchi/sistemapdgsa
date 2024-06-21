@@ -467,12 +467,17 @@ class GeneradorCrudService
             $template_fields_all = $template_fields_list;
         }
 
-        //columns
+        //columns - queries
         $template_columns = file_get_contents('../app/Crud/template_datatable_getcolumns.php');
         $template_columns = $this->generateCrudReplace($template_columns, $data);
         $template_columns_all = '';
         $incluir_list = false;
         $template_columns_list = '';
+
+        $template_queries = file_get_contents('../app/Crud/template_datatable_queries.php');
+        $template_queries_all = '';
+        $datatables_fields_query = env('DATATABLES_FIELDS_QUERY','idcliente,idproyecto,idrol');
+        $datatables_queries = explode(',', $datatables_fields_query);
 
         foreach ($data['table_columns'] as $column) {
             $datatable_column_field_name = $column['name'];
@@ -488,6 +493,12 @@ class GeneradorCrudService
                 $incluir_list = true;
                 $template_columns_list .=  $template_columns_replace;
             }
+
+            if (in_array($column['name'],$datatables_queries)) {
+                $template_queries_replace = $template_queries;
+                $template_queries_replace = str_replace('%FIELD%',$column['name'], $template_queries_replace);
+                $template_queries_all .=  $template_queries_replace;
+            }
         }
 
         if ($incluir_list) {
@@ -499,6 +510,7 @@ class GeneradorCrudService
 
         $template = str_replace('%FIELDS_DATATABLES_DATATABLE%', $template_fields_all, $template);
         $template = str_replace('%FIELDS_DATATABLES_GETCOLUMNS%', $template_columns_all, $template);
+        $template = str_replace('%DATATABLE_QUERY_FILTERS%', $template_queries_all, $template);
 
         fwrite($file, $template);
         fclose($file);
