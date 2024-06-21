@@ -328,6 +328,7 @@ class GeneradorCrudService
         }
 
         //create views
+        //list -------------------------------
         $file_list_view = fopen("../resources/views/cruds/" . $data['table_name'] . "/list.blade.php", "w") or die("Unable to open file - view list.blade.php");
         $template_list_view = file_get_contents('../app/Crud/template_view_list.php');
         $template_list_view = $this->generateCrudReplace($template_list_view, $data);
@@ -335,7 +336,7 @@ class GeneradorCrudService
         fwrite($file_list_view, $template_list_view);
         fclose($file_list_view);
 
-        //show
+        //show-------------------
         $file_show_view = fopen("../resources/views/cruds/" . $data['table_name'] . "/show.blade.php", "w") or die("Unable to open file - view show.blade.php");
         $template_list_show = file_get_contents('../app/Crud/template_view_show.php');
         $template_list_show = $this->generateCrudReplace($template_list_show, $data);
@@ -343,7 +344,23 @@ class GeneradorCrudService
         fwrite($file_show_view, $template_list_show);
         fclose($file_show_view);
 
-        //show field
+        //create-------------------
+        $file_create = fopen("../resources/views/cruds/" . $data['table_name'] . "/create.blade.php", "w") or die("Unable to open file - view create.blade.php");
+        $template_create = file_get_contents('../app/Crud/template_view_create.php');
+        $template_create = $this->generateCrudReplace($template_create, $data);
+
+        fwrite($file_create, $template_create);
+        fclose($file_create);        
+
+        //edit-------------------
+        $file_edit = fopen("../resources/views/cruds/" . $data['table_name'] . "/edit.blade.php", "w") or die("Unable to open file - view edit.blade.php");
+        $template_edit = file_get_contents('../app/Crud/template_view_edit.php');
+        $template_edit = $this->generateCrudReplace($template_edit, $data);
+
+        fwrite($file_edit, $template_edit);
+        fclose($file_edit);          
+
+        //show field------------------
         $file_fields = fopen("../resources/views/cruds/" . $data['table_name'] . "/fields.blade.php", "w") or die("Unable to open file - view fields.blade.php");
         $template_fields = file_get_contents('../app/Crud/template_view_show_field.php');
         $fields_all = '';
@@ -380,8 +397,7 @@ class GeneradorCrudService
         fwrite($file_fields, $fields_all);
         fclose($file_fields);
 
-
-
+        //actions ----------------------
         $file_action_view = fopen("../resources/views/cruds/" . $data['table_name'] . "/columns/_actions.blade.php", "w") or die("Unable to open file - view actions.blade.php");
         $template_list_actions = file_get_contents('../app/Crud/template_view_actions.php');
         $template_list_actions = $this->generateCrudReplace($template_list_actions, $data);
@@ -389,6 +405,7 @@ class GeneradorCrudService
         fwrite($file_action_view, $template_list_actions);
         fclose($file_action_view);
 
+        //draw scripts -------------------
         $file_draw_scripts_view = fopen("../resources/views/cruds/" . $data['table_name'] . "/columns/_draw-scripts.js", "w") or die("Unable to open file - view _draw-scripts.js");
         $template_list_draw_js = file_get_contents('../app/Crud/template_view_draw_js.php');
         $template_list_draw_js = $this->generateCrudReplace($template_list_draw_js, $data);
@@ -396,7 +413,7 @@ class GeneradorCrudService
         fwrite($file_draw_scripts_view, $template_list_draw_js);
         fclose($file_draw_scripts_view);
 
-        //view table
+        //view table---------------------------------
         $file_table = fopen("../resources/views/cruds/" . $data['table_name'] . "/columns/_table.blade.php", "w") or die("Unable to open file - view table.blade.php");
 
         $template_table = file_get_contents('../app/Crud/template_view_table.php');

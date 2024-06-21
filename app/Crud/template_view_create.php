@@ -14,7 +14,7 @@
         <div class="card-title">
             <!--begin::Search-->
             <div class="d-flex align-items-center position-relative my-1">
-                DETALLE
+                CREAR
             </div>
             <!--end::Search-->
         </div>
@@ -25,16 +25,12 @@
             <!--begin::Toolbar-->
             <div class="d-flex justify-content-end" data-kt-%OBJETO_ROUTE%-table-toolbar="base">
                 <!--begin::Add %OBJETO_ROUTE%-->
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_%OBJETO_ROUTE%">
-                    {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                    Agregar %OBJETO_LABEL_INDIVIDUAL%
-                </button>
+                
                 <!--end::Add %OBJETO_ROUTE%-->
             </div>
             <!--end::Toolbar-->
 
             <!--begin::Modal-->
-            <livewire:%OBJETO_VIEW%.add-%OBJETO_VIEW%-modal></livewire:%OBJETO_VIEW%.add-%OBJETO_VIEW%-modal>
             <!--end::Modal-->
         </div>
         <!--end::Card toolbar-->
@@ -44,21 +40,28 @@
     <!--begin::Card body-->
     <div class="card-body py-4">
         <!--begin::Table-->
+        <form id="add_%OBJETO_LABEL_INDIVIDUAL%_form" name="add_%OBJETO_LABEL_INDIVIDUAL%_form" class="form" action="{{ route('%OBJETO_ROUTE%.store') }}" method="POST" enctype="multipart/form-data">
+
         <div class="row">
-        <fieldset id="show-fieldset-%OBJETO_LABEL_INDIVIDUAL%" disabled>
         @include('cruds.%OBJETO_VIEW%.fields')
-        </fieldset>
         </div>
+        <div class="row">
+            <div class="d-flex justify-content-end" >                
+                <button type="submit" class="btn btn-primary" >
+                    Crear
+                </button>               
+            </div>
+        </div>
+
+        </form>
         <!--end::Table-->
     </div>
     <!--end::Card body-->
 </div>
 
 @push('scripts')
-<script>     
-    $('#kt_modal_add_usuarios').on('hidden.bs.modal', function() {
-        Livewire.dispatch('new_usuarios');
-    });
+<script>    
+    
 </script>
 @endpush
 
