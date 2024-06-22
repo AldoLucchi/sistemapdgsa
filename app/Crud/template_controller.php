@@ -75,11 +75,13 @@ class %OBJETO_CONTROLLER% extends Controller
 
         $%OBJETO_VARIABLE% = %OBJETO%::create($request->all());
 
-        return redirect('/%MENU_RUTA%/%OBJETO_ROUTE%');
+        $message =  ' %OBJETO_LABEL_INDIVIDUAL%: registro creado correctamente: ';
+
+        return redirect('/%MENU_RUTA%/%OBJETO_ROUTE%')->with('message',$message);
       } catch (Exception $e) {
           Log::info('%OBJETO_CONTROLLER% - store - Exception ' . $e->getMessage());
 
-          return redirect('/');
+          return redirect('/%MENU_RUTA%/%OBJETO_VARIABLE%')->with('message-error',$e->getMessage());
       }
     }
 
@@ -122,11 +124,32 @@ class %OBJETO_CONTROLLER% extends Controller
      * @param  %OBJETO% $%OBJETO_VARIABLE%
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, %OBJETO% $%OBJETO_VARIABLE%)
+    public function update(Request $request, $%OBJETO_VARIABLE%)
     {
 		//
 
     %FIELD_CHECKBOX%
+
+    Log::info('%OBJETO_CONTROLLER% - update');      
+
+      Log::info($request);
+
+      try{
+        $%OBJETO_VARIABLE% = %OBJETO_VARIABLE%::find($%OBJETO_VARIABLE%);
+      
+        %FIELD_FILE_STORAGE%
+
+      $%OBJETO_VARIABLE% = $%OBJETO_VARIABLE%->update($request->all());
+
+      $message =  ' %OBJETO_LABEL_INDIVIDUAL%: registro actualizado correctamente: ';
+
+      return redirect('/%MENU_RUTA%/%OBJETO_VARIABLE%')->with('message',$message);
+      
+    } catch (Exception $e) {
+        Log::info('%OBJETO_CONTROLLER% - store - Exception ' . $e->getMessage());
+
+        return redirect('/%MENU_RUTA%/%OBJETO_VARIABLE%')->with('message-error',$e->getMessage());
+    }
     
     }
 
