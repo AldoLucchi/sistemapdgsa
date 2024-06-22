@@ -25,10 +25,15 @@
             <!--begin::Toolbar-->
             <div class="d-flex justify-content-end" data-kt-%OBJETO_ROUTE%-table-toolbar="base">
                 <!--begin::Add %OBJETO_ROUTE%-->
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_%OBJETO_ROUTE%">
+                <!--<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_%OBJETO_ROUTE%">
+                {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                Agregar %OBJETO_LABEL_INDIVIDUAL%
+                </button>-->
+                <a href="{{ url('/%MENU_RUTA%/%OBJETO_ROUTE%/create' ) }}" class="btn btn-primary">
                     {!! getIcon('plus', 'fs-2', '', 'i') !!}
                     Agregar %OBJETO_LABEL_INDIVIDUAL%
-                </button>
+                </a>
+                
                 <!--end::Add %OBJETO_ROUTE%-->
             </div>
             <!--end::Toolbar-->

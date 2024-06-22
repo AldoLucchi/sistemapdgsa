@@ -27,10 +27,14 @@
                 <!--begin::Toolbar-->
                 <div class="d-flex justify-content-end" data-kt-%OBJETO_VIEW%-table-toolbar="base">
                     <!--begin::Add %OBJETO_VIEW%-->
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_%OBJETO_VIEW%">
+                    <!--<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_%OBJETO_VIEW%">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
                         Agregar %OBJETO_LABEL_INDIVIDUAL%
-                    </button>
+                        </button>-->
+                    <a href="{{ url('/%MENU_RUTA%/%OBJETO_ROUTE%/create' ) }}" class="btn btn-primary">
+                        {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                        Agregar %OBJETO_LABEL_INDIVIDUAL%
+                    </a>
                     <!--end::Add %OBJETO_VIEW%-->
                 </div>
                 <!--end::Toolbar-->

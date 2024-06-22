@@ -14,7 +14,8 @@
 
     <!--begin::Menu item-->
     <div class="menu-item px-3">
-        <a href="#" class="menu-link px-3" data-kt-%OBJETO_ROUTE%-id="{{ $%OBJETO_VARIABLE%->%FIELD_ID% }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_%OBJETO_ROUTE%" data-kt-action="update_row">
+        <!--<a href="#" class="menu-link px-3" data-kt-%OBJETO_ROUTE%-id="{{ $%OBJETO_VARIABLE%->%FIELD_ID% }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_%OBJETO_ROUTE%" data-kt-action="update_row">-->
+        <a href="{{ url('/%MENU_RUTA%/%OBJETO_ROUTE%/'. $%OBJETO_VARIABLE%->%FIELD_ID% .'/edit' ) }}" class="menu-link px-3">
             Editar
         </a>
     </div>

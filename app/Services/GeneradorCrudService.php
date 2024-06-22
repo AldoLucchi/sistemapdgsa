@@ -770,18 +770,20 @@ class GeneradorCrudService
                     </select>
                     ';
                 } else {
-                    $input_file = '';
+                    $input = '';
+
                     if ($column_type_html == 'checkbox') {
                         $class = 'form-check-input mb-3 mb-lg-0';
                     }
                     if ($column_type_html == 'file') {
-                        $input_file = '
-                        @if( isset($' . $data['table_name'].') && $'.$data['table_name'] . '->' . $column['name'].' )
-                        <br><img src="/images/{{ $'.$data['table_name'] . '->' . $column['name'].' }}" style="width:100px;">
+                        $input.= '
+                        @if( isset($' . $column['name'].') && $'. $column['name'].' )
+                        <br><img src="/images/{{ $'. $column['name'].' }}" style="width:100px;">
                         @endif
                         ';
                     }
-                    $input = '<input type="' . $column_type_html . '" wire:model="' . $column_name . '" name="' . $column_name . '" class="' . $class . '" placeholder="' . $column_name . '" />';
+
+                    $input .= '<input type="' . $column_type_html . '" wire:model="' . $column_name . '" name="' . $column_name . '" class="' . $class . '" placeholder="' . $column_name . '" />';
                 }
 
                 $template = str_replace('%INPUT_FIELD%', $input, $template);
