@@ -232,6 +232,7 @@ class GeneradorCrudService
             $this->generateRoute($data);
             $this->generateBreadcrumb($data);
             $this->replaceActions($data);
+            $this->replaceControllers($data);
             $this->replaceviews($data);
 
             //dd($table_columns);
@@ -419,7 +420,7 @@ class GeneradorCrudService
                 //$value = '(isset($' . $data['table_name'] . ') ? $' . $data['table_name'] . '->' . $model_name . '->first()?->' . $column_name . ':"")';
                 $value = '
                     @foreach($' . $model_name . ' as $item)
-                    <option value="{{ $item->' . $column_id . ' }}"  {{ (isset($'.$data['table_name'].') && $item->' . $column_id . ' == $'.$data['table_name'].'->'.$show_column_name.')?"selected":"" }}>{{ $item->' . $column_name . ' }})</option>
+                    <option value="{{ $item->' . $column_id . ' }}"  {{ (isset($'.$data['table_name'].') && $item->' . $column_id . ' == $'.$data['table_name'].'->'.$show_column_name.')?"selected":"" }}>{{ $item->' . $column_name . ' }}</option>
                     @endforeach';
 
                 $template = str_replace('%FIELD_SELECT_OPTIONS%', $value, $template);
@@ -430,6 +431,7 @@ class GeneradorCrudService
 
                 $value = '( isset($' . $data['table_name'] . ')?$' . $data['table_name'] . '->' . $column['name'] . ':"")';
                 $value_file = '';
+                $value_readonly = "";
 
                 if ($column['type_html'] == 'checkbox') {
                     $value = '(isset($' . $data['table_name'] . ') && $' . $data['table_name'] . '->' . $column['name'] . '?"ON":"OFF")';
@@ -440,13 +442,17 @@ class GeneradorCrudService
                 if ($column['type_html'] == 'file') {
                     $value_file = '
                     @if( isset($' . $data['table_name'].') && $'.$data['table_name'] . '->' . $column['name'].' )
-                    <img src="/images/$'.$data['table_name'] . '->' . $column['name'].'" style="width:100px;">
+                    <br><img src="/images/{{ $'.$data['table_name'] . '->' . $column['name'].' }}" style="width:100px;">
                     @endif
                     ';
+                }
+                if($data['table_column_id'] == $column['name']){
+                    $value_readonly = "readonly";
                 }
 
                 $template = str_replace('%FIELD_VALUE_SHOW%', $value, $template);
                 $template = str_replace('%FIELD_FILE%', $value_file, $template);
+                $template = str_replace('%FIELD_READONLY%', $value_readonly, $template);
             }
 
             $template = str_replace('%FIELD%', $show_column_name, $template);
@@ -789,6 +795,21 @@ class GeneradorCrudService
 
 
         $file = fopen("../resources/views/cruds/" . $item_nombre . "/columns/_actions.blade.php", "w") or die("Unable to open file - view actions.blade.php");
+        $content = str_replace('%MENU_RUTA%', $menu_ruta, $content);
+
+        fwrite($file, $content);
+        fclose($file);
+    }
+
+    public function replaceControllers($data)
+    {
+        $menu_ruta = $data['menu']['ruta'];
+        $item_nombre = $data['item']['nombre'];
+
+        $content = file_get_contents("../app/Http/Controllers/Crud/" . $data['controller_name'] . ".php");
+
+        $file = fopen("../app/Http/Controllers/Crud/" . $data['controller_name'] . ".php", "w") or die("Unable to open file - controller " . $data['controller_name']);
+
         $content = str_replace('%MENU_RUTA%', $menu_ruta, $content);
 
         fwrite($file, $content);

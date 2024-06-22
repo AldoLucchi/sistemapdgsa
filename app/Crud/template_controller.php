@@ -60,7 +60,7 @@ class %OBJETO_CONTROLLER% extends Controller
       try{
         $%OBJETO_VARIABLE% = %OBJETO%::create($request->all());
 
-        return redirect('/crud/%OBJETO_ROUTE%');
+        return redirect('/%MENU_RUTA%/%OBJETO_ROUTE%');
       } catch (Exception $e) {
           Log::info('%OBJETO_CONTROLLER% - store - Exception ' . $e->getMessage());
 
