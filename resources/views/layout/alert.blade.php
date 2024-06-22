@@ -1,14 +1,14 @@
 @if(Session::has('message'))
 <!--begin::Alert-->
-<div class="alert alert-dismissible bg-light-success d-flex flex-column flex-sm-row p-5 mb-10">
+<div class="alert alert-dismissible bg-success d-flex flex-column flex-sm-row p-5 mb-10">
     <!--begin::Icon-->
-    <i class="ki-duotone ki-search-list fs-2hx text-light me-4 mb-5 mb-sm-0"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
+    <!--<i class="ki-duotone ki-search-list fs-2hx text-light me-4 mb-5 mb-sm-0"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>-->
     <!--end::Icon-->
 
     <!--begin::Wrapper-->
     <div class="d-flex flex-column text-light pe-0 pe-sm-10">
         <!--begin::Title-->
-        <!--<h4 class="mb-2 light">-</h4>-->
+        <!--<h4 class="mb-2 light">This is an alert</h4> -->
         <!--end::Title-->
 
         <!--begin::Content-->
@@ -28,15 +28,15 @@
 
 @if(Session::has('message-error'))
 <!--begin::Alert-->
-<div class="alert alert-dismissible bg-light-danger d-flex flex-column flex-sm-row p-5 mb-10">
+<div class="alert alert-dismissible bg-danger d-flex flex-column flex-sm-row p-5 mb-10">
     <!--begin::Icon-->
-    <i class="ki-duotone ki-search-list fs-2hx text-light me-4 mb-5 mb-sm-0"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
+    <!--<i class="ki-duotone ki-search-list fs-2hx text-light me-4 mb-5 mb-sm-0"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>-->
     <!--end::Icon-->
 
     <!--begin::Wrapper-->
     <div class="d-flex flex-column text-light pe-0 pe-sm-10">
         <!--begin::Title-->
-        <!--<h4 class="mb-2 light">-</h4>-->
+        <!--<h4 class="mb-2 light">This is an alert</h4> -->
         <!--end::Title-->
 
         <!--begin::Content-->

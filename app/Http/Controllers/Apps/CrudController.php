@@ -55,23 +55,23 @@ class CrudController extends Controller
             'alias_opcion' => 'required',
         ]);
 
-        $crud = $this->crudService->store($request->all());
+        try {
+            $crud = $this->crudService->store($request->all());
 
-        if ($crud) {
-            $request['crud_id'] = $crud->id;
+            if ($crud) {
+                $request['crud_id'] = $crud->id;
 
-            $crudGenerado = $this->generadorCrudService->store($request->all());
+                $crudGenerado = $this->generadorCrudService->store($request->all());
 
-            if ($crudGenerado) {
-                $message = [
-                    'message', 'Proceso completado. CRUD generado correctamente',
-                    'message-success', 'Proceso completado. CRUD generado correctamente',
-                ];
+                if ($crudGenerado) {
+                    $message = 'Proceso completado. CRUD generado correctamente';
 
-                return redirect('/admin/crud')->with($message);
+                    return redirect('/admin/crud')->with('message', $message);
+                }
             }
+        } catch (Exception $e) {
+            return redirect('/admin/crud')->with('message-error', $e->getMessage());
         }
-
         return redirect('/admin/crud')->with('message-error', 'No se ha podido completar la generación de CRUD');
     }
 
@@ -83,17 +83,17 @@ class CrudController extends Controller
     {
         Log::info('CrudController - update');
 
-        $request["estatus"] = ( isset($request["estatus"])?1:0); 
+        $request["estatus"] = (isset($request["estatus"]) ? 1 : 0);
 
         Log::info($request);
+        try {
+            $crud = $this->crudService->update($request->all(), $request['crud_id']);
 
-        $crud = $this->crudService->update($request->all(), $request['crud_id']);
+            $message = 'Proceso completado. CRUD actualizado correctamente';
 
-        $message = [
-            'message', 'Proceso completado. CRUD generado correctamente',
-            'message-success', 'Proceso completado. CRUD generado correctamente',
-        ];
-
-        return redirect('/admin/crud')->with($message);
+            return redirect('/admin/crud')->with('message', $message);
+        } catch (Exception $e) {
+            return redirect('/admin/crud')->with('message-error', $e->getMessage());
+        }
     }
 }
