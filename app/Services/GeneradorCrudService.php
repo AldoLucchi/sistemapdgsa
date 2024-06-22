@@ -444,8 +444,11 @@ class GeneradorCrudService
                 $value_file = '';
                 $value_readonly = "";
 
+                $field_style = "form-control form-control-solid";
+
                 if ($column['type_html'] == 'checkbox') {
                     $value = '(isset($' . $data['table_name'] . ') && $' . $data['table_name'] . '->' . $column['name'] . '?"ON":"OFF")';
+                    $field_style = "form-check-input";
                 }
                 if ($column['type_html'] == 'password') {
                     $value = '"---"';
@@ -466,6 +469,7 @@ class GeneradorCrudService
                 $template = str_replace('%FIELD_VALUE_SHOW%', $value, $template);
                 $template = str_replace('%FIELD_FILE%', $value_file, $template);
                 $template = str_replace('%FIELD_READONLY%', $value_readonly, $template);
+                $template = str_replace('%FIELD_STYLE%', $field_style, $template);
             }
 
             $template = str_replace('%FIELD%', $show_column_name, $template);
