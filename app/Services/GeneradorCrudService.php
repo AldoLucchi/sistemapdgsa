@@ -851,6 +851,15 @@ class GeneradorCrudService
         $menu_ruta = $data['menu']['ruta'];
         $item_nombre = $data['item']['nombre'];
 
+        //list
+        $content = file_get_contents('../resources/views/cruds/' . $item_nombre . '/list.blade.php');
+
+        $file = fopen("../resources/views/cruds/" . $item_nombre . "/list.blade.php", "w") or die("Unable to open file - view list.blade.php");
+        $content = str_replace('%MENU_RUTA%', $menu_ruta, $content);
+
+        fwrite($file, $content);
+        fclose($file);
+
         //create
         $content = file_get_contents('../resources/views/cruds/' . $item_nombre . '/create.blade.php');
 
@@ -868,6 +877,15 @@ class GeneradorCrudService
 
         fwrite($file, $content);
         fclose($file);
+
+        //show
+        $content = file_get_contents('../resources/views/cruds/' . $item_nombre . '/show.blade.php');
+
+        $file = fopen("../resources/views/cruds/" . $item_nombre . "/show.blade.php", "w") or die("Unable to open file - view show.blade.php");
+        $content = str_replace('%MENU_RUTA%', $menu_ruta, $content);
+
+        fwrite($file, $content);
+        fclose($file);        
     }
 
 
