@@ -309,9 +309,12 @@ class GeneradorCrudService
         $template_controller = file_get_contents('../app/Crud/template_controller.php');
         $template_controller = $this->generateCrudReplace($template_controller, $data);
 
+        $template_controller_file = file_get_contents('../app/Crud/template_controller_file.php');
+
         $fields_checkobx = '';
         $tablas_asociadas = '';
         $tablas_asociadas_uses = '';
+        $field_file_storage = '';
         foreach ($data['table_columns'] as $column) {
             if ($column['type_html'] == 'checkbox') {
                 $field_checkbox = '
@@ -335,11 +338,19 @@ class GeneradorCrudService
                 $tablas_asociadas .= $tabla;
                 $tablas_asociadas_uses .= $use;
             }
+            if ($column['type_html'] == 'file') {
+                $template_file = $template_controller_file;
+                $template_file = $this->generateCrudReplace($template_file, $data);
+                $template_file = str_replace('%FIELD%', $column['name'], $template_file);
+
+                $field_file_storage .=$template_file;
+            }
         }
 
         $template_controller = str_replace('%FIELD_CHECKBOX%', $fields_checkobx, $template_controller);
         $template_controller = str_replace('%TABLAS_ASOCIADAS%', $tablas_asociadas, $template_controller);
         $template_controller = str_replace('%TABLAS_ASOCIADAS_USE%', $tablas_asociadas_uses, $template_controller);
+        $template_controller = str_replace('%FIELD_FILE_STORAGE%', $field_file_storage, $template_controller);
 
         fwrite($file_controller, $template_controller);
         fclose($file_controller);
@@ -445,6 +456,8 @@ class GeneradorCrudService
                     <br><img src="/images/{{ $'.$data['table_name'] . '->' . $column['name'].' }}" style="width:100px;">
                     @endif
                     ';
+
+                    $show_column_name = $show_column_name.'_file';
                 }
                 if($data['table_column_id'] == $column['name']){
                     $value_readonly = "readonly";
@@ -806,9 +819,9 @@ class GeneradorCrudService
         $menu_ruta = $data['menu']['ruta'];
         $item_nombre = $data['item']['nombre'];
 
-        $content = file_get_contents("../app/Http/Controllers/Crud/" . $data['controller_name'] . ".php");
+        $content = file_get_contents("../app/Http/Controllers/Crud/" . $item_nombre . "Controller.php");
 
-        $file = fopen("../app/Http/Controllers/Crud/" . $data['controller_name'] . ".php", "w") or die("Unable to open file - controller " . $data['controller_name']);
+        $file = fopen("../app/Http/Controllers/Crud/" . $item_nombre . "Controller.php", "w") or die("Unable to open file - controller " . $data['controller_name']);
 
         $content = str_replace('%MENU_RUTA%', $menu_ruta, $content);
 

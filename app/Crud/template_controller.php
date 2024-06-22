@@ -6,14 +6,26 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\DataTables\%OBJETO_DATATABLE%;
 use App\Models\%OBJETO%;
+use App\Services\FunctionsService;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 %TABLAS_ASOCIADAS_USE%
 
 %SELECT_USE%
 
 class %OBJETO_CONTROLLER% extends Controller
 {	
+  private $functionsService;
+
+  public function __construct(
+      FunctionsService $functionsService
+  ) {
+      $this->functionsService = $functionsService;
+  }
+
     /**
      * Display a listing of the resource.
      *
@@ -58,6 +70,9 @@ class %OBJETO_CONTROLLER% extends Controller
       %FIELD_CHECKBOX%
 
       try{
+
+        %FIELD_FILE_STORAGE%
+
         $%OBJETO_VARIABLE% = %OBJETO%::create($request->all());
 
         return redirect('/%MENU_RUTA%/%OBJETO_ROUTE%');
