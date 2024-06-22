@@ -310,6 +310,7 @@ class GeneradorCrudService
 
         $fields_checkobx = '';
         $tablas_asociadas = '';
+        $tablas_asociadas_uses = '';
         foreach ($data['table_columns'] as $column) {
             if ($column['type_html'] == 'checkbox') {
                 $field_checkbox = '
@@ -326,12 +327,18 @@ class GeneradorCrudService
                 "'.$model_name_fk.'" => '.$model_name_fk.'::all(), 
                 ';
 
+                $use = '
+                use App\Models\\'.$model_name_fk.';
+                ';
+
                 $tablas_asociadas .= $tabla;
+                $tablas_asociadas_uses .= $use;
             }
         }
 
         $template_controller = str_replace('%FIELD_CHECKBOX%', $fields_checkobx, $template_controller);
         $template_controller = str_replace('%TABLAS_ASOCIADAS%', $tablas_asociadas, $template_controller);
+        $template_controller = str_replace('%TABLAS_ASOCIADAS_USE%', $tablas_asociadas_uses, $template_controller);
 
         fwrite($file_controller, $template_controller);
         fclose($file_controller);

@@ -8,6 +8,7 @@ use App\DataTables\%OBJETO_DATATABLE%;
 use App\Models\%OBJETO%;
 use Exception;
 use Illuminate\Support\Facades\Log;
+%TABLAS_ASOCIADAS_USE%
 
 %SELECT_USE%
 
