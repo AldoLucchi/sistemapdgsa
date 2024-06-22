@@ -33,7 +33,9 @@ class %OBJETO_CONTROLLER% extends Controller
      */
     public function create()
     {
-      $data = [];
+      $data = [
+        %TABLAS_ASOCIADAS%
+      ];
       
       return view('cruds/%OBJETO_VIEW%.create', $data);
     }

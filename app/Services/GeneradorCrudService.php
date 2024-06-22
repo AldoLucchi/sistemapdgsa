@@ -419,7 +419,7 @@ class GeneradorCrudService
                 //$value = '(isset($' . $data['table_name'] . ') ? $' . $data['table_name'] . '->' . $model_name . '->first()?->' . $column_name . ':"")';
                 $value = '
                     @foreach($' . $model_name . ' as $item)
-                    <option value="{{ $item->' . $column_id . ' }}">{{ $item->' . $column_name . ' }})</option>
+                    <option value="{{ $item->' . $column_id . ' }}"  {{ (isset($'.$data['table_name'].' && $item->' . $column_id . ' == $'.$data['table_name'].'->'.$show_column_name.')"selected":"") ) }}>{{ $item->' . $column_name . ' }})</option>
                     @endforeach';
 
                 $template = str_replace('%FIELD_SELECT_OPTIONS%', $value, $template);
