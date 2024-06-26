@@ -9,7 +9,7 @@ use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Support\Facades\Session;
-
+use Illuminate\Support\HtmlString;
 
 class %OBJETO_DATATABLE% extends DataTable
 {

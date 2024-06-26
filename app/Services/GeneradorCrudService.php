@@ -553,6 +553,8 @@ class GeneradorCrudService
                     $return = '($%OBJETO_VARIABLE%->' . $column['name'] . '?"ON":"OFF")';
                 } else if ($column['type_html'] == 'password') {
                     $return = '"---"';
+                } else if ($column['type_html'] == 'file') {
+                    $return = 'new HtmlString(\'<img src="/images/' . '$'.$data['model_name'].'->'.$column['name']. '" border="0" width="40" class="img-rounded" />\')';
                 } else {
                     $return = '$%OBJETO_VARIABLE%->' . $column['name'];
                 }
