@@ -1,72 +1,86 @@
 <x-default-layout>
-@section('title')
-%OBJETO_LABEL%
-@endsection
+    @section('title')
+    %OBJETO_LABEL%
+    @endsection
 
-@section('breadcrumbs')
-{{ Breadcrumbs::render('%OBJETO_ROUTE%.show', $%OBJETO_VARIABLE%) }}
-@endsection
+    @section('breadcrumbs')
+    {{ Breadcrumbs::render('%OBJETO_ROUTE%.show', $%OBJETO_VARIABLE%) }}
+    @endsection
 
-<div class="card">
-    <!--begin::Card header-->
-    <div class="card-header border-0 pt-6">
-        <!--begin::Card title-->
-        <div class="card-title">
-            <!--begin::Search-->
-            <div class="d-flex align-items-center position-relative my-1">
-                DETALLE
+    <div class="card">
+        <!--begin::Card header-->
+        <div class="card-header border-0 pt-6">
+            <!--begin::Card title-->
+            <div class="card-title">
+                <!--begin::Search-->
+                <div class="d-flex align-items-center position-relative my-1">
+                    DETALLE
+                </div>
+                <!--end::Search-->
             </div>
-            <!--end::Search-->
-        </div>
-        <!--begin::Card title-->
+            <!--begin::Card title-->
 
-        <!--begin::Card toolbar-->
-        <div class="card-toolbar">
-            <!--begin::Toolbar-->
-            <div class="d-flex justify-content-end" data-kt-%OBJETO_ROUTE%-table-toolbar="base">
-                <!--begin::Add %OBJETO_ROUTE%-->
-                <!--<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_%OBJETO_ROUTE%">
+            <!--begin::Card toolbar-->
+            <div class="card-toolbar">
+                <!--begin::Toolbar-->
+                <div class="d-flex justify-content-end" data-kt-%OBJETO_ROUTE%-table-toolbar="base">
+                    <!--begin::Add %OBJETO_ROUTE%-->
+                    <!--<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_%OBJETO_ROUTE%">
                 {!! getIcon('plus', 'fs-2', '', 'i') !!}
                 Agregar %OBJETO_LABEL_INDIVIDUAL%
                 </button>-->
-                <a href="{{ url('/%MENU_RUTA%/%OBJETO_ROUTE%/create' ) }}" class="btn btn-primary">
-                    {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                    Agregar %OBJETO_LABEL_INDIVIDUAL%
-                </a>
-                
-                <!--end::Add %OBJETO_ROUTE%-->
+                    <a href="{{ url('/%MENU_RUTA%/%OBJETO_ROUTE%/create' ) }}" class="btn btn-primary">
+                        {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                        Agregar %OBJETO_LABEL_INDIVIDUAL%
+                    </a>
+
+                    <!--end::Add %OBJETO_ROUTE%-->
+                </div>
+                <!--end::Toolbar-->
+
+                <!--begin::Modal-->
+                <livewire:%OBJETO_VIEW%.add-%OBJETO_VIEW%-modal></livewire:%OBJETO_VIEW%.add-%OBJETO_VIEW%-modal>
+                <!--end::Modal-->
             </div>
-            <!--end::Toolbar-->
-
-            <!--begin::Modal-->
-            <livewire:%OBJETO_VIEW%.add-%OBJETO_VIEW%-modal></livewire:%OBJETO_VIEW%.add-%OBJETO_VIEW%-modal>
-            <!--end::Modal-->
+            <!--end::Card toolbar-->
         </div>
-        <!--end::Card toolbar-->
-    </div>
-    <!--end::Card header-->
+        <!--end::Card header-->
 
-    <!--begin::Card body-->
-    <div class="card-body py-4">
-        <!--begin::Table-->
-        
-        <fieldset id="show-fieldset-%OBJETO_LABEL_INDIVIDUAL%" disabled>
-        <div class="row">
-        @include('cruds.%OBJETO_VIEW%.fields')
+        <!--begin::Card body-->
+        <div class="card-body py-4">
+            <!--begin::Table-->
+
+
+            <div class="accordion" id="accordion%OBJETO_LABEL_INDIVIDUAL%">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="panelDatos">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelDatosCollapse" aria-expanded="true" aria-controls="panelDatosCollapse">
+                            Datos
+                        </button>
+                    </h2>
+                    <div id="panelDatosCollapse" class="accordion-collapse collapse show" aria-labelledby="panelDatos">
+                        <div class="accordion-body">
+                            <fieldset id="show-fieldset-%OBJETO_LABEL_INDIVIDUAL%" disabled>
+                                <div class="row">
+                                    @include('cruds.%OBJETO_VIEW%.fields')
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--end::Table-->
         </div>
-        </fieldset>
-        
-        <!--end::Table-->
+        <!--end::Card body-->
     </div>
-    <!--end::Card body-->
-</div>
 
-@push('scripts')
-<script>     
-    $('#kt_modal_add_usuarios').on('hidden.bs.modal', function() {
-        Livewire.dispatch('new_usuarios');
-    });
-</script>
-@endpush
+    @push('scripts')
+    <script>
+        $('#kt_modal_add_usuarios').on('hidden.bs.modal', function() {
+            Livewire.dispatch('new_usuarios');
+        });
+    </script>
+    @endpush
 
 </x-default-layout>
