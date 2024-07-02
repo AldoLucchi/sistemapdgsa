@@ -175,7 +175,7 @@ class GeneradorCrudService
                     'table_columns_string_fk' => $table_columns_all_string,
                     'table_column_fk_id' => $table_column_fk_id,
                     'table_column_fk_name' => $table_column_fk_name,
-                    'model_name_fk' => $table_name_fk_format,
+                    'model_name' => $table_name_fk_format,
                 ];
                 $tables_data_fk[$key] =  $table_fk_data;
             }
