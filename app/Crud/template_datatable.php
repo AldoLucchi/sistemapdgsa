@@ -47,7 +47,7 @@ class %OBJETO_DATATABLE% extends DataTable
 
         %DATATABLE_QUERY_FILTERS%
 
-        %DATATABLE_QUERY_FILTERS_DINAMYC%
+        %DATATABLE_QUERY_FILTERS_DYNAMIC%
 
         return $query;
     }
