@@ -702,7 +702,7 @@ class GeneradorCrudService
             }
 
             if ($column['type_html'] == 'text') {
-                $template_filters_texto .= $column['name'] . ', " ", ';
+                $template_filters_texto .= $column['name'] . ", ' ', ";
             }
         }
 
@@ -717,6 +717,7 @@ class GeneradorCrudService
         $template = str_replace('%FIELDS_DATATABLES_GETCOLUMNS%', $template_columns_all, $template);
         $template = str_replace('%DATATABLE_QUERY_FILTERS%', $template_queries_all, $template);
         $template = str_replace('%DATATABLE_QUERY_FILTERS_DYNAMIC%', $filters, $template);
+        $template_filters_texto = substr($template_filters_texto, 0, -1);
         $template = str_replace('%DATATABLE_QUERY_FILTERS_DYNAMIC_TEXTO%', $template_filters_texto, $template);
 
         fwrite($file, $template);
