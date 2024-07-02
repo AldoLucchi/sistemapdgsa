@@ -26,6 +26,13 @@
             <div class="card-toolbar">
                 <!--begin::Toolbar-->
                 <div class="d-flex justify-content-end" data-kt-%OBJETO_VIEW%-table-toolbar="base">
+                    <!--begin::Filter-->
+                    <button type="button" class="btn btn-light-primary me-3" data-bs-toggle="collapse" href="#filtros" role="button" aria-expanded="false" aria-controls="filtros">
+                        <i class="ki-duotone ki-filter fs-2"><span class="path1"></span><span class="path2"></span></i>
+                        Filtros
+                    </button>
+                    <!--end::Filter-->
+
                     <!--begin::Add %OBJETO_VIEW%-->
                     <!--<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_%OBJETO_VIEW%">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
@@ -46,6 +53,24 @@
             <!--end::Card toolbar-->
         </div>
         <!--end::Card header-->
+
+        <div class="row border-0 pt-6 collapse  card-filtros " id="filtros">
+
+            <div class="col-12 col-lg-4">
+                <label for="texto" class=" form-label">Texto</label>
+                <input type="text" class="form-control form-control-transparent" />
+            </div>
+
+            %VIEW_LIST_FILTROS%
+
+            <div class="col-12">
+                <button type="button" class="btn btn-primary float-end" onclick="redirectFiltros()">
+                    {!! getIcon('search-list', 'fs-2', '', 'i') !!}
+                    Filtrar
+                </button>
+            </div>
+
+        </div>
 
         <!--begin::Card body-->
         <div class="card-body py-4">
@@ -73,6 +98,15 @@
         $('#kt_modal_add_%OBJETO_VIEW%').on('hidden.bs.modal', function() {
             Livewire.dispatch('new_%OBJETO_VIEW%');
         });
+
+        //filtros
+        function redirectFiltros() {
+            var urlFilter = "{{ url('/%MENU_RUTA%/%OBJETO_ROUTE%' ) }}"+"?";
+
+            %VIEW_LIST_FILTROS_JAVASCRIPT%
+
+            window.location.href = urlFilter;
+        }
     </script>
     @endpush
 

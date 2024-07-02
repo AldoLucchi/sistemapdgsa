@@ -13,6 +13,14 @@ use Illuminate\Support\HtmlString;
 
 class %OBJETO_DATATABLE% extends DataTable
 {
+    private $filters;
+
+    public function __construct(
+        $filters = null
+    ) {
+        $this->filters = $filters;
+    }
+
     /**
      * Build the DataTable class.
      *
@@ -38,6 +46,8 @@ class %OBJETO_DATATABLE% extends DataTable
         $query = $model->newQuery();
 
         %DATATABLE_QUERY_FILTERS%
+
+        %DATATABLE_QUERY_FILTERS_DINAMYC%
 
         return $query;
     }

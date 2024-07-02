@@ -31,10 +31,20 @@ class %OBJETO_CONTROLLER% extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(%OBJETO_DATATABLE% $dataTable)
+    public function index(Request $request)
     {			
 		
-        return $dataTable->render('cruds/%OBJETO_VIEW%.list');
+      $filters = [];
+
+      %FILTERS_VARIABLES%
+      
+      $dataTable = new %OBJETO_DATATABLE%($filters);
+
+      $details = [  
+        %FILTERS_VARIABLES%
+      ];
+
+        return $dataTable->render('cruds/%OBJETO_VIEW%.list', $details);
 
     }
 

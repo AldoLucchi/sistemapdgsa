@@ -48,6 +48,8 @@ class GeneradorCrudService
             $all_columns_null = true;
             $table_columns_all_null_string = '';
             $table_column_id = '';
+            $table_column_name = '';
+            $k = 1;
 
             $tables_fk = [];
 
@@ -113,6 +115,12 @@ class GeneradorCrudService
                 if ($colum->Key == 'PRI') {
                     $table_column_id = $colum->Field;
                 }
+
+                if ($k == 2) {
+                    $table_column_name = $colum->Field;
+                }
+
+                $k++;
 
                 //all                
                 $table_columns_all_null[] = $table_column_detail;
@@ -183,6 +191,7 @@ class GeneradorCrudService
                 'table_columns' =>  $table_columns,
                 'table_columns_string' =>  $table_columns_string,
                 'table_column_id' => $table_column_id,
+                'table_column_name' => $table_column_name,
                 'tables_fk' => $tables_data_fk,
                 'model_name' => $table_name_format,
                 'controller_name' => $table_name_format . 'Controller',
@@ -315,6 +324,23 @@ class GeneradorCrudService
         $tablas_asociadas = '';
         $tablas_asociadas_uses = '';
         $field_file_storage = '';
+        
+        $filters = '';        
+        $template_filters = '
+            if(isset($request["%OBJETO_VARIABLE%"]) ){
+                $filters["%OBJETO_VARIABLE%"]=$request["%OBJETO_VARIABLE%"];
+            }
+            else{
+                $request["%OBJETO_VARIABLE%"]="";
+            }	    
+        ';
+
+        $filters_variables = '';
+        $template_filters_variables = '
+            "%OBJETO_VARIABLE%List" => %OBJETO_VARIABLE%::all(),
+            "%OBJETO_VARIABLE%" => $request["%OBJETO_VARIABLE%"],
+        ';
+
         foreach ($data['table_columns'] as $column) {
             if ($column['type_html'] == 'checkbox') {
                 $field_checkbox = '
@@ -323,27 +349,37 @@ class GeneradorCrudService
                 $fields_checkobx .= $field_checkbox;
             }
             if (isset($column['select'])) {
+                $filter = $template_filters;
+                $filter_variable = $template_filters_variables;
+
                 $model_name_fk = $data['tables_fk'][$column['name']]['table_name_fk'];
                 $column_name_fk = $data['tables_fk'][$column['name']]['table_column_fk_name'];
                 $column_id_fk = $data['tables_fk'][$column['name']]['table_column_fk_id'];
-                
+
                 $tabla = '
-                "'.$model_name_fk.'" => '.$model_name_fk.'::all(), 
+                "' . $model_name_fk . '" => ' . $model_name_fk . '::all(), 
                 ';
 
                 $use = '
-                use App\Models\\'.$model_name_fk.';
+                use App\Models\\' . $model_name_fk . ';
                 ';
 
                 $tablas_asociadas .= $tabla;
                 $tablas_asociadas_uses .= $use;
+
+                //filter
+                $filter = str_replace('%OBJETO_VARIABLE%', $column['name'], $filter);
+                $filters .= $filter;
+
+                $filter_variable = str_replace('%OBJETO_VARIABLE%', $column['name'], $filter_variable);
+                $filters_variables .= $filter_variable;
             }
             if ($column['type_html'] == 'file') {
                 $template_file = $template_controller_file;
                 $template_file = $this->generateCrudReplace($template_file, $data);
                 $template_file = str_replace('%FIELD%', $column['name'], $template_file);
 
-                $field_file_storage .=$template_file;
+                $field_file_storage .= $template_file;
             }
         }
 
@@ -351,6 +387,8 @@ class GeneradorCrudService
         $template_controller = str_replace('%TABLAS_ASOCIADAS%', $tablas_asociadas, $template_controller);
         $template_controller = str_replace('%TABLAS_ASOCIADAS_USE%', $tablas_asociadas_uses, $template_controller);
         $template_controller = str_replace('%FIELD_FILE_STORAGE%', $field_file_storage, $template_controller);
+        $template_controller = str_replace('%FILTERS%', $filters, $template_controller);
+        $template_controller = str_replace('%FILTERS_VARIABLES%', $filters_variables, $template_controller);
 
         fwrite($file_controller, $template_controller);
         fclose($file_controller);
@@ -376,6 +414,40 @@ class GeneradorCrudService
         $file_list_view = fopen("../resources/views/cruds/" . $data['table_name'] . "/list.blade.php", "w") or die("Unable to open file - view list.blade.php");
         $template_list_view = file_get_contents('../app/Crud/template_view_list.php');
         $template_list_view = $this->generateCrudReplace($template_list_view, $data);
+
+        $template_list_filters = file_get_contents('../app/Crud/template_view_list_filters.php');
+        $template_list_filters_javascript = '
+        const %OBJETO_LABEL% = document.getElementById("%OBJETO_LABEL%").value;            
+            urlFilter = urlFilter+ "%OBJETO_LABEL%="+%OBJETO_LABEL%+"&";
+            ';
+
+        $template_filters = '';
+        $template_filters_javascript = '';
+
+        foreach ($data['table_columns'] as $column) {
+            if (isset($column['select'])) {
+                $list_filters = $template_list_filters;
+                $list_filters_javascript = $template_list_filters_javascript;
+
+                $model_name = $data['tables_fk'][$column['name']]['table_name_fk'];
+                $column_name = $data['tables_fk'][$column['name']]['table_column_fk_name'];
+                $column_id = $data['tables_fk'][$column['name']]['table_column_fk_id'];
+
+                $list_filters = str_replace('%OBJETO_LABEL_INDIVIDUAL%', $model_name, $list_filters);
+                $list_filters = str_replace('%OBJETO_LABEL%', $model_name, $list_filters);
+                $list_filters = str_replace('%FIELD_ID%', $column_id, $list_filters);
+                $list_filters = str_replace('%FIELD_NAME%', $column_name, $list_filters);
+
+                $template_filters .= $list_filters;
+
+                $list_filters_javascript = str_replace('%OBJETO_LABEL%', $model_name, $list_filters_javascript);
+
+                $template_filters_javascript .= $list_filters_javascript;
+            }
+        }
+
+        $template_list_view = str_replace('%VIEW_LIST_FILTROS%', $template_filters, $template_list_view);
+        $template_list_view = str_replace('%VIEW_LIST_FILTROS_JAVASCRIPT%', $template_filters_javascript, $template_list_view);
 
         fwrite($file_list_view, $template_list_view);
         fclose($file_list_view);
@@ -431,7 +503,7 @@ class GeneradorCrudService
                 //$value = '(isset($' . $data['table_name'] . ') ? $' . $data['table_name'] . '->' . $model_name . '->first()?->' . $column_name . ':"")';
                 $value = '
                     @foreach($' . $model_name . ' as $item)
-                    <option value="{{ $item->' . $column_id . ' }}"  {{ (isset($'.$data['table_name'].') && $item->' . $column_id . ' == $'.$data['table_name'].'->'.$show_column_name.')?"selected":"" }}>{{ $item->' . $column_name . ' }}</option>
+                    <option value="{{ $item->' . $column_id . ' }}"  {{ (isset($' . $data['table_name'] . ') && $item->' . $column_id . ' == $' . $data['table_name'] . '->' . $show_column_name . ')?"selected":"" }}>{{ $item->' . $column_name . ' }}</option>
                     @endforeach';
 
                 $template = str_replace('%FIELD_SELECT_OPTIONS%', $value, $template);
@@ -450,21 +522,21 @@ class GeneradorCrudService
                 if ($column['type_html'] == 'checkbox') {
                     $value = '(isset($' . $data['table_name'] . ') && $' . $data['table_name'] . '->' . $column['name'] . '?"ON":"OFF")';
                     $field_style = "form-check-input";
-                    $field_checked = '{{ (isset($'.$data['table_name'].') && $'.$data['table_name'].'->'. $column['name'].'?"checked":"") }}';
+                    $field_checked = '{{ (isset($' . $data['table_name'] . ') && $' . $data['table_name'] . '->' . $column['name'] . '?"checked":"") }}';
                 }
                 if ($column['type_html'] == 'password') {
                     $value = '"---"';
                 }
                 if ($column['type_html'] == 'file') {
                     $value_file = '
-                    @if( isset($' . $data['table_name'].') && $'.$data['table_name'] . '->' . $column['name'].' )
-                    <br><img src="/images/{{ $'.$data['table_name'] . '->' . $column['name'].' }}" style="width:100px;">
+                    @if( isset($' . $data['table_name'] . ') && $' . $data['table_name'] . '->' . $column['name'] . ' )
+                    <br><img src="/images/{{ $' . $data['table_name'] . '->' . $column['name'] . ' }}" style="width:100px;">
                     @endif
                     ';
 
-                    $show_column_name = $show_column_name.'_file';
+                    $show_column_name = $show_column_name . '_file';
                 }
-                if($data['table_column_id'] == $column['name']){
+                if ($data['table_column_id'] == $column['name']) {
                     $value_readonly = "readonly";
                 }
 
@@ -554,7 +626,7 @@ class GeneradorCrudService
                 } else if ($column['type_html'] == 'password') {
                     $return = '"---"';
                 } else if ($column['type_html'] == 'file') {
-                    $return = 'new HtmlString(\'<img src="/images/' . '\'.$'.$data['model_name'].'->'.$column['name']. '.\'" border="0" width="40" class="img-rounded" />\')';
+                    $return = 'new HtmlString(\'<img src="/images/' . '\'.$' . $data['model_name'] . '->' . $column['name'] . '.\'" border="0" width="40" class="img-rounded" />\')';
                 } else {
                     $return = '$%OBJETO_VARIABLE%->' . $column['name'];
                 }
@@ -586,6 +658,14 @@ class GeneradorCrudService
         $datatables_fields_query = env('DATATABLES_FIELDS_QUERY', 'idcliente,idproyecto,idrol');
         $datatables_queries = explode(',', $datatables_fields_query);
 
+        $filters = '';
+        $template_filters = '
+        if ($this->filters && isset($this->filters["%OBJETO_LABEL%"])) {
+            $query->where("%FIELD_ID%", $this->filters["%OBJETO_LABEL%"]);
+        }
+        ';
+
+
         foreach ($data['table_columns'] as $column) {
             $datatable_column_field_name = $column['name'];
             if (isset($column['alias']) && $column['name'] != $data['table_column_id']) {
@@ -606,6 +686,19 @@ class GeneradorCrudService
                 $template_queries_replace = str_replace('%FIELD%', $column['name'], $template_queries_replace);
                 $template_queries_all .=  $template_queries_replace;
             }
+
+            if (isset($column['select'])) {
+                $list_filters = $template_filters;
+
+                $model_name = $data['tables_fk'][$column['name']]['table_name_fk'];
+                $column_name = $data['tables_fk'][$column['name']]['table_column_fk_name'];
+                $column_id = $data['tables_fk'][$column['name']]['table_column_fk_id'];
+
+                $list_filters = str_replace('%OBJETO_LABEL%', $model_name, $list_filters);
+                $list_filters = str_replace('%FIELD_ID%', $column_id, $list_filters);
+
+                $filters .= $list_filters;
+            }
         }
 
         if ($incluir_list) {
@@ -618,6 +711,7 @@ class GeneradorCrudService
         $template = str_replace('%FIELDS_DATATABLES_DATATABLE%', $template_fields_all, $template);
         $template = str_replace('%FIELDS_DATATABLES_GETCOLUMNS%', $template_columns_all, $template);
         $template = str_replace('%DATATABLE_QUERY_FILTERS%', $template_queries_all, $template);
+        $template = str_replace('%DATATABLE_QUERY_FILTERS_DYNAMIC%', $filters, $template);
 
         fwrite($file, $template);
         fclose($file);
@@ -778,9 +872,9 @@ class GeneradorCrudService
                         $class = 'form-check-input mb-3 mb-lg-0';
                     }
                     if ($column_type_html == 'file') {
-                        $input.= '
-                        @if( isset($' . $column['name'].') && $'. $column['name'].' )
-                        <br><img src="/images/{{ $'. $column['name'].' }}" style="width:100px;">
+                        $input .= '
+                        @if( isset($' . $column['name'] . ') && $' . $column['name'] . ' )
+                        <br><img src="/images/{{ $' . $column['name'] . ' }}" style="width:100px;">
                         @endif
                         ';
                     }
@@ -887,7 +981,7 @@ class GeneradorCrudService
         $content = str_replace('%MENU_RUTA%', $menu_ruta, $content);
 
         fwrite($file, $content);
-        fclose($file);        
+        fclose($file);
     }
 
 

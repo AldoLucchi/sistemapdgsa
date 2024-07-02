@@ -51450,3 +51450,17 @@ body,
     color: #ffffff !important;
   }
 }
+/*custom*/
+
+.card-filtros {
+  /*display: flex;*/
+  justify-content: space-between;
+  align-items: stretch;
+  flex-wrap: wrap;
+  min-height: 70px;
+  padding: 0 2.25rem;
+    padding-top: 0px;
+  color: var(--bs-card-cap-color);
+  background-color: var(--bs-card-cap-bg);
+  border-bottom: 1px solid var(--bs-card-border-color);
+}
