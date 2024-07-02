@@ -368,10 +368,10 @@ class GeneradorCrudService
                 $tablas_asociadas_uses .= $use;
 
                 //filter
-                $filter = str_replace('%OBJETO_VARIABLE%', $column['name'], $filter);
+                $filter = str_replace('%OBJETO_VARIABLE%', $data['model_name'], $filter);
                 $filters .= $filter;
 
-                $filter_variable = str_replace('%OBJETO_VARIABLE%', $column['name'], $filter_variable);
+                $filter_variable = str_replace('%OBJETO_VARIABLE%', $data['model_name'], $filter_variable);
                 $filters_variables .= $filter_variable;
             }
             if ($column['type_html'] == 'file') {

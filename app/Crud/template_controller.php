@@ -36,7 +36,7 @@ class %OBJETO_CONTROLLER% extends Controller
 		
       $filters = [];
 
-      %FILTERS_VARIABLES%
+      %FILTERS%
       
       $dataTable = new %OBJETO_DATATABLE%($filters);
 
