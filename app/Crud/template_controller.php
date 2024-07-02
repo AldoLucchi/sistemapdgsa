@@ -36,11 +36,19 @@ class %OBJETO_CONTROLLER% extends Controller
 		
       $filters = [];
 
+      if(isset($request["texto"]) ){
+          $filters["texto"]=$request["texto"];
+      }
+      else{
+          $request["texto"]="";
+      }	
+
       %FILTERS%
       
       $dataTable = new %OBJETO_DATATABLE%($filters);
 
       $details = [  
+        "texto" => $request["texto"],
         %FILTERS_VARIABLES%
       ];
 

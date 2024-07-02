@@ -324,8 +324,8 @@ class GeneradorCrudService
         $tablas_asociadas = '';
         $tablas_asociadas_uses = '';
         $field_file_storage = '';
-        
-        $filters = '';        
+
+        $filters = '';
         $template_filters = '
             if(isset($request["%OBJETO_VARIABLE%"]) ){
                 $filters["%OBJETO_VARIABLE%"]=$request["%OBJETO_VARIABLE%"];
@@ -665,6 +665,7 @@ class GeneradorCrudService
         }
         ';
 
+        $template_filters_texto = '';
 
         foreach ($data['table_columns'] as $column) {
             $datatable_column_field_name = $column['name'];
@@ -699,6 +700,10 @@ class GeneradorCrudService
 
                 $filters .= $list_filters;
             }
+
+            if ($column['type_html'] == 'text') {
+                $template_filters_texto .= $column['name'].' ';
+            }
         }
 
         if ($incluir_list) {
@@ -712,6 +717,7 @@ class GeneradorCrudService
         $template = str_replace('%FIELDS_DATATABLES_GETCOLUMNS%', $template_columns_all, $template);
         $template = str_replace('%DATATABLE_QUERY_FILTERS%', $template_queries_all, $template);
         $template = str_replace('%DATATABLE_QUERY_FILTERS_DYNAMIC%', $filters, $template);
+        $template = str_replace('%DATATABLE_QUERY_FILTERS_DYNAMIC_TEXTO%', $template_filters_texto, $template);
 
         fwrite($file, $template);
         fclose($file);

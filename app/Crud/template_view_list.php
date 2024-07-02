@@ -55,10 +55,10 @@
         <!--end::Card header-->
 
         <div class="row border-0 pt-6 collapse  card-filtros " id="filtros">
-
+            
             <div class="col-12 col-lg-4">
                 <label for="texto" class=" form-label">Texto</label>
-                <input type="text" class="form-control form-control-transparent" />
+                <input type="text" class="form-control form-control-transparent" id="texto" name="texto" value="{{ (isset($texto))?$texto:'' }}" />
             </div>
 
             %VIEW_LIST_FILTROS%
@@ -103,6 +103,9 @@
         function redirectFiltros() {
             var urlFilter = "{{ url('/%MENU_RUTA%/%OBJETO_ROUTE%' ) }}"+"?";
 
+            const texto = document.getElementById("texto").value;            
+            urlFilter = urlFilter+ "texto="+texto+"&";
+            
             %VIEW_LIST_FILTROS_JAVASCRIPT%
 
             window.location.href = urlFilter;
