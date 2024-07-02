@@ -702,7 +702,7 @@ class GeneradorCrudService
             }
 
             if ($column['type_html'] == 'text') {
-                $template_filters_texto .= $column['name'].' ';
+                $template_filters_texto .= $column['name'] . ', " ", ';
             }
         }
 

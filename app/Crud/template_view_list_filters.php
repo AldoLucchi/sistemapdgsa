@@ -3,7 +3,7 @@
     <select class="form-control form-select form-select-transparent" aria-label="Select example" id="%OBJETO_LABEL_INDIVIDUAL%" name="%OBJETO_LABEL_INDIVIDUAL%">
         <option value="">---</option>
         @foreach($%OBJETO_LABEL%List as $%OBJETO_LABEL_INDIVIDUAL%Option)
-        <option value="{{ $%OBJETO_LABEL_INDIVIDUAL%Option->%FIELD_ID% }}" {{ (isset($%OBJETO_LABEL%) && $%OBJETO_LABEL% == $%OBJETO_LABEL_INDIVIDUAL%Option->%FIELD_ID% ->idestatus)?'selected':'' }}>{{ $%OBJETO_LABEL_INDIVIDUAL%Option->%FIELD_NAME% }}</option>
+        <option value="{{ $%OBJETO_LABEL_INDIVIDUAL%Option->%FIELD_ID% }}" {{ (isset($%OBJETO_LABEL%) && $%OBJETO_LABEL% == $%OBJETO_LABEL_INDIVIDUAL%Option->%FIELD_ID% )?'selected':'' }}>{{ $%OBJETO_LABEL_INDIVIDUAL%Option->%FIELD_NAME% }}</option>
         @endforeach
     </select>
 </div>
