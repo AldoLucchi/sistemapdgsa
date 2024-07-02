@@ -175,7 +175,7 @@ class GeneradorCrudService
                     'table_columns_string_fk' => $table_columns_all_string,
                     'table_column_fk_id' => $table_column_fk_id,
                     'table_column_fk_name' => $table_column_fk_name,
-                    'model_name' => $table_name_fk_format,
+                    'model_name_fk' => $table_name_fk_format,
                 ];
                 $tables_data_fk[$key] =  $table_fk_data;
             }
@@ -368,10 +368,10 @@ class GeneradorCrudService
                 $tablas_asociadas_uses .= $use;
 
                 //filter
-                $filter = str_replace('%OBJETO_VARIABLE%', $data['model_name'], $filter);
+                $filter = str_replace('%OBJETO_VARIABLE%', $model_name_fk, $filter);
                 $filters .= $filter;
 
-                $filter_variable = str_replace('%OBJETO_VARIABLE%', $data['model_name'], $filter_variable);
+                $filter_variable = str_replace('%OBJETO_VARIABLE%', $model_name_fk, $filter_variable);
                 $filters_variables .= $filter_variable;
             }
             if ($column['type_html'] == 'file') {
