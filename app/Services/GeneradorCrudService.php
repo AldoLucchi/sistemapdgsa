@@ -708,6 +708,18 @@ class GeneradorCrudService
         }
         ';
 
+        $template_filters_min = '
+        if ($this->filters && isset($this->filters["%OBJETO_LABEL%"])) {
+            $query->where("%FIELD_ID%", ">",  $this->filters["%OBJETO_LABEL%"]);
+        }
+        ';
+
+        $template_filters_max = '
+        if ($this->filters && isset($this->filters["%OBJETO_LABEL%"])) {
+            $query->where("%FIELD_ID%", "<",  $this->filters["%OBJETO_LABEL%"]);
+        }
+        ';
+
         $template_filters_texto = '';
 
         foreach ($data['table_columns'] as $column) {
@@ -750,11 +762,21 @@ class GeneradorCrudService
             }
 
             if ($column['type_html'] == 'datetime-local') {
-                $list_filters = $template_filters;
-                $list_filters = str_replace('%OBJETO_LABEL%', $column['name'], $list_filters);
-                $list_filters = str_replace('%FIELD_ID%', $column['name'], $list_filters);
+                $list_filters_from = $template_filters_min;
+                $from = $column['name'].'_from';
+                $to = $column['name'].'_to';
 
-                $filters .= $list_filters;
+                $list_filters_from = str_replace('%OBJETO_LABEL%', $from, $list_filters_from);
+                $list_filters_from = str_replace('%FIELD_ID%', $from, $list_filters_from);
+
+                $filters .= $list_filters_from;
+
+                $list_filters_to = $template_filters_max;
+
+                $list_filters_to = str_replace('%OBJETO_LABEL%', $to, $list_filters_to);
+                $list_filters_to = str_replace('%FIELD_ID%', $to, $list_filters_to);
+
+                $filters .= $list_filters_to;
             }
 
             if ($column['type_html'] == 'text') {
