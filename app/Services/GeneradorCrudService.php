@@ -467,6 +467,8 @@ class GeneradorCrudService
 
             if($column['type_html'] == 'datetime-local'){
                 $list_filters_date = $template_list_filters_date;
+                $list_filters_javascript = $template_list_filters_javascript;
+
                 $alias = $column['name'];
                 if( isset($column['alias'])){
                     $alias = $column['alias'];
