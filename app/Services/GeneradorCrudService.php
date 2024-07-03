@@ -466,7 +466,8 @@ class GeneradorCrudService
 
             if ($column['type_html'] == 'datetime-local') {
                 $list_filters_date = $template_list_filters_date;
-                $list_filters_javascript = $template_list_filters_javascript;
+                $list_filters_javascript_from = $template_list_filters_javascript;
+                $list_filters_javascript_to = $template_list_filters_javascript;
 
                 $alias = $column['name'];
                 if (isset($column['alias'])) {
@@ -479,12 +480,12 @@ class GeneradorCrudService
 
                 //-------
                 $date_from = $column['name'] . '_from';
-                $list_filters_javascript = str_replace('%OBJETO_LABEL%', $date_from, $list_filters_javascript);
-                $template_filters_javascript .= $list_filters_javascript;
+                $list_filters_javascript_from = str_replace('%OBJETO_LABEL%', $date_from, $list_filters_javascript);
+                $template_filters_javascript .= $list_filters_javascript_from;
 
                 $date_to = $column['name'] . '_to';
-                $list_filters_javascript = str_replace('%OBJETO_LABEL%', $date_to, $list_filters_javascript);
-                $template_filters_javascript .= $list_filters_javascript;
+                $list_filters_javascript_to = str_replace('%OBJETO_LABEL%', $date_to, $list_filters_javascript);
+                $template_filters_javascript .= $list_filters_javascript_to;
             }
         }
 
