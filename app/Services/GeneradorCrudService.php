@@ -385,10 +385,10 @@ class GeneradorCrudService
                 $filter_variable = $template_filters_variables;
 
                 //filter
-                $filter = str_replace('%OBJETO_VARIABLE%', $model_name_fk, $filter);
+                $filter = str_replace('%OBJETO_VARIABLE%', $column['name'], $filter);
                 $filters .= $filter;
 
-                $filter_variable = str_replace('%OBJETO_VARIABLE%', $model_name_fk, $filter_variable);
+                $filter_variable = str_replace('%OBJETO_VARIABLE%', $column['name'], $filter_variable);
                 $filters_variables .= $filter_variable;
 
             }
