@@ -467,13 +467,17 @@ class GeneradorCrudService
 
             if($column['type_html'] == 'datetime-local'){
                 $list_filters_date = $template_list_filters_date;
+                $alias = $column['name'];
+                if( isset($column['alias'])){
+                    $alias = $column['alias'];
+                }
                 $list_filters_date = str_replace('%FIELD_NAME%', $column['name'], $list_filters_date);
-                $list_filters_date = str_replace('%FIELD_ALIAS%', $column['alias'], $list_filters_date);
+                $list_filters_date = str_replace('%FIELD_ALIAS%', $alias, $list_filters_date);
 
                 $template_filters .= $list_filters_date;
 
                 //-------
-                $list_filters_javascript = str_replace('%OBJETO_LABEL%', $model_name, $list_filters_javascript);
+                $list_filters_javascript = str_replace('%OBJETO_LABEL%',$column['name'], $list_filters_javascript);
 
                 $template_filters_javascript .= $list_filters_javascript;
             }
