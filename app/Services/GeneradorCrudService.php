@@ -336,8 +336,11 @@ class GeneradorCrudService
         ';
 
         $filters_variables = '';
-        $template_filters_variables = '
+        $template_filters_variables_all = '
             "%OBJETO_VARIABLE%List" => %OBJETO_VARIABLE%::all(),
+        ';
+
+        $template_filters_variables = '
             "%OBJETO_VARIABLE%" => $request["%OBJETO_VARIABLE%"],
         ';
 
@@ -351,6 +354,7 @@ class GeneradorCrudService
             if (isset($column['select'])) {
                 $filter = $template_filters;
                 $filter_variable = $template_filters_variables;
+                $filter_variable_all = $template_filters_variables_all;
 
                 $model_name_fk = $data['tables_fk'][$column['name']]['table_name_fk'];
                 $column_name_fk = $data['tables_fk'][$column['name']]['table_column_fk_name'];
@@ -373,6 +377,20 @@ class GeneradorCrudService
 
                 $filter_variable = str_replace('%OBJETO_VARIABLE%', $model_name_fk, $filter_variable);
                 $filters_variables .= $filter_variable;
+                $filter_variable_all = str_replace('%OBJETO_VARIABLE%', $model_name_fk, $filter_variable_all);
+                $filters_variables .= $filter_variable_all;
+            }
+            if ($column['type_html'] == 'date') {
+                $filter = $template_filters;
+                $filter_variable = $template_filters_variables;
+
+                //filter
+                $filter = str_replace('%OBJETO_VARIABLE%', $model_name_fk, $filter);
+                $filters .= $filter;
+
+                $filter_variable = str_replace('%OBJETO_VARIABLE%', $model_name_fk, $filter_variable);
+                $filters_variables .= $filter_variable;
+
             }
             if ($column['type_html'] == 'file') {
                 $template_file = $template_controller_file;
@@ -416,6 +434,7 @@ class GeneradorCrudService
         $template_list_view = $this->generateCrudReplace($template_list_view, $data);
 
         $template_list_filters = file_get_contents('../app/Crud/template_view_list_filters.php');
+        $template_list_filters_date = file_get_contents('../app/Crud/template_view_list_filters_date.php');
         $template_list_filters_javascript = '
         const %OBJETO_LABEL% = document.getElementById("%OBJETO_LABEL%").value;            
             urlFilter = urlFilter+ "%OBJETO_LABEL%="+%OBJETO_LABEL%+"&";
@@ -440,6 +459,20 @@ class GeneradorCrudService
 
                 $template_filters .= $list_filters;
 
+                //-------
+                $list_filters_javascript = str_replace('%OBJETO_LABEL%', $model_name, $list_filters_javascript);
+
+                $template_filters_javascript .= $list_filters_javascript;
+            }
+
+            if($column['type_html'] == 'date'){
+                $list_filters_date = $template_list_filters_date;
+                $list_filters_date = str_replace('%FIELD_NAME%', $column['name'], $list_filters_date);
+                $list_filters_date = str_replace('%FIELD_ALIAS%', $column['alias'], $list_filters_date);
+
+                $template_filters .= $list_filters_date;
+
+                //-------
                 $list_filters_javascript = str_replace('%OBJETO_LABEL%', $model_name, $list_filters_javascript);
 
                 $template_filters_javascript .= $list_filters_javascript;
@@ -696,7 +729,20 @@ class GeneradorCrudService
                 $column_id = $data['tables_fk'][$column['name']]['table_column_fk_id'];
 
                 $list_filters = str_replace('%OBJETO_LABEL%', $model_name, $list_filters);
-                $list_filters = str_replace('%FIELD_ID%', $column_id, $list_filters);
+
+                if (in_array($model_name, ['Users', 'users'])) {
+                    $list_filters = str_replace('%FIELD_ID%', 'idusuario', $list_filters);
+                } else {
+                    $list_filters = str_replace('%FIELD_ID%', $column_id, $list_filters);
+                }
+
+                $filters .= $list_filters;
+            }
+
+            if ($column['type_html'] == 'date') {
+                $list_filters = $template_filters;
+                $list_filters = str_replace('%OBJETO_LABEL%', $column['name'], $list_filters);
+                $list_filters = str_replace('%FIELD_ID%', $column['name'], $list_filters);
 
                 $filters .= $list_filters;
             }
