@@ -380,7 +380,7 @@ class GeneradorCrudService
                 $filter_variable_all = str_replace('%OBJETO_VARIABLE%', $model_name_fk, $filter_variable_all);
                 $filters_variables .= $filter_variable_all;
             }
-            if ($column['type_html'] == 'date') {
+            if ($column['type_html'] == 'datetime-local') {
                 $filter = $template_filters;
                 $filter_variable = $template_filters_variables;
 
@@ -465,7 +465,7 @@ class GeneradorCrudService
                 $template_filters_javascript .= $list_filters_javascript;
             }
 
-            if($column['type_html'] == 'date'){
+            if($column['type_html'] == 'datetime-local'){
                 $list_filters_date = $template_list_filters_date;
                 $list_filters_date = str_replace('%FIELD_NAME%', $column['name'], $list_filters_date);
                 $list_filters_date = str_replace('%FIELD_ALIAS%', $column['alias'], $list_filters_date);
@@ -739,7 +739,7 @@ class GeneradorCrudService
                 $filters .= $list_filters;
             }
 
-            if ($column['type_html'] == 'date') {
+            if ($column['type_html'] == 'datetime-local') {
                 $list_filters = $template_filters;
                 $list_filters = str_replace('%OBJETO_LABEL%', $column['name'], $list_filters);
                 $list_filters = str_replace('%FIELD_ID%', $column['name'], $list_filters);
