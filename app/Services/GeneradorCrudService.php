@@ -480,11 +480,11 @@ class GeneradorCrudService
 
                 //-------
                 $date_from = $column['name'] . '_from';
-                $list_filters_javascript_from = str_replace('%OBJETO_LABEL%', $date_from, $list_filters_javascript);
+                $list_filters_javascript_from = str_replace('%OBJETO_LABEL%', $date_from, $list_filters_javascript_from);
                 $template_filters_javascript .= $list_filters_javascript_from;
 
                 $date_to = $column['name'] . '_to';
-                $list_filters_javascript_to = str_replace('%OBJETO_LABEL%', $date_to, $list_filters_javascript);
+                $list_filters_javascript_to = str_replace('%OBJETO_LABEL%', $date_to, $list_filters_javascript_to);
                 $template_filters_javascript .= $list_filters_javascript_to;
             }
         }
