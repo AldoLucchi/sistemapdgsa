@@ -390,7 +390,6 @@ class GeneradorCrudService
 
                 $filter_variable = str_replace('%OBJETO_VARIABLE%', $column['name'], $filter_variable);
                 $filters_variables .= $filter_variable;
-
             }
             if ($column['type_html'] == 'file') {
                 $template_file = $template_controller_file;
@@ -465,22 +464,26 @@ class GeneradorCrudService
                 $template_filters_javascript .= $list_filters_javascript;
             }
 
-            if($column['type_html'] == 'datetime-local'){
+            if ($column['type_html'] == 'datetime-local') {
                 $list_filters_date = $template_list_filters_date;
                 $list_filters_javascript = $template_list_filters_javascript;
 
                 $alias = $column['name'];
-                if( isset($column['alias'])){
+                if (isset($column['alias'])) {
                     $alias = $column['alias'];
                 }
-                $list_filters_date = str_replace('%FIELD_NAME%', $column['name'], $list_filters_date);
+                $list_filters_date = str_replace('%FIELD%', $column['name'], $list_filters_date);
                 $list_filters_date = str_replace('%FIELD_ALIAS%', $alias, $list_filters_date);
 
                 $template_filters .= $list_filters_date;
 
                 //-------
-                $list_filters_javascript = str_replace('%OBJETO_LABEL%',$column['name'], $list_filters_javascript);
+                $date_from = $column['name'] . '_from';
+                $list_filters_javascript = str_replace('%OBJETO_LABEL%', $date_from, $list_filters_javascript);
+                $template_filters_javascript .= $list_filters_javascript;
 
+                $date_to = $column['name'] . '_to';
+                $list_filters_javascript = str_replace('%OBJETO_LABEL%', $date_to, $list_filters_javascript);
                 $template_filters_javascript .= $list_filters_javascript;
             }
         }
