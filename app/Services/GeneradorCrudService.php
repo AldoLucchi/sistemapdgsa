@@ -763,18 +763,19 @@ class GeneradorCrudService
 
             if ($column['type_html'] == 'datetime-local') {
                 $list_filters_from = $template_filters_min;
-                $from = $column['name'].'_from';
-                $to = $column['name'].'_to';
+                $date_name = $column['name'];
+                $date_from = $column['name'] . '_from';
+                $date_to = $column['name'] . '_to';
 
-                $list_filters_from = str_replace('%OBJETO_LABEL%', $from, $list_filters_from);
-                $list_filters_from = str_replace('%FIELD_ID%', $from, $list_filters_from);
+                $list_filters_from = str_replace('%OBJETO_LABEL%', $date_from, $list_filters_from);
+                $list_filters_from = str_replace('%FIELD_ID%', $date_name, $list_filters_from);
 
                 $filters .= $list_filters_from;
 
                 $list_filters_to = $template_filters_max;
 
-                $list_filters_to = str_replace('%OBJETO_LABEL%', $to, $list_filters_to);
-                $list_filters_to = str_replace('%FIELD_ID%', $to, $list_filters_to);
+                $list_filters_to = str_replace('%OBJETO_LABEL%', $date_to, $list_filters_to);
+                $list_filters_to = str_replace('%FIELD_ID%', $date_name, $list_filters_to);
 
                 $filters .= $list_filters_to;
             }
