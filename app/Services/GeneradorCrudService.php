@@ -381,15 +381,30 @@ class GeneradorCrudService
                 $filters_variables .= $filter_variable_all;
             }
             if ($column['type_html'] == 'datetime-local') {
-                $filter = $template_filters;
-                $filter_variable = $template_filters_variables;
+                $date_name = $column['name'];
+                $date_from = $column['name'].'_from';
+                $date_to = $column['name'].'_to';
 
-                //filter
-                $filter = str_replace('%OBJETO_VARIABLE%', $column['name'], $filter);
-                $filters .= $filter;
+                $filter_from = $template_filters;
+                $filter_variable_from = $template_filters_variables;
 
-                $filter_variable = str_replace('%OBJETO_VARIABLE%', $column['name'], $filter_variable);
-                $filters_variables .= $filter_variable;
+                //filter from
+                $filter_from = str_replace('%OBJETO_VARIABLE%', $date_from, $filter_from);
+                $filters .= $filter_from;
+
+                $filter_variable_from = str_replace('%OBJETO_VARIABLE%', $date_from, $filter_variable_from);
+                $filters_variables .= $filter_variable_from;
+
+                //filter to
+
+                $filter_to = $template_filters;
+                $filter_variable_to = $template_filters_variables;
+
+                $filter_to = str_replace('%OBJETO_VARIABLE%', $date_to, $filter_to);
+                $filters .= $filter_to;
+
+                $filter_variable_to = str_replace('%OBJETO_VARIABLE%', $date_to, $filter_variable_to);
+                $filters_variables .= $filter_variable_to;
             }
             if ($column['type_html'] == 'file') {
                 $template_file = $template_controller_file;
