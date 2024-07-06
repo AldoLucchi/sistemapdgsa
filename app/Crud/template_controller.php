@@ -111,9 +111,15 @@ class %OBJETO_CONTROLLER% extends Controller
      */
     public function show( $%OBJETO_VARIABLE%)
     {
+
+
+      /*%RELATION_DATATABLE_VARIABLES%*/
+
         $data = [
           '%OBJETO_VARIABLE%' => %OBJETO%::find($%OBJETO_VARIABLE%),
           %TABLAS_ASOCIADAS%
+
+          /*%RELATION_DATATABLE_VARIABLES_DATA%*/
         ];
         return view('cruds/%OBJETO_VIEW%.show', $data);
 
@@ -182,6 +188,9 @@ class %OBJETO_CONTROLLER% extends Controller
 		//
     }
 	
-		
+    public function get%OBJETO%(%OBJETO_DATATABLE% $dataTable)
+    {
+        return $dataTable->render('cruds/%OBJETO%.datatable');
+    }
 	
 }

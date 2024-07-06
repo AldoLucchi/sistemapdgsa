@@ -68,6 +68,9 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- %RELATIONS_DATATABLE% -->
+
             </div>
 
             <!--end::Table-->
@@ -76,6 +79,9 @@
     </div>
 
     @push('scripts')
+
+    <!-- %RELATIONS_DATATABLE_SCRIPTS% -->
+
     <script>
         $('#kt_modal_add_usuarios').on('hidden.bs.modal', function() {
             Livewire.dispatch('new_usuarios');

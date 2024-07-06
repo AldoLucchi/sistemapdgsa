@@ -1002,12 +1002,15 @@ class GeneradorCrudService
 
         if (!str_contains($rutas, $search)) {
             //create route
-
+            $item_controller = $item_nombre ."Controller";
+            $item_datatable = $item_nombre ."Datatable";
             $new_route = "
-        use App\Http\Controllers\Crud\\" . $item_nombre . "Controller;
+        use App\Http\Controllers\Crud\\" . $item_controller . ";
         Route::name('" . $menu_ruta . ".')->group(function () {
-            Route::resource('/" . $menu_ruta . "/" . $item_nombre . "', " . $item_nombre . "Controller::class);
+            Route::resource('/" . $menu_ruta . "/" . $item_nombre . "', " . $item_controller . "::class);
         }); 
+        Route::get('" . $menu_ruta . "/" . $item_datatable . "',[" . $item_controller . "::class, 'get" . $item_datatable . "'])->name('" . $menu_ruta . "." . $item_datatable . "');
+
         ";
             $template_route = file_put_contents('../routes/web_crud.php', $new_route . PHP_EOL, FILE_APPEND | LOCK_EX);
         }

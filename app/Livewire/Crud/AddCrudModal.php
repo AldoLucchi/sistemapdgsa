@@ -38,6 +38,13 @@ class AddCrudModal extends Component
         $tables_excluded_env = env('CRUD_TABLES_EXCLUDED', 'addresses,cruds,failed_jobs,migrations,model_has_permissions,model_has_roles,password_resets,permissions,personal_access_tokens,role_has_permissions,roles');
         $tables_excluded = explode(',', $tables_excluded_env);
 
+        $options_crud = [
+            'create' => 'create',
+            'read' => 'read',
+            'update' => 'update',
+            'delete' => 'delete',
+        ];
+
         foreach ($tables as $i => $crud_table) {
             $table_name = $crud_table->Tables_in_pdgsabd;
 
@@ -50,7 +57,13 @@ class AddCrudModal extends Component
             }
         }
 
-        return view('livewire.crud.add-crud-modal', compact('cruds_availables', 'cruds_filtered', 'cruds_filtered_columns'));
+        $data = [
+            'cruds_availables' => $cruds_availables,
+            'cruds_filtered' => $cruds_filtered,
+            'cruds_filtered_columns' => $cruds_filtered_columns,
+            'options_crud' => $options_crud,
+        ];
+        return view('livewire.crud.add-crud-modal', $data);
     }
 
     public function submit(Request $request)
@@ -108,8 +121,8 @@ class AddCrudModal extends Component
         // Delete the record with the specified ID
         $crud = Crud::find($id);
 
-        if($crud->CrudGeneradosMenues){
-            foreach($crud->CrudGeneradosMenues as $CrudMenu){
+        if ($crud->CrudGeneradosMenues) {
+            foreach ($crud->CrudGeneradosMenues as $CrudMenu) {
                 $CrudMenu->delete();
             }
         }

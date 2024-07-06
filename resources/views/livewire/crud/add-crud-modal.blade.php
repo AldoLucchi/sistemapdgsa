@@ -1,6 +1,6 @@
 <div class="modal fade" id="kt_modal_add_crud" tabindex="-1" aria-hidden="true" wire:ignore.self>
     <!--begin::Modal dialog-->
-    <div class="modal-dialog modal-dialog-centered  modal-xl ">
+    <div class="modal-dialog modal-dialog-centered  modal-fullscreen ">
         <!--begin::Modal content-->
         <div class="modal-content">
             <!--begin::Modal header-->
@@ -99,6 +99,8 @@
                                         <td><b>Incluir <br>list</b></td>
                                         <td><b>Alias</b></td>
                                         <td><b>Seleccionar FK</b></td>
+                                        <td><b>Incluir en <br>Detalle de FK</b></td>
+                                        <td><b>Permisos en <br>Detalle de FK</b></td>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -114,16 +116,27 @@
                                             <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field }}" id="{{ $key.'_'.$column->Field }}">
                                         </td>
                                         <td>
-                                            <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field.'_list' }}" id="{{ $key.'_list_'.$column->Field }}">
+                                            <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field.'_list' }}" id="{{ $key.'_'.$column->Field.'_list' }}">
                                         </td>
                                         <td>
-                                            <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_alias' }}" id="{{ $key.'_alias_'.$column->Field }}" >
+                                            <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_alias' }}" id="{{ $key.'_'.$column->Field.'_alias' }}" >
                                         </td>
                                         <td>
                                             <select name="{{ $key.'_'.$column->Field.'_select' }}" id="{{ $key.'_'.$column->Field.'_select' }}" class="form-select form-select-transparent" aria-label="Seleccione una opción">
-                                                <option></option>
+                                                <option>---</option>
                                                 @foreach($cruds_availables as $crud_table)
                                                 <option id="{{ $crud_table }}">{{ $crud_table }}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field.'_show_fk' }}" id="{{ $key.'_'.$column->Field.'_show_fk' }}">
+                                        </td>
+                                        <td>
+                                            <select name="{{ $key.'_'.$column->Field.'_show_fk_select' }}" id="{{ $key.'_'.$column->Field.'_show_fk_select' }}" class="form-select form-select-transparent py-5" aria-label="Seleccione una opción"  multiple="multiple">
+                                                <option>---</option>
+                                                @foreach($options_crud as $option)
+                                                <option id="{{ $option }}">{{ $option }}</option>
                                                 @endforeach
                                             </select>
                                         </td>
