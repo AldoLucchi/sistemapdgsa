@@ -45,6 +45,8 @@ class AddCrudModal extends Component
             'delete' => 'delete',
         ];
 
+        $cruds_generated = Crud::all();
+
         foreach ($tables as $i => $crud_table) {
             $table_name = $crud_table->Tables_in_pdgsabd;
 
@@ -61,6 +63,7 @@ class AddCrudModal extends Component
             'cruds_availables' => $cruds_availables,
             'cruds_filtered' => $cruds_filtered,
             'cruds_filtered_columns' => $cruds_filtered_columns,
+            'cruds_generated' => $cruds_generated,
             'options_crud' => $options_crud,
         ];
         return view('livewire.crud.add-crud-modal', $data);

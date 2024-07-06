@@ -99,8 +99,8 @@
                                         <td><b>Incluir <br>list</b></td>
                                         <td><b>Alias</b></td>
                                         <td><b>Seleccionar FK</b></td>
-                                        <td><b>Incluir en <br>Detalle de FK</b></td>
-                                        <td><b>Permisos en <br>Detalle de FK</b></td>
+                                        <td><b>Incluir en <br>Detalle FK</b></td>
+                                        <td><b>Permisos  <br>Detalle FK</b></td>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -129,11 +129,16 @@
                                                 @endforeach
                                             </select>
                                         </td>
-                                        <td>
-                                            <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field.'_show_fk' }}" id="{{ $key.'_'.$column->Field.'_show_fk' }}">
+                                        <td>                                            
+                                            <select name="{{ $key.'_'.$column->Field.'_show_fk' }}" id="{{ $key.'_'.$column->Field.'_show_fk' }}" class="form-select form-select-transparent" aria-label="Seleccione una opción">
+                                                <option>---</option>
+                                                @foreach($cruds_generated as $crud)
+                                                <option id="{{ $crud->id }}">{{ $crud->alias_opcion }} | {{ $crud->nombre_componente }} | {{ $crud->nombre }}</option>
+                                                @endforeach
+                                            </select>
                                         </td>
                                         <td>
-                                            <select name="{{ $key.'_'.$column->Field.'_show_fk_select' }}" id="{{ $key.'_'.$column->Field.'_show_fk_select' }}" class="form-select form-select-transparent py-5" aria-label="Seleccione una opción"  multiple="multiple">
+                                            <select name="{{ $key.'_'.$column->Field.'_show_fk_permisos' }}" id="{{ $key.'_'.$column->Field.'_show_fk_permisos' }}" class="form-select form-select-transparent py-5" aria-label="Seleccione una opción"  multiple="multiple">
                                                 <option>---</option>
                                                 @foreach($options_crud as $option)
                                                 <option id="{{ $option }}">{{ $option }}</option>

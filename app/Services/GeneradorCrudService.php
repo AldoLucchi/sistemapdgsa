@@ -52,12 +52,15 @@ class GeneradorCrudService
             $k = 1;
 
             $tables_fk = [];
+            $tables_crud_relation_fk = [];
 
             foreach ($table_crud_columns as $colum) {
                 $column_request = $table_crud . '_' . $colum->Field;
                 $column_select_request = $table_crud . '_' . $colum->Field . '_select';
                 $column_select_alias = $table_crud . '_' . $colum->Field . '_alias';
                 $column_select_list = $table_crud . '_' . $colum->Field . '_list';
+                $column_show_fk = $table_crud . '_' . $colum->Field . '_show_fk';
+                $column_show_fk_permisos = $table_crud . '_' . $colum->Field . '_show_fk_permisos';
 
                 $type_html = 'text'; //varchar text
 
@@ -85,26 +88,40 @@ class GeneradorCrudService
                     $type_html = 'checkbox';
                 }
 
+                //type
                 $table_column_detail = [
                     'name' => $colum->Field,
                     'type' => $colum->Type,
                     'type_html' => $type_html
                 ];
 
+                //alias
                 if (isset($request[$column_select_alias]) && !empty($request[$column_select_alias]) &&  $column_select_alias && $column_select_alias != 'NULL' && $column_select_alias != NULL) {
                     $table_column_detail['alias'] = $request[$column_select_alias];
                 }
 
+                //fk
                 if (isset($request[$column_select_request]) && !empty($request[$column_select_request]) &&  $column_select_request && $column_select_request != 'NULL' && $column_select_request != NULL) {
                     $table_column_detail['select'] = $request[$column_select_request];
                     $tables_fk[$colum->Field] = $request[$column_select_request];
+
+                    //
+                    if (isset($request[$column_show_fk]) && !empty($request[$column_show_fk]) &&  $column_show_fk && $column_show_fk != 'NULL' && $column_show_fk != NULL) {
+                        $table_column_detail['select_crud_relation'] = $request[$column_show_fk];
+                        $tables_crud_relation_fk[$colum->Field]['crud'] = $request[$column_show_fk];
+                        if (isset($request[$column_show_fk_permisos]) && !empty($request[$column_show_fk_permisos]) &&  $column_show_fk_permisos && $column_show_fk_permisos != 'NULL' && $column_show_fk_permisos != NULL) {
+                            $table_column_detail['select_crud_relation_permisos'] = $request[$column_show_fk_permisos];
+                            $tables_crud_relation_fk[$colum->Field]['permisos'] = $request[$column_show_fk_permisos];
+                        }
+                    }
                 }
 
+                //in list
                 if (isset($request[$column_select_list]) && !empty($request[$column_select_list]) &&  $column_select_list && $column_select_list != 'NULL' && $column_select_list != NULL) {
                     $table_column_detail['incluir_list'] = $request[$column_select_list];
                 }
 
-                //selected
+                //incude field
                 if (isset($request[$column_request])) {
                     $all_columns_null = false;
 
@@ -112,10 +129,12 @@ class GeneradorCrudService
                     $table_columns_string .= "'" . $colum->Field . "',";
                 }
 
+                //pk
                 if ($colum->Key == 'PRI') {
                     $table_column_id = $colum->Field;
                 }
 
+                //name
                 if ($k == 2) {
                     $table_column_name = $colum->Field;
                 }
@@ -127,17 +146,14 @@ class GeneradorCrudService
                 $table_columns_all_null_string .= "'" . $colum->Field . "',";
             }
 
+            // all columns o selected columns
             if ($all_columns_null) {
                 $table_columns =  $table_columns_all_null;
                 $table_columns_string = $table_columns_all_null_string;
             }
 
-            //Log::info('$table_columns -------');
-            //Log::info($table_columns );
 
-            //Log::info('$tables_fk -------');
-            //Log::info($tables_fk );
-
+            //fk tables----
             $tables_data_fk = [];
             foreach ($tables_fk as $key => $table_fk) {
                 $table_fk_columns = DB::select("SHOW COLUMNS FROM " . $table_fk);
@@ -145,6 +161,8 @@ class GeneradorCrudService
                 $table_column_fk_id = '';
                 $table_column_fk_name = '-';
                 $i = 1;
+
+                //column id and name fk
                 foreach ($table_fk_columns as $colum) {
                     $table_columns_all_string .= "'" . $colum->Field . "',";
                     if ($colum->Key == 'PRI') {
@@ -153,35 +171,37 @@ class GeneradorCrudService
                     if ($i == 2) {
                         $table_column_fk_name = $colum->Field;
                     }
-
                     $i++;
                 }
 
+                //name table fk
                 $table_name_fk_substr = substr($table_fk, 4);
                 if ($table_fk == 'users') {
                     $table_name_fk_substr = $table_fk;
                 }
+
+                //name table fk format
                 $table_name_fk_array = explode("_", $table_name_fk_substr);
                 $table_name_fk_format = '';
                 foreach ($table_name_fk_array as $tring) {
                     $table_name_fk_format .= ucfirst($tring);
                 }
-                //$table_name_fk_substr = str_replace('_', '', $table_name_fk_substr);
 
-                //$table_name_fk_substr_ucfirst =ucfirst($table_name_fk_substr );
-                $table_fk_data = [
-                    'table_fullname_fk' => $table_fk,
-                    'table_name_fk' => $table_name_fk_format,
-                    'table_columns_string_fk' => $table_columns_all_string,
-                    'table_column_fk_id' => $table_column_fk_id,
-                    'table_column_fk_name' => $table_column_fk_name,
-                    'model_name' => $table_name_fk_format,
-                ];
+                //crud relation
+                $crud_relation =
+
+                    //data fk
+                    $table_fk_data = [
+                        'table_fullname_fk' => $table_fk,
+                        'table_name_fk' => $table_name_fk_format,
+                        'table_columns_string_fk' => $table_columns_all_string,
+                        'table_column_fk_id' => $table_column_fk_id,
+                        'table_column_fk_name' => $table_column_fk_name,
+                        'model_name' => $table_name_fk_format,
+                    ];
+
                 $tables_data_fk[$key] =  $table_fk_data;
             }
-
-            //Log::info('$tables_data_fk ----');
-            //Log::info($tables_data_fk );
 
             $data = [
                 'table_fullname' => $table_crud,
@@ -193,6 +213,7 @@ class GeneradorCrudService
                 'table_column_id' => $table_column_id,
                 'table_column_name' => $table_column_name,
                 'tables_fk' => $tables_data_fk,
+                'tables_crud_relation_fk' => $tables_crud_relation_fk,
                 'model_name' => $table_name_format,
                 'controller_name' => $table_name_format . 'Controller',
                 'datatable_name' => $table_name_format . 'DataTable',
@@ -219,6 +240,8 @@ class GeneradorCrudService
         $this->generateCrudViews($data);
         $this->generateCrudDatatable($data);
         $this->generateCrudLivewire($data);
+        $this->generateCrudRelations($data);
+
         //$this->generateCrudRoute($data);
         //$this->generateCrudMenu($data);
         //$this->generateCrudBreadcrumb($data);
@@ -240,9 +263,10 @@ class GeneradorCrudService
 
             $this->generateRoute($data);
             $this->generateBreadcrumb($data);
-            $this->replaceActions($data);
-            $this->replaceControllers($data);
-            $this->replaceviews($data);
+            $this->replaceRutasActions($data);
+            $this->replaceRutasControllers($data);
+            $this->replaceRutasDatatables($data);
+            $this->replaceRutasViews($data);
 
             //dd($table_columns);
 
@@ -382,8 +406,8 @@ class GeneradorCrudService
             }
             if ($column['type_html'] == 'datetime-local') {
                 $date_name = $column['name'];
-                $date_from = $column['name'].'_from';
-                $date_to = $column['name'].'_to';
+                $date_from = $column['name'] . '_from';
+                $date_to = $column['name'] . '_to';
 
                 $filter_from = $template_filters;
                 $filter_variable_from = $template_filters_variables;
@@ -533,6 +557,14 @@ class GeneradorCrudService
 
         fwrite($file_edit, $template_edit);
         fclose($file_edit);
+
+        //show-------------------
+        $file_datatable_view = fopen("../resources/views/cruds/" . $data['table_name'] . "/datatable.blade.php", "w") or die("Unable to open file - view dattable.blade.php");
+        $template_datatable = file_get_contents('../app/Crud/template_show_datatable.php');
+        $template_datatable = $this->generateCrudReplace($template_datatable, $data);
+
+        fwrite($file_datatable_view, $template_datatable);
+        fclose($file_datatable_view);        
 
         // field------------------
         $file_fields = fopen("../resources/views/cruds/" . $data['table_name'] . "/fields.blade.php", "w") or die("Unable to open file - view fields.blade.php");
@@ -993,6 +1025,64 @@ class GeneradorCrudService
         fclose($file_fields);
     }
 
+
+    public function generateCrudRelations($data)
+    {
+        $template_show_datatable = file_get_contents('../app/Crud/template_view_datatable.php');
+
+        foreach ($data['tables_crud_relation_fk'] as $crud_relation) {
+
+            $crud = Crud::find($crud_relation['crud']);
+
+            if ($crud) {
+                $controllerName = $crud->nombre_componente.'Controller';
+                $datatableName = $crud->nombre_componente.'DataTable';
+                $componentName = $crud->nombre_componente;
+                $viewShowName = 'show';
+
+                $template_controller = file_get_contents('../app/Http/Controllers/Crud/'.$controllerName.'.php');
+
+                $relation_variables = '
+                $filters'.$componentName.' = ["ruta" => true];
+                $dataTable'.$componentName.' = new '.$datatableName.'($filters'.$componentName.');
+                
+                //%RELATION_DATATABLE_VARIABLES%
+                ';
+
+                $relation_variables_data = '
+                "dataTable'.$componentName.'" => $dataTable'.$componentName.'->html(),
+
+                //%RELATION_DATATABLE_VARIABLES_DATA%
+                ';
+
+                 $relation_variables_data_use = '
+                use App\DataTables\\'.$datatableName .';
+                //%RELATION_DATATABLE_VARIABLES_USE%
+                ';
+
+                $template_controller = str_replace("//%RELATION_DATATABLE_VARIABLES%", $relation_variables, $template_controller);
+                $template_controller = str_replace("//%RELATION_DATATABLE_VARIABLES_DATA%", $relation_variables_data, $template_controller);
+                $template_controller = str_replace("//%RELATION_DATATABLE_VARIABLES_USE%", $relation_variables_data_use, $template_controller);
+                
+                $file_controller = fopen("../app/Http/Controllers/Crud/" . $controllerName . ".php", "w") or die("Unable to open file - controller " . $controllerName);
+                fwrite($file_controller, $template_controller);
+                fclose($file_controller);
+
+                //show
+                $template_datatable =  $template_show_datatable;
+                $template_datatable = str_replace("%OBJECT%", $crud->nombre_componente, $template_datatable);
+                $template_datatable = str_replace("%OBJECT_ALIAS%", $crud->alias_opcion, $template_datatable);
+
+                $template_show = file_get_contents('../resources/views/cruds/'.$data['model_name'].'show.blade.php');
+                $template_show = str_replace("<!-- %RELATIONS_DATATABLE% -->", $template_datatable, $template_show);
+
+                $file_show = fopen('../resources/views/cruds/'.$data['model_name'].'show.blade.php', "w") or die("Unable to open file - view show.blade.php" );
+                fwrite($file_show, $template_show);
+                fclose($file_show);
+            }
+        }
+    }
+
     public function generateRoute($data)
     {
         $menu_ruta = $data['menu']['ruta'];
@@ -1002,8 +1092,8 @@ class GeneradorCrudService
 
         if (!str_contains($rutas, $search)) {
             //create route
-            $item_controller = $item_nombre ."Controller";
-            $item_datatable = $item_nombre ."Datatable";
+            $item_controller = $item_nombre . "Controller";
+            $item_datatable = $item_nombre . "Datatable";
             $new_route = "
         use App\Http\Controllers\Crud\\" . $item_controller . ";
         Route::name('" . $menu_ruta . ".')->group(function () {
@@ -1016,7 +1106,7 @@ class GeneradorCrudService
         }
     }
 
-    public function replaceActions($data)
+    public function replaceRutasActions($data)
     {
         $menu_ruta = $data['menu']['ruta'];
         $item_nombre = $data['item']['nombre'];
@@ -1031,14 +1121,14 @@ class GeneradorCrudService
         fclose($file);
     }
 
-    public function replaceControllers($data)
+    public function replaceRutasControllers($data)
     {
         $menu_ruta = $data['menu']['ruta'];
         $item_nombre = $data['item']['nombre'];
 
         $content = file_get_contents("../app/Http/Controllers/Crud/" . $item_nombre . "Controller.php");
 
-        $file = fopen("../app/Http/Controllers/Crud/" . $item_nombre . "Controller.php", "w") or die("Unable to open file - controller " . $data['controller_name']);
+        $file = fopen("../app/Http/Controllers/Crud/" . $item_nombre . "Controller.php", "w") or die("Unable to open file - controller " . $item_nombre);
 
         $content = str_replace('%MENU_RUTA%', $menu_ruta, $content);
 
@@ -1046,7 +1136,22 @@ class GeneradorCrudService
         fclose($file);
     }
 
-    public function replaceviews($data)
+    public function replaceRutasDatatables($data)
+    {
+        $menu_ruta = $data['menu']['ruta'];
+        $item_nombre = $data['item']['nombre'];
+
+        $content = file_get_contents("../app/DataTables/" . $item_nombre . "DataTable.php");
+
+        $file = fopen("../app/DataTables/" . $item_nombre . "DataTable.php", "w") or die("Unable to open file - datatable  " . $item_nombre);
+
+        $content = str_replace('%MENU_RUTA%', $menu_ruta, $content);
+
+        fwrite($file, $content);
+        fclose($file);
+    }    
+
+    public function replaceRutasViews($data)
     {
         $menu_ruta = $data['menu']['ruta'];
         $item_nombre = $data['item']['nombre'];

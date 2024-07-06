@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Storage;
 
 %SELECT_USE%
 
+//%RELATION_DATATABLE_VARIABLES_USE%
+
 class %OBJETO_CONTROLLER% extends Controller
 {	
   private $functionsService;
@@ -113,13 +115,13 @@ class %OBJETO_CONTROLLER% extends Controller
     {
 
 
-      /*%RELATION_DATATABLE_VARIABLES%*/
+      //%RELATION_DATATABLE_VARIABLES%
 
         $data = [
           '%OBJETO_VARIABLE%' => %OBJETO%::find($%OBJETO_VARIABLE%),
           %TABLAS_ASOCIADAS%
 
-          /*%RELATION_DATATABLE_VARIABLES_DATA%*/
+          //%RELATION_DATATABLE_VARIABLES_DATA%
         ];
         return view('cruds/%OBJETO_VIEW%.show', $data);
 
