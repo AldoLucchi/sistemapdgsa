@@ -1037,8 +1037,10 @@ class GeneradorCrudService
         foreach ($data['tables_crud_relation_fk'] as $crud_relation) {
 
             $crud = Crud::find($crud_relation['crud']);
+            $permisos = $crud_relation['permisos'];
 
             if ($crud) {
+                //controller---
                 $controllerName = $crud->nombre_componente . 'Controller';
                 $datatableName = $crud->nombre_componente . 'DataTable';
                 $componentName = $crud->nombre_componente;
@@ -1048,6 +1050,31 @@ class GeneradorCrudService
 
                 $relation_variables = '
                 $filters' . $tableName . ' = ["rutaDatatable" => true];
+                ';
+
+                $create = false;
+                foreach ($permisos as $key => $permiso) {
+                    if ($permiso == 'read') {
+                        $relation_variables .= '
+                            $filters' . $tableName . ' ["datatable"] ["read"] = true;
+                            ';
+                    }
+                    if ($permiso == 'update') {
+                        $relation_variables .= '
+                            $filters' . $tableName . ' ["datatable"] ["update"] = true;
+                            ';
+                    }                    
+                    if ($permiso == 'delete') {
+                        $relation_variables .= '
+                            $filters' . $tableName . ' ["datatable"] ["delete"] = true;
+                            ';
+                    } 
+                    if ($permiso == 'create') {
+                        $create = true;
+                    }                      
+                }
+
+                $relation_variables .= '
                 $dataTable' . $tableName . ' = new ' . $tableNameDatatable . '($filters' . $tableName . ');
                 
                 //%RELATION_DATATABLE_VARIABLES%
@@ -1078,11 +1105,19 @@ class GeneradorCrudService
                 $template_datatable = str_replace("%OBJETO_ALIAS%", $tableNameLabel, $template_datatable);
                 $template_datatable = str_replace("%OBJETO_DATATABLE%", $tableNameDatatable, $template_datatable);
 
+                if($create){
+                    $link = '<a href="/%MENU_RUTA%/'. $tableName.'/create"> CREAR</a> ';
+                    $template_datatable = str_replace("%CREATE%", '', $template_datatable); 
+                }
+                else{
+                    $template_datatable = str_replace("%CREATE%", '', $template_datatable); 
+                }
+
                 $template_show = file_get_contents('../resources/views/cruds/' . $componentName . '/show.blade.php');
                 $template_show = str_replace("<!-- %RELATIONS_DATATABLE% -->", $template_datatable, $template_show);
 
                 $template_datatable_script = '
-                  <!-- %RELATIONS_DATATABLE_SCRIPTS% -->
+                  
                     {{$dataTable%OBJETO%->scripts()}}
 
                     <!-- %RELATIONS_DATATABLE_SCRIPTS% -->

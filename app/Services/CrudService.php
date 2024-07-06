@@ -28,6 +28,9 @@ class CrudService
             $select = (isset($request[$table_name.'_'.$colum->Field.'_select'])?$request[$table_name.'_'.$colum->Field.'_select']:null);
             $show_fk = (isset($request[$table_name.'_'.$colum->Field.'_show_fk'])?$request[$table_name.'_'.$colum->Field.'_show_fk']:null);
             $show_fk_permisos = (isset($request[$table_name.'_'.$colum->Field.'_show_fk_permisos'])?$request[$table_name.'_'.$colum->Field.'_show_fk_permisos']:null);
+            if($show_fk_permisos){
+                $show_fk_permisos = implode(',',$show_fk_permisos);
+            }
 
             $campos .=  '{"field": "'.$colum->Field.'", "type": "'.$colum->Type.'", "null": "'.$colum->Null.'", "key": "'.$colum->Key.'", "default": "'.$colum->Default.'", "extra": "'.$colum->Extra.'", ';
             $campos .=  '"incluir_campo": '.$incluir_campo.', "incluir_list": '.$incluir_list.', "alias": "'.$alias.'",  "select": "'.$select.'",  "show_fk": "'.$show_fk.'",  "show_fk_permisos": "'.$show_fk_permisos.'" }, ';

@@ -138,7 +138,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <select name="{{ $key.'_'.$column->Field.'_show_fk_permisos' }}" id="{{ $key.'_'.$column->Field.'_show_fk_permisos' }}" class="form-select form-select-transparent py-5" aria-label="Seleccione una opción"  multiple="multiple">
+                                            <select name="{{ $key.'_'.$column->Field.'_show_fk_permisos' }}[]" id="{{ $key.'_'.$column->Field.'_show_fk_permisos' }}" class="form-select form-select-transparent py-5" aria-label="Seleccione una opción"  multiple="multiple">
                                                 <option value="">---</option>
                                                 @foreach($options_crud as $option)
                                                 <option value="{{ $option }}">{{ $option }}</option>
