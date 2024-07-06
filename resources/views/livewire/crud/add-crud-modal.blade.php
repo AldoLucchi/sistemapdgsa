@@ -125,7 +125,7 @@
                                             <select name="{{ $key.'_'.$column->Field.'_select' }}" id="{{ $key.'_'.$column->Field.'_select' }}" class="form-select form-select-transparent" aria-label="Seleccione una opción">
                                                 <option value="">---</option>
                                                 @foreach($cruds_availables as $crud_table)
-                                                <option id="{{ $crud_table }}">{{ $crud_table }}</option>
+                                                <option value="{{ $crud_table }}">{{ $crud_table }}</option>
                                                 @endforeach
                                             </select>
                                         </td>
@@ -133,7 +133,7 @@
                                             <select name="{{ $key.'_'.$column->Field.'_show_fk' }}" id="{{ $key.'_'.$column->Field.'_show_fk' }}" class="form-select form-select-transparent" aria-label="Seleccione una opción">
                                                 <option value="">---</option>
                                                 @foreach($cruds_generated as $crud)
-                                                <option id="{{ $crud->id }}">{{ $crud->alias_opcion }} | {{ $crud->nombre_componente }} | {{ $crud->nombre }}</option>
+                                                <option value="{{ $crud->id }}">{{ $crud->alias_opcion }} | {{ $crud->nombre_componente }} | {{ $crud->nombre }}</option>
                                                 @endforeach
                                             </select>
                                         </td>
@@ -141,7 +141,7 @@
                                             <select name="{{ $key.'_'.$column->Field.'_show_fk_permisos' }}" id="{{ $key.'_'.$column->Field.'_show_fk_permisos' }}" class="form-select form-select-transparent py-5" aria-label="Seleccione una opción"  multiple="multiple">
                                                 <option value="">---</option>
                                                 @foreach($options_crud as $option)
-                                                <option id="{{ $option }}">{{ $option }}</option>
+                                                <option value="{{ $option }}">{{ $option }}</option>
                                                 @endforeach
                                             </select>
                                         </td>

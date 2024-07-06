@@ -1028,7 +1028,10 @@ class GeneradorCrudService
 
     public function generateCrudRelations($data)
     {
-        $template_show_datatable = file_get_contents('../app/Crud/template_view_datatable.php');
+        $template_show_datatable = file_get_contents('../app/Crud/template_view_show_datatable.php');
+        $tableName =$data['table_name'];
+        $tableNameLabel =$data['table_name_label'];
+        $tableNameDatatable =$data['table_name'].'Datatable';
 
         foreach ($data['tables_crud_relation_fk'] as $crud_relation) {
 
@@ -1043,20 +1046,20 @@ class GeneradorCrudService
                 $template_controller = file_get_contents('../app/Http/Controllers/Crud/'.$controllerName.'.php');
 
                 $relation_variables = '
-                $filters'.$componentName.' = ["ruta" => true];
-                $dataTable'.$componentName.' = new '.$datatableName.'($filters'.$componentName.');
+                $filters'.$tableName.' = ["rutaDatatable" => true];
+                $dataTable'.$tableName.' = new '.$tableNameDatatable.'($filters'.$tableName.');
                 
                 //%RELATION_DATATABLE_VARIABLES%
                 ';
 
                 $relation_variables_data = '
-                "dataTable'.$componentName.'" => $dataTable'.$componentName.'->html(),
+                "dataTable'.$tableName.'" => $dataTable'.$tableName.'->html(),
 
                 //%RELATION_DATATABLE_VARIABLES_DATA%
                 ';
 
                  $relation_variables_data_use = '
-                use App\DataTables\\'.$datatableName .';
+                use App\DataTables\\'.$tableNameDatatable .';
                 //%RELATION_DATATABLE_VARIABLES_USE%
                 ';
 
@@ -1070,13 +1073,14 @@ class GeneradorCrudService
 
                 //show
                 $template_datatable =  $template_show_datatable;
-                $template_datatable = str_replace("%OBJECT%", $crud->nombre_componente, $template_datatable);
-                $template_datatable = str_replace("%OBJECT_ALIAS%", $crud->alias_opcion, $template_datatable);
+                $template_datatable = str_replace("%OBJECTO%", $tableName, $template_datatable);
+                $template_datatable = str_replace("%OBJECTO_ALIAS%", $tableNameLabel, $template_datatable);
+                $template_datatable = str_replace("%OBJECTO_DATATABLE%", $tableNameDatatable, $template_datatable);
 
-                $template_show = file_get_contents('../resources/views/cruds/'.$data['model_name'].'show.blade.php');
+                $template_show = file_get_contents('../resources/views/cruds/'.$componentName.'/show.blade.php');
                 $template_show = str_replace("<!-- %RELATIONS_DATATABLE% -->", $template_datatable, $template_show);
 
-                $file_show = fopen('../resources/views/cruds/'.$data['model_name'].'show.blade.php', "w") or die("Unable to open file - view show.blade.php" );
+                $file_show = fopen('../resources/views/cruds/'.$componentName.'/show.blade.php', "w") or die("Unable to open file - view show.blade.php" );
                 fwrite($file_show, $template_show);
                 fclose($file_show);
             }
