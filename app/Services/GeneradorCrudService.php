@@ -558,9 +558,9 @@ class GeneradorCrudService
         fwrite($file_edit, $template_edit);
         fclose($file_edit);
 
-        //show-------------------
+        //datatable-------------------
         $file_datatable_view = fopen("../resources/views/cruds/" . $data['table_name'] . "/datatable.blade.php", "w") or die("Unable to open file - view dattable.blade.php");
-        $template_datatable = file_get_contents('../app/Crud/template_show_datatable.php');
+        $template_datatable = file_get_contents('../app/Crud/template_view_datatable.php');
         $template_datatable = $this->generateCrudReplace($template_datatable, $data);
 
         fwrite($file_datatable_view, $template_datatable);
