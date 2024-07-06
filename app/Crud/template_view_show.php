@@ -54,7 +54,7 @@
             <div class="accordion" id="accordion%OBJETO_LABEL_INDIVIDUAL%">
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="panelDatos">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelDatosCollapse" aria-expanded="true" aria-controls="panelDatosCollapse">
+                        <button class="accordion-button bg-primary text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelDatosCollapse" aria-expanded="true" aria-controls="panelDatosCollapse">
                             Datos
                         </button>
                     </h2>

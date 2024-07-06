@@ -1,6 +1,6 @@
 <div class="accordion-item bg-secondary">
     <h2 class="accordion-header" id="panel%OBJETO%">
-        <button class="accordion-button bg-success text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panel%OBJETO%Collapse" aria-expanded="true" aria-controls="panel%OBJETO%Collapse">
+        <button class="accordion-button bg-primary text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panel%OBJETO%Collapse" aria-expanded="true" aria-controls="panel%OBJETO%Collapse">
             %OBJETO_ALIAS%
         </button>
     </h2>

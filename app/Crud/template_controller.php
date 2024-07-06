@@ -190,9 +190,9 @@ class %OBJETO_CONTROLLER% extends Controller
 		//
     }
 	
-    public function get%OBJETO%(%OBJETO_DATATABLE% $dataTable)
+    public function get%OBJETO_DATATABLE%(%OBJETO_DATATABLE% $dataTable%OBJETO%)
     {
-        return $dataTable->render('cruds/%OBJETO%.datatable');
+        return $dataTable%OBJETO%->render('cruds/%OBJETO%.datatable');
     }
 	
 }

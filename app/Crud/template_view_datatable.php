@@ -2,9 +2,9 @@
     <div class="card">
         <div class="card-header">%OBJETO_VARIABLE%</div>
         <div class="card-body">
-            {{ $%OBJETO_DATATABLE%->table() }}
+            {{ $datatable%OBJETO%->table() }}
         </div>
     </div>
 </div>
 
-{{ $%OBJETO_DATATABLE%->scripts() }}
+{{ $datatable%OBJETO%->scripts() }}
