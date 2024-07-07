@@ -4,6 +4,7 @@
 </a>
 <!--begin::Menu-->
 <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4" data-kt-menu="true">
+    @if( (request()->segment(2) == '%OBJETO%') || (request()->segment(2) != '%OBJETO%' && Session::has('%OBJETO%_read') ) )
     <!--begin::Menu item-->
     <div class="menu-item px-3">
         <a href="{{ url('/%MENU_RUTA%/%OBJETO_ROUTE%/'. $%OBJETO_VARIABLE%->%FIELD_ID% ) }}" class="menu-link px-3">
@@ -11,7 +12,9 @@
         </a>
     </div>
     <!--end::Menu item-->
+    @endif
 
+    @if( (request()->segment(2) == '%OBJETO%') || (request()->segment(2) != '%OBJETO%' && Session::has('%OBJETO%_update') ) )
     <!--begin::Menu item-->
     <div class="menu-item px-3">
         <!--<a href="#" class="menu-link px-3" data-kt-%OBJETO_ROUTE%-id="{{ $%OBJETO_VARIABLE%->%FIELD_ID% }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_%OBJETO_ROUTE%" data-kt-action="update_row">-->
@@ -20,7 +23,9 @@
         </a>
     </div>
     <!--end::Menu item-->
+    @endif
 
+    @if( (request()->segment(2) == '%OBJETO%') || (request()->segment(2) != '%OBJETO%' && Session::has('%OBJETO%_delete') ) )
     <!--begin::Menu item-->
     <div class="menu-item px-3">
         <a href="#" class="menu-link px-3" data-kt-%OBJETO_ROUTE%-id="{{ $%OBJETO_VARIABLE%->%FIELD_ID% }}" data-kt-action="delete_row">
@@ -28,6 +33,7 @@
         </a>
     </div>
     <!--end::Menu item-->
+    @endif
 </div>
 <!--end::Menu-->
 

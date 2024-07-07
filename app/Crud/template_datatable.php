@@ -19,6 +19,14 @@ class %OBJETO_DATATABLE% extends DataTable
         $filters = null
     ) {
         $this->filters = $filters;
+
+        if ($filters) {
+            if (isset($filters['datatable'])) { 
+                foreach($filters['datatable'] as $key =>$permiso){
+                    Session::put('%OBJETO%_'.$key, true);
+                }               
+            }
+        }
     }
 
     /**
@@ -32,7 +40,11 @@ class %OBJETO_DATATABLE% extends DataTable
             %FIELDS_DATATABLES_DATATABLE%
             
             ->addColumn('action', function (%OBJETO% $%OBJETO_VARIABLE%) {
-                return view('cruds/%OBJETO_VIEW%.columns._actions', compact('%OBJETO_VARIABLE%'));
+                $data = [
+                    '%OBJETO_VARIABLE%' =>  $%OBJETO_VARIABLE%,
+                    'filters' => $this->filters,
+                ];
+                return view('cruds/%OBJETO_VIEW%.columns._actions', $data);
             })
             ->setRowId('%FIELD_ID%');
     }

@@ -188,17 +188,17 @@ class GeneradorCrudService
                 }
 
                 //crud relation
-                $crud_relation =
+                //$crud_relation =
 
-                    //data fk
-                    $table_fk_data = [
-                        'table_fullname_fk' => $table_fk,
-                        'table_name_fk' => $table_name_fk_format,
-                        'table_columns_string_fk' => $table_columns_all_string,
-                        'table_column_fk_id' => $table_column_fk_id,
-                        'table_column_fk_name' => $table_column_fk_name,
-                        'model_name' => $table_name_fk_format,
-                    ];
+                //data fk
+                $table_fk_data = [
+                    'table_fullname_fk' => $table_fk,
+                    'table_name_fk' => $table_name_fk_format,
+                    'table_columns_string_fk' => $table_columns_all_string,
+                    'table_column_fk_id' => $table_column_fk_id,
+                    'table_column_fk_name' => $table_column_fk_name,
+                    'model_name' => $table_name_fk_format,
+                ];
 
                 $tables_data_fk[$key] =  $table_fk_data;
             }
@@ -1028,6 +1028,7 @@ class GeneradorCrudService
 
     public function generateCrudRelations($data)
     {
+        Log::info('GeneradorCrudService - generateCrudRelations ----');
         $template_show_datatable = file_get_contents('../app/Crud/template_view_show_datatable.php');
         $tableName = $data['table_name'];
         $tableNameLabel = $data['table_name_label'];
@@ -1037,7 +1038,9 @@ class GeneradorCrudService
         foreach ($data['tables_crud_relation_fk'] as $crud_relation) {
 
             $crud = Crud::find($crud_relation['crud']);
-            $permisos = $crud_relation['permisos'];
+            $permisos = (isset($crud_relation['permisos']) ? $crud_relation['permisos'] : null);
+            Log::info($crud_relation['crud']);
+            Log::info($permisos);
 
             if ($crud) {
                 //controller---
@@ -1063,15 +1066,15 @@ class GeneradorCrudService
                         $relation_variables .= '
                             $filters' . $tableName . ' ["datatable"] ["update"] = true;
                             ';
-                    }                    
+                    }
                     if ($permiso == 'delete') {
                         $relation_variables .= '
                             $filters' . $tableName . ' ["datatable"] ["delete"] = true;
                             ';
-                    } 
+                    }
                     if ($permiso == 'create') {
                         $create = true;
-                    }                      
+                    }
                 }
 
                 $relation_variables .= '
@@ -1105,12 +1108,11 @@ class GeneradorCrudService
                 $template_datatable = str_replace("%OBJETO_ALIAS%", $tableNameLabel, $template_datatable);
                 $template_datatable = str_replace("%OBJETO_DATATABLE%", $tableNameDatatable, $template_datatable);
 
-                if($create){
-                    $link = '<a href="/%MENU_RUTA%/'. $tableName.'/create"> CREAR</a> ';
-                    $template_datatable = str_replace("%CREATE%", '', $template_datatable); 
-                }
-                else{
-                    $template_datatable = str_replace("%CREATE%", '', $template_datatable); 
+                if ($create) {
+                    $link = '<a href="/%MENU_RUTA%/' . $tableName . '/create"> CREAR</a> ';
+                    $template_datatable = str_replace("%CREATE%", '', $template_datatable);
+                } else {
+                    $template_datatable = str_replace("%CREATE%", '', $template_datatable);
                 }
 
                 $template_show = file_get_contents('../resources/views/cruds/' . $componentName . '/show.blade.php');
