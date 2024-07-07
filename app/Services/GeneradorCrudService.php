@@ -1109,8 +1109,8 @@ class GeneradorCrudService
                 $template_datatable = str_replace("%OBJETO_DATATABLE%", $tableNameDatatable, $template_datatable);
 
                 if ($create) {
-                    $link = '<a href="/%MENU_RUTA%/' . $tableName . '/create"> CREAR</a> ';
-                    $template_datatable = str_replace("%CREATE%", '', $template_datatable);
+                    $link = '<a href="{{ route("'. $tableNameDatatable.'.create") }}" class="btn btn-primary float-end"> Agregar</a> ';
+                    $template_datatable = str_replace("%CREATE%", $link , $template_datatable);
                 } else {
                     $template_datatable = str_replace("%CREATE%", '', $template_datatable);
                 }
@@ -1144,15 +1144,16 @@ class GeneradorCrudService
         if (!str_contains($rutas, $search)) {
             //create route
             $item_controller = $item_nombre . "Controller";
-            $item_datatable = $item_nombre . "Datatable";
+            $item_datatable = $item_nombre . "DataTable";
             $new_route = "
         use App\Http\Controllers\Crud\\" . $item_controller . ";
         Route::name('" . $menu_ruta . ".')->group(function () {
             Route::resource('/" . $menu_ruta . "/" . $item_nombre . "', " . $item_controller . "::class);
         }); 
         Route::get('" . $menu_ruta . "/" . $item_datatable . "',[" . $item_controller . "::class, 'get" . $item_datatable . "'])->name('" . $menu_ruta . "." . $item_datatable . "');
+        Route::get('" . $menu_ruta . "/" . $item_datatable . "/create',[$item_controller ::class, 'create'])->name('".$item_datatable.".create');
 
-        ";
+                ";
             $template_route = file_put_contents('../routes/web_crud.php', $new_route . PHP_EOL, FILE_APPEND | LOCK_EX);
         }
     }
