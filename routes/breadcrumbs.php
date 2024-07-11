@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\CrudsGeneradosMenues100;
+use App\Models\EtiquetasDocumentos104;
 use App\Models\Menues97;
 use App\Models\MenuesAsignados101;
 use App\Models\Opciones98;
@@ -140,6 +141,29 @@ Breadcrumbs::for('admin.menuAsignado.show', function (BreadcrumbTrail $trail, Me
     $trail->parent('admin.menuAsignado.index');
     $trail->push('Detalle Menu Asignado', route('admin.menuAsignado.show', $menuAsignado));
 });
+
+//--------------------------------------------------------
+// Home > Dashboard > Admin > Etiqueta Documento
+Breadcrumbs::for('admin.etiquetaDocumento.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin.index');
+    $trail->push('Etiqueta Documento', route('admin.etiquetaDocumento.index'));
+});
+
+// Home > Dashboard > Admin > EtiquetaDocumento > [EtiquetaDocumento]
+Breadcrumbs::for('admin.etiquetaDocumento.show', function (BreadcrumbTrail $trail, EtiquetasDocumentos104 $etiquetaDocumento) {
+    $trail->parent('admin.etiquetaDocumento.index');
+    $trail->push('Detalle EtiquetaDocumento', route('admin.etiquetaDocumento.show', $etiquetaDocumento));
+});
+
+
+
+
+
+
+
+
+
+
 
 
 Breadcrumbs::for('crm.index', function (BreadcrumbTrail $trail) {

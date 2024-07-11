@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Apps\CrudController;
 use App\Http\Controllers\Crud\CrudsGeneradosMenues100Controller;
+use App\Http\Controllers\Crud\EtiquetasDocumentos104Controller;
 use App\Http\Controllers\Crud\Menues97Controller;
 use App\Http\Controllers\Crud\MenuesAsignados101Controller;
 use App\Http\Controllers\Crud\Opciones98Controller;
@@ -25,4 +26,7 @@ Route::name('admin.')->group(function () {
     Route::resource('/admin/menuOpcion', OpcionesMenues99Controller::class);
     Route::resource('/admin/menuCrud', CrudsGeneradosMenues100Controller::class);
     Route::resource('/admin/menuAsignado', MenuesAsignados101Controller::class);
+    Route::resource('/admin/etiquetaDocumento', EtiquetasDocumentos104Controller::class);
+    Route::get('/admin/getEtiquetaDocumento/{alias}/{id}', [EtiquetasDocumentos104Controller::class, 'getEtiquetaDocumento'])->name('admin.getEtiquetaDocumento');
+
 });
