@@ -3,7 +3,7 @@
 <textarea id="%FIELD%" name="%FIELD%" class="tox-target">
 </textarea>
 
-<script src="assets/plugins/custom/tinymce/tinymce.bundle.js"></script>
+<script src="/assets/plugins/custom/tinymce/tinymce.js"></script>
 
 <script>
 var options = {selector: "#%FIELD%", height : "480", width : "100%"};
