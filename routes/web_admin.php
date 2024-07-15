@@ -29,5 +29,6 @@ Route::name('admin.')->group(function () {
     Route::resource('/admin/menuAsignado', MenuesAsignados101Controller::class);
     Route::resource('/admin/etiquetaDocumento', EtiquetasDocumentos104Controller::class);
     Route::get('/admin/getEtiquetaDocumento/{alias}/{id}', [EtiquetasDocumentos104Controller::class, 'getEtiquetaDocumento'])->name('admin.getEtiquetaDocumento');
-    Route::get('/admin/getDataFirma', [FirmaController::class, 'getDataFirma'])->name('admin.getDataFirma');
+    Route::get('/admin/getDataFirma/{table?}/{idRegister?}', [FirmaController::class, 'getDataFirma'])->name('admin.getDataFirma');
+    Route::get('/registrarFirma/{table}/{idRegister}', [FirmaController::class, 'registrarFirma'])->name('admin.registrarFirma');
 });
