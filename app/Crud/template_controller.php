@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\App;
+
 %TABLAS_ASOCIADAS_USE%
 
 %SELECT_USE%
@@ -95,6 +97,8 @@ class %OBJETO_CONTROLLER% extends Controller
 
         $%OBJETO_VARIABLE% = %OBJETO%::create($request->all());
 
+        %FIELD_PDF%
+
         $message =  ' %OBJETO_LABEL_INDIVIDUAL%: registro creado correctamente: ';
 
         return redirect('/%MENU_RUTA%/%OBJETO_ROUTE%')->with('message',$message);
@@ -165,7 +169,9 @@ class %OBJETO_CONTROLLER% extends Controller
       
         %FIELD_FILE_STORAGE%
 
-      $%OBJETO_VARIABLE% = $%OBJETO_VARIABLE%->update($request->all());
+      $%OBJETO_VARIABLE%_updated = $%OBJETO_VARIABLE%->update($request->all());
+      
+      %FIELD_PDF%
 
       $message =  ' %OBJETO_LABEL_INDIVIDUAL%: registro actualizado correctamente: ';
 

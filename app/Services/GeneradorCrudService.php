@@ -355,6 +355,7 @@ class GeneradorCrudService
         $tablas_asociadas = '';
         $tablas_asociadas_uses = '';
         $field_file_storage = '';
+        $pdf = '';
 
         $filters = '';
         $template_filters = '
@@ -444,6 +445,14 @@ class GeneradorCrudService
 
                 $field_file_storage .= $template_file;
             }
+
+            if ($column['type_html'] == 'html') {
+                $xxx ='
+                    $pdf = App::make("dompdf.wrapper");
+                    $pdf->loadHTML($'.$data['model_name'].'->'.$column['name'].');
+                    $pdf->save(public_path() . "/docs/'.$data['model_name'].'_" . $'.$data['model_name'].'->'.$data['table_column_id'].' . ".pdf");
+                ';
+            }
         }
 
         $template_controller = str_replace('%FIELD_CHECKBOX%', $fields_checkobx, $template_controller);
@@ -452,6 +461,7 @@ class GeneradorCrudService
         $template_controller = str_replace('%FIELD_FILE_STORAGE%', $field_file_storage, $template_controller);
         $template_controller = str_replace('%FILTERS%', $filters, $template_controller);
         $template_controller = str_replace('%FILTERS_VARIABLES%', $filters_variables, $template_controller);
+        $template_controller = str_replace('%%FIELD_PDF%%', $pdf, $template_controller);
 
         fwrite($file_controller, $template_controller);
         fclose($file_controller);
