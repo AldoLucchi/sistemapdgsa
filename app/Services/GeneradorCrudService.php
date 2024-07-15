@@ -461,7 +461,7 @@ class GeneradorCrudService
         $template_controller = str_replace('%FIELD_FILE_STORAGE%', $field_file_storage, $template_controller);
         $template_controller = str_replace('%FILTERS%', $filters, $template_controller);
         $template_controller = str_replace('%FILTERS_VARIABLES%', $filters_variables, $template_controller);
-        $template_controller = str_replace('%%FIELD_PDF%%', $pdf, $template_controller);
+        $template_controller = str_replace('%FIELD_PDF%', $pdf, $template_controller);
 
         fwrite($file_controller, $template_controller);
         fclose($file_controller);
