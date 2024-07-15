@@ -70,12 +70,17 @@ class GeneradorCrudService
                 $fields_media_env = env('FIELDS_MEDIA', 'imagen,logo,avatar,archivo');
                 $fields_media = explode(',', $fields_media_env);
 
+                $fields_doc_env = env('FIELDS_DOC', 'documento,doc,pdf');
+                $fields_doc = explode(',', $fields_doc_env);
+
                 if (str_contains($colum->Type, 'tinyint')) {
                     $type_html = 'checkbox';
                 } else if (str_contains($colum->Type, 'varchar') &&   in_array(strtolower($colum->Field), $fields_password)) {
                     $type_html = 'password';
                 } else if (str_contains($colum->Type, 'varchar') &&   in_array(strtolower($colum->Field), $fields_media)) {
                     $type_html = 'file';
+                } else if (str_contains($colum->Type, 'varchar') &&   in_array(strtolower($colum->Field), $fields_doc)) {
+                    $type_html = 'html';
                 } else if (str_contains($colum->Type, 'varchar')) {
                     $type_html = 'text';
                 } else if (str_contains($colum->Type, 'timestamp')) {
@@ -570,6 +575,7 @@ class GeneradorCrudService
         $file_fields = fopen("../resources/views/cruds/" . $data['table_name'] . "/fields.blade.php", "w") or die("Unable to open file - view fields.blade.php");
         $template_fields = file_get_contents('../app/Crud/template_view_show_field.php');
         $template_fields_select = file_get_contents('../app/Crud/template_view_show_field_select.php');
+        $template_fields_html = file_get_contents('../app/Crud/template_view_show_field_html.php');
 
         $fields_all = '';
         foreach ($data['table_columns'] as $column) {
@@ -597,10 +603,13 @@ class GeneradorCrudService
                     @endforeach';
 
                 $template = str_replace('%FIELD_SELECT_OPTIONS%', $value, $template);
+            } elseif ( $column['type_html'] == 'html') {
+                $template = $template_fields_html;
+
             } else {
                 $template = $template_fields;
-                $show_column_type = $column['type_html'];
-                $template = str_replace('%FIELD_TYPE%', $show_column_type, $template);
+
+                $template = str_replace('%FIELD_TYPE%', $column['type_html'], $template);
 
                 $value = '( isset($' . $data['table_name'] . ')?$' . $data['table_name'] . '->' . $column['name'] . ':"")';
                 $value_file = '';
@@ -1109,8 +1118,8 @@ class GeneradorCrudService
                 $template_datatable = str_replace("%OBJETO_DATATABLE%", $tableNameDatatable, $template_datatable);
 
                 if ($create) {
-                    $link = '<a href="{{ route("'. $tableNameDatatable.'.create") }}" class="btn btn-primary float-end"> Agregar</a> ';
-                    $template_datatable = str_replace("%CREATE%", $link , $template_datatable);
+                    $link = '<a href="{{ route("' . $tableNameDatatable . '.create") }}" class="btn btn-primary float-end"> Agregar</a> ';
+                    $template_datatable = str_replace("%CREATE%", $link, $template_datatable);
                 } else {
                     $template_datatable = str_replace("%CREATE%", '', $template_datatable);
                 }
@@ -1151,7 +1160,7 @@ class GeneradorCrudService
             Route::resource('/" . $menu_ruta . "/" . $item_nombre . "', " . $item_controller . "::class);
         }); 
         Route::get('" . $menu_ruta . "/" . $item_datatable . "',[" . $item_controller . "::class, 'get" . $item_datatable . "'])->name('" . $menu_ruta . "." . $item_datatable . "');
-        Route::get('" . $menu_ruta . "/" . $item_datatable . "/create',[$item_controller ::class, 'create'])->name('".$item_datatable.".create');
+        Route::get('" . $menu_ruta . "/" . $item_datatable . "/create',[$item_controller ::class, 'create'])->name('" . $item_datatable . ".create');
 
                 ";
             $template_route = file_put_contents('../routes/web_crud.php', $new_route . PHP_EOL, FILE_APPEND | LOCK_EX);
