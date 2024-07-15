@@ -170,17 +170,6 @@ Breadcrumbs::for('crm.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
     $trail->push('CRM', route('dashboard'));
 });
-// Home > Dashboard > crm > Contactos4
-Breadcrumbs::for('Contactos4.index', function (BreadcrumbTrail $trail) {
-    $trail->parent('crm.index');
-    $trail->push('Contactos Registrados', route('crm.Contactos4.index'));
-});
 
-use App\Models\Contactos4;
-
-Breadcrumbs::for('Contactos4.show', function (BreadcrumbTrail $trail, Contactos4 $Contactos4) {
-    $trail->parent('crm.index');
-    $trail->push('Contactos Registrados Detalle', route('crm.Contactos4.show', $Contactos4));
-});
 
 
