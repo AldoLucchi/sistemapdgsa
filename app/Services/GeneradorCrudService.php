@@ -622,6 +622,8 @@ class GeneradorCrudService
 
                 $value = '( isset($' . $data['table_name'] . ')?$' . $data['table_name'] . '->' . $column['name'] . ':"")';
                 $template = str_replace('%FIELD_VALUE_SHOW%', $value, $template);
+                $template = str_replace('%FIELD_ID%', $data['table_column_id'], $template);
+                $template = str_replace('%OBJETO%', $data['table_name'], $template);
 
                 $action_documento = '
                 <!--begin::Menu item-->
