@@ -626,7 +626,7 @@ class GeneradorCrudService
                 $action_documento = '
                 <!--begin::Menu item-->
                 <div class="menu-item px-3">
-                    <a href="{{ url("/docs/'.$data['table_name'].'". $%OBJETO_VARIABLE%->%FIELD_ID%.".pdf" ) }}" class="menu-link px-3" target="_blank">
+                    <a href="{{ url("/docs/'.$data['table_name'].'_". $'.$data['table_name'].'->'.$data['table_column_id'].'.".pdf" ) }}" class="menu-link px-3" target="_blank">
                         Documento
                     </a>
                 </div>
