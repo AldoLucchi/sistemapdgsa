@@ -447,7 +447,7 @@ class GeneradorCrudService
             }
 
             if ($column['type_html'] == 'html') {
-                $xxx ='
+                $pdf ='
                     $pdf = App::make("dompdf.wrapper");
                     $pdf->loadHTML($'.$data['model_name'].'->'.$column['name'].');
                     $pdf->save(public_path() . "/docs/'.$data['model_name'].'_" . $'.$data['model_name'].'->'.$data['table_column_id'].' . ".pdf");
@@ -627,7 +627,7 @@ class GeneradorCrudService
                 <!--begin::Menu item-->
                 <div class="menu-item px-3">
                     <a href="{{ url("/docs/'.$data['table_name'].'_". $'.$data['table_name'].'->'.$data['table_column_id'].'.".pdf" ) }}" class="menu-link px-3" target="_blank">
-                        Documento
+                        Pdf
                     </a>
                 </div>
                 <!--end::Menu item-->
