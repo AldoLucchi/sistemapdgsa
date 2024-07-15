@@ -79,7 +79,7 @@ class GeneradorCrudService
                     $type_html = 'password';
                 } else if (str_contains($colum->Type, 'varchar') &&   in_array(strtolower($colum->Field), $fields_media)) {
                     $type_html = 'file';
-                } else if (str_contains($colum->Type, 'varchar') &&   in_array(strtolower($colum->Field), $fields_doc)) {
+                } else if (str_contains($colum->Type, 'text') &&   in_array(strtolower($colum->Field), $fields_doc)) {
                     $type_html = 'html';
                 } else if (str_contains($colum->Type, 'varchar')) {
                     $type_html = 'text';
@@ -91,8 +91,10 @@ class GeneradorCrudService
                     $type_html = 'number';
                 } else if (str_contains($colum->Type, 'char')) {
                     $type_html = 'checkbox';
+                } else  {
+                    $type_html = 'text';
                 }
-
+                
                 //type
                 $table_column_detail = [
                     'name' => $colum->Field,
