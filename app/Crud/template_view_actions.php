@@ -34,6 +34,10 @@
     </div>
     <!--end::Menu item-->
     @endif
+
+    @if( (request()->segment(2) == '%OBJETO%') || (request()->segment(2) != '%OBJETO%' && Session::has('%OBJETO%_read') ) )
+    %ACTION_DOCUMENTO%
+    @endif    
 </div>
 <!--end::Menu-->
 

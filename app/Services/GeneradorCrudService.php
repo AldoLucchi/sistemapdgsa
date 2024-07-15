@@ -580,6 +580,8 @@ class GeneradorCrudService
         $template_fields_html = file_get_contents('../app/Crud/template_view_show_field_html.php');
 
         $fields_all = '';
+        $action_documento = '';
+
         foreach ($data['table_columns'] as $column) {
             $template = '';
 
@@ -607,6 +609,19 @@ class GeneradorCrudService
                 $template = str_replace('%FIELD_SELECT_OPTIONS%', $value, $template);
             } elseif ( $column['type_html'] == 'html') {
                 $template = $template_fields_html;
+
+                $value = '( isset($' . $data['table_name'] . ')?$' . $data['table_name'] . '->' . $column['name'] . ':"")';
+                $template = str_replace('%FIELD_VALUE_SHOW%', $value, $template);
+
+                $action_documento = '
+                <!--begin::Menu item-->
+                <div class="menu-item px-3">
+                    <a href="{{ url("/docs/'.$data['table_name'].'". $%OBJETO_VARIABLE%->%FIELD_ID%.".pdf" ) }}" class="menu-link px-3" target="_blank">
+                        Documento
+                    </a>
+                </div>
+                <!--end::Menu item-->
+                ';
 
             } else {
                 $template = $template_fields;
@@ -663,6 +678,8 @@ class GeneradorCrudService
         $file_action_view = fopen("../resources/views/cruds/" . $data['table_name'] . "/columns/_actions.blade.php", "w") or die("Unable to open file - view actions.blade.php");
         $template_list_actions = file_get_contents('../app/Crud/template_view_actions.php');
         $template_list_actions = $this->generateCrudReplace($template_list_actions, $data);
+        $template_list_actions = str_replace('%ACTION_DOCUMENTO%', $action_documento, $template_list_actions);
+
 
         fwrite($file_action_view, $template_list_actions);
         fclose($file_action_view);
