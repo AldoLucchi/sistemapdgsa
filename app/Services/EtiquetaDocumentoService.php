@@ -87,11 +87,11 @@ class EtiquetaDocumentoService
                     $campoFormat = '***';
                 }
                 if ($type_html == 'file') {
-                    $campoFormat = '<img src="/images/'.$campoValue.'">';
+                    $campoFormat = '<img src="/images/' . $campoValue . '">';
                 }
                 if ($type_html == 'datetime-local') {
-                    $date= date_create($campoValue);
-                    $campoFormat = date_format($date,"d/m/Y");
+                    $date = date_create($campoValue);
+                    $campoFormat = date_format($date, "d/m/Y");
                 }
 
 
@@ -100,5 +100,18 @@ class EtiquetaDocumentoService
         }
 
         return null;
+    }
+
+    public function replaceVariables($html, $id)
+    {
+        $etiquetasDocumentos = EtiquetasDocumentos104::get();
+
+        foreach($etiquetasDocumentos as $etiquetaDocumento){
+            $etiquetaDocumentoValue = $this->getValueAlias($etiquetaDocumento->alias, $id);
+
+            $html = str_replace($etiquetaDocumento->alias, $etiquetaDocumentoValue, $html);
+        }
+
+        return $html;
     }
 }

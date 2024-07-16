@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\DataTables\%OBJETO_DATATABLE%;
 use App\Models\%OBJETO%;
+use App\Services\EtiquetaDocumentoService;
 use App\Services\FunctionsService;
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -23,11 +24,14 @@ use Illuminate\Support\Facades\App;
 class %OBJETO_CONTROLLER% extends Controller
 {	
   private $functionsService;
+  private $etiquetasDocumentosService;
 
   public function __construct(
-      FunctionsService $functionsService
+      FunctionsService $functionsService,
+      EtiquetaDocumentoServiceService $etiquetasDocumentosService
   ) {
       $this->functionsService = $functionsService;
+      $this->etiquetasDocumentosService = $etiquetasDocumentosService;
   }
 
     /**

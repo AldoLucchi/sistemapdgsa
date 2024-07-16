@@ -448,10 +448,23 @@ class GeneradorCrudService
 
             if ($column['type_html'] == 'html') {
                 $pdf ='
+                    $html = $'.$data['model_name'].'->'.$column['name'].';
+                    $html = $this->etiquetasDocumentos->replaceVariables($html, $'.$data['model_name'].'->'.$data['table_column_id'].');
                     $pdf = App::make("dompdf.wrapper");
-                    $pdf->loadHTML($'.$data['model_name'].'->'.$column['name'].');
+                    $pdf->loadHTML($html);
                     $pdf->save(public_path() . "/docs/'.$data['model_name'].'_" . $'.$data['model_name'].'->'.$data['table_column_id'].' . ".pdf");
                 ';
+
+                $tabla = '
+                "etiquetasDocumentos" => EtiquetasDocumentos104::get(), 
+                ';
+
+                $use = '
+                use App\Models\EtiquetasDocumentos104;
+                ';
+
+                $tablas_asociadas .= $tabla;
+                $tablas_asociadas_uses .= $use;
             }
         }
 
