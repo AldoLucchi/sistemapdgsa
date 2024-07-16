@@ -64,10 +64,11 @@ class EtiquetaDocumentoService
             }
 
 
+            $APP_URL = env('APP_URL');
 
             //Log::info($etiquetaDocumento);
             //Log::info($primary_key);
-            Log::info($field_detail);
+            //Log::info($field_detail);
 
             $campo = $etiquetaDocumento->campo;
             $campoResult = DB::table($etiquetaDocumento->tabla)->where($primary_key, $id)->select($campo)->first();
@@ -87,7 +88,8 @@ class EtiquetaDocumentoService
                     $campoFormat = '***';
                 }
                 if ($type_html == 'file') {
-                    $campoFormat = '<img src="/images/' . $campoValue . '">';
+                    $path = $APP_URL . '/images/' . $campoValue;
+                    $campoFormat = '<img src="' . $path . '">';
                 }
                 if ($type_html == 'datetime-local') {
                     $date = date_create($campoValue);
@@ -106,10 +108,10 @@ class EtiquetaDocumentoService
     {
         $etiquetasDocumentos = EtiquetasDocumentos104::get();
 
-        foreach($etiquetasDocumentos as $etiquetaDocumento){
+        foreach ($etiquetasDocumentos as $etiquetaDocumento) {
             $etiquetaDocumentoValue = $this->getValueAlias($etiquetaDocumento->alias, $id);
 
-            $html = str_replace('%'.$etiquetaDocumento->alias.'%', $etiquetaDocumentoValue, $html);
+            $html = str_replace('%' . $etiquetaDocumento->alias . '%', $etiquetaDocumentoValue, $html);
         }
 
         return $html;

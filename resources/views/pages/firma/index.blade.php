@@ -54,7 +54,7 @@
                     <table>
                         @foreach($registerColumns as $colum)
 
-                        @if($loop->iteration < 5)
+                        @if($loop->iteration < 4)
                         @php
                         $nameColumn = $colum->Field;
                         @endphp

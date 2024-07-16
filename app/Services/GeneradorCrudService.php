@@ -451,12 +451,13 @@ class GeneradorCrudService
                     $html = $'.$data['model_name'].'->'.$column['name'].';
                     $html = $this->etiquetasDocumentosService->replaceVariables($html, $'.$data['model_name'].'->'.$data['table_column_id'].');
                     $pdf = App::make("dompdf.wrapper");
+                    Log::info($html);
                     $pdf->loadHTML($html);
                     $pdf->save(public_path() . "/docs/'.$data['model_name'].'_" . $'.$data['model_name'].'->'.$data['table_column_id'].' . ".pdf");
                 ';
 
                 $tabla = '
-                "etiquetasDocumentos" => EtiquetasDocumentos104::get(), 
+                "etiquetasDocumentos" => EtiquetasDocumentos104::orderBy("alias","ASC")->get(), 
                 ';
 
                 $use = '
