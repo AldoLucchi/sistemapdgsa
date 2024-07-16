@@ -6,8 +6,7 @@ use App\Services\FirmaService;
 use App\Services\FunctionsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\File;
+
 
 class FirmaController extends Controller
 {
@@ -60,19 +59,10 @@ class FirmaController extends Controller
     public function registrarFirmaGenerada(Request $request)
     {
         Log::info('FirmaController - registrarFirmaGenerada');
-        //Log::info($request);   
-        
-        if ($request->hasFile('firma')) {
-            $archivo = $request->file('firma');
-            $nombreArchivo =  $this->functionsService->getCustomFilename($request['table'], $archivo->getClientOriginalName(), 'firma');
-            Log::info($nombreArchivo);
-            Storage::disk('images')->put($nombreArchivo, File::get($archivo));
-
-            $request['nombreArchivo'] = $nombreArchivo;
-        }
+        //Log::info($request);  
 
         $data = $this->firmaService->registrarFirmaGenerada($request->all());        
 
-        return redirect('registrarFirma/'.$request['table'].'/'.$request['idRegister']);
+        return redirect('registrarFirma/'.$request['table'].'/'.$request['idRegister'])->with('message', 'Firma generada correctamente: '.$data);
     }
 }
