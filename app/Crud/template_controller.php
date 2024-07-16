@@ -28,7 +28,7 @@ class %OBJETO_CONTROLLER% extends Controller
 
   public function __construct(
       FunctionsService $functionsService,
-      EtiquetaDocumentoServiceService $etiquetasDocumentosService
+      EtiquetaDocumentoService $etiquetasDocumentosService
   ) {
       $this->functionsService = $functionsService;
       $this->etiquetasDocumentosService = $etiquetasDocumentosService;

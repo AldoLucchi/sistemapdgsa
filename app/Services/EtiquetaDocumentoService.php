@@ -26,7 +26,7 @@ class EtiquetaDocumentoService
             $fields_password_env = env('FIELDS_PASSWORD', 'password,clave');
             $fields_password = explode(',', $fields_password_env);
 
-            $fields_media_env = env('FIELDS_MEDIA', 'imagen,logo,avatar,archivo');
+            $fields_media_env = env('FIELDS_MEDIA', 'imagen,logo,avatar,archivo,firma');
             $fields_media = explode(',', $fields_media_env);
 
             foreach ($table_columns as $colum) {
@@ -109,7 +109,7 @@ class EtiquetaDocumentoService
         foreach($etiquetasDocumentos as $etiquetaDocumento){
             $etiquetaDocumentoValue = $this->getValueAlias($etiquetaDocumento->alias, $id);
 
-            $html = str_replace($etiquetaDocumento->alias, $etiquetaDocumentoValue, $html);
+            $html = str_replace('%'.$etiquetaDocumento->alias.'%', $etiquetaDocumentoValue, $html);
         }
 
         return $html;
