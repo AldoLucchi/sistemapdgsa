@@ -31,4 +31,5 @@ Route::name('admin.')->group(function () {
     Route::get('/admin/getEtiquetaDocumento/{alias}/{id}', [EtiquetasDocumentos104Controller::class, 'getEtiquetaDocumento'])->name('admin.getEtiquetaDocumento');
     Route::get('/admin/getDataFirma/{table?}/{idRegister?}', [FirmaController::class, 'getDataFirma'])->name('admin.getDataFirma');
     Route::get('/registrarFirma/{table}/{idRegister}', [FirmaController::class, 'registrarFirma'])->name('admin.registrarFirma');
+    Route::post('/registrarFirmaGenerada', [FirmaController::class, 'registrarFirmaGenerada'])->name('admin.registrarFirmaGenerada');
 });

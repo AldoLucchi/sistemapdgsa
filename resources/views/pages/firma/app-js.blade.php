@@ -12,6 +12,7 @@ var signaturePad = new SignaturePad(canvas, {
   // this option can be omitted if only saving as PNG or SVG
   backgroundColor: 'rgb(255, 255, 255)'
 });
+var firmaGenerada = document.getElementById("firma");
 
 // Adjust canvas coordinate space taking into account pixel ratio,
 // to make it look crisp on mobile devices.
@@ -96,28 +97,34 @@ changeColorButton.addEventListener("click", function (event) {
 
 savePNGButton.addEventListener("click", function (event) {
   if (signaturePad.isEmpty()) {
-    alert("Please provide a signature first.");
+    alert("Por favor, registre una firma");
   } else {
     var dataURL = signaturePad.toDataURL();
-    download(dataURL, "signature.png");
+    //download(dataURL, "signature.png");
+    firmaGenerada.value=dataURL;
+    alert("Firma generada correctamente");
   }
 });
 
 saveJPGButton.addEventListener("click", function (event) {
   if (signaturePad.isEmpty()) {
-    alert("Please provide a signature first.");
+    alert("Por favor, registre una firma");
   } else {
     var dataURL = signaturePad.toDataURL("image/jpeg");
-    download(dataURL, "signature.jpg");
+    //download(dataURL, "signature.jpg");
+    firmaGenerada.value=dataURL;
+    alert("Firma generada correctamente");
   }
 });
 
 saveSVGButton.addEventListener("click", function (event) {
   if (signaturePad.isEmpty()) {
-    alert("Please provide a signature first.");
+    alert("Por favor, registre una firma");
   } else {
     var dataURL = signaturePad.toDataURL('image/svg+xml');
-    download(dataURL, "signature.svg");
+    //download(dataURL, "signature.svg");
+    firmaGenerada.value=dataURL;
+    alert("Firma generada correctamente");
   }
 });
 </script>

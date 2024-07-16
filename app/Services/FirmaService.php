@@ -2,7 +2,11 @@
 
 namespace App\Services;
 
+use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
 
 class FirmaService
 {
@@ -79,5 +83,45 @@ class FirmaService
         ];
 
         return  $data;
+    }
+
+    public function registrarFirmaGenerada($request)
+    {
+        Log::info('FirmaService - registrarFirmaGenerada');
+        Log::info($request);
+
+        $tableSelected = $request['table'];
+        $idRegister = $request['idRegister'];
+        $registerKey = '';
+        $registerColumns = '';
+        $nombreArchivo = $request['nombreArchivo'];
+
+        try {           
+
+            if ($tableSelected && $idRegister) {
+                $registerColumns = DB::select("SHOW COLUMNS FROM " . $tableSelected);
+
+
+                foreach ($registerColumns as $column) {
+                    if ($column->Key == 'PRI') {
+                        $registerKey = $column->Field;
+                    }
+                }
+                $register = DB::table($tableSelected)->where($registerKey, $idRegister)->first();
+                if ($register) {
+                   // $register->firma = $nombreArchivo;
+                    //$register->save();
+                    $register->update([
+                        'firma' => $nombreArchivo,
+                    ]);
+                }
+
+                return $nombreArchivo;
+            }
+        } catch (Exception $e) {
+            Log::info('FirmaService - registrarFirmaGenerada - error' . $e->getMessage());
+        }
+
+        return false;
     }
 }
