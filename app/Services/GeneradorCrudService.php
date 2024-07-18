@@ -91,10 +91,10 @@ class GeneradorCrudService
                     $type_html = 'number';
                 } else if (str_contains($colum->Type, 'char')) {
                     $type_html = 'checkbox';
-                } else  {
+                } else {
                     $type_html = 'text';
                 }
-                
+
                 //type
                 $table_column_detail = [
                     'name' => $colum->Field,
@@ -447,13 +447,13 @@ class GeneradorCrudService
             }
 
             if ($column['type_html'] == 'html') {
-                $pdf ='
-                    $html = $'.$data['model_name'].'->'.$column['name'].';
-                    $html = $this->etiquetasDocumentosService->replaceVariables($html, $'.$data['model_name'].'->'.$data['table_column_id'].');
+                $pdf = '
+                    $html = $' . $data['model_name'] . '->' . $column['name'] . ';
+                    $html = $this->etiquetasDocumentosService->replaceVariables($html, $' . $data['model_name'] . '->' . $data['table_column_id'] . ');
                     $pdf = App::make("dompdf.wrapper");
                     Log::info($html);
                     $pdf->loadHTML($html);
-                    $pdf->save(public_path() . "/docs/'.$data['model_name'].'_" . $'.$data['model_name'].'->'.$data['table_column_id'].' . ".pdf");
+                    $pdf->save(public_path() . "/docs/' . $data['model_name'] . '_" . $' . $data['model_name'] . '->' . $data['table_column_id'] . ' . ".pdf");
                 ';
 
                 $tabla = '
@@ -631,7 +631,7 @@ class GeneradorCrudService
                     @endforeach';
 
                 $template = str_replace('%FIELD_SELECT_OPTIONS%', $value, $template);
-            } elseif ( $column['type_html'] == 'html') {
+            } elseif ($column['type_html'] == 'html') {
                 $template = $template_fields_html;
 
                 $value = '( isset($' . $data['table_name'] . ')?$' . $data['table_name'] . '->' . $column['name'] . ':"")';
@@ -642,13 +642,12 @@ class GeneradorCrudService
                 $action_documento = '
                 <!--begin::Menu item-->
                 <div class="menu-item px-3">
-                    <a href="{{ url("/docs/'.$data['table_name'].'_". $'.$data['table_name'].'->'.$data['table_column_id'].'.".pdf" ) }}" class="menu-link px-3" target="_blank">
+                    <a href="{{ url("/docs/' . $data['table_name'] . '_". $' . $data['table_name'] . '->' . $data['table_column_id'] . '.".pdf" ) }}" class="menu-link px-3" target="_blank">
                         Pdf
                     </a>
                 </div>
                 <!--end::Menu item-->
                 ';
-
             } else {
                 $template = $template_fields;
 
@@ -1381,10 +1380,26 @@ class GeneradorCrudService
 
             //create route
 
-            $new_route = "
+            /*
+        $new_route = "
         use App\Http\Controllers\Crud\%OBJETO%Controller;
         Route::resource('/crud/%OBJETO_VIEW%', %OBJETO%Controller::class);
         ";
+        */
+
+            $item_nombre  = $data['model_name'];
+            $item_controller = $data['model_name'] . "Controller";
+            $item_datatable = $data['model_name'] . "DataTable";
+
+            $new_route = "
+            use App\Http\Controllers\Crud\\" . $item_controller . ";
+            Route::name('crud.')->group(function () {
+                Route::resource('/crud/" . $item_nombre . "', " . $item_controller . "::class);
+            }); 
+            Route::get('crud/" . $item_datatable . "',[" . $item_controller . "::class, 'get" . $item_datatable . "'])->name('crud." . $item_datatable . "');
+            Route::get('crud/" . $item_datatable . "/create',[$item_controller ::class, 'create'])->name('" . $item_datatable . ".create');
+            ";
+
             $new_route = $this->generateCrudReplace($new_route, $data);
 
             $template_route = file_put_contents('../routes/web_base.php', $new_route . PHP_EOL, FILE_APPEND | LOCK_EX);

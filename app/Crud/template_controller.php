@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
 
 %TABLAS_ASOCIADAS_USE%
 

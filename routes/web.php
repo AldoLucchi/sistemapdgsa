@@ -40,6 +40,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     require __DIR__ . '/web_admin.php';
 
+    require __DIR__ . '/web_base.php';
+
     require __DIR__ . '/web_crud.php';
     
 });
