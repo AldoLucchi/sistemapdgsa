@@ -98,14 +98,15 @@ class AddCrudsGeneradosMenues100Modal extends Component
                 $CrudsGeneradosMenues100->save();
             }
 
+            $generadorRutaService = new GeneradorRutaService();
+            $generadorRutaService->generateRutaBreadCrumb($CrudsGeneradosMenues100);
+
             if ($this->edit_mode) {
                 // Emit a success event with a message
                 $this->dispatch('success', __('Actualizado correctamente!'));
             } else {                
 
-                $generadorRutaService = new GeneradorRutaService();
-
-                $generadorRutaService->generateRutaBreadCrumb($CrudsGeneradosMenues100);
+                                
 
                 // Emit a success event with a message
                 $this->dispatch('success', __('Creado correctamente!'));

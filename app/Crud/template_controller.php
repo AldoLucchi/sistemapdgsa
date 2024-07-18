@@ -34,8 +34,10 @@ class %OBJETO_CONTROLLER% extends Controller
       $this->functionsService = $functionsService;
       $this->etiquetasDocumentosService = $etiquetasDocumentosService;
 
-      if( request()->segments(1)  ){
-        Session::put(request()->segments(1),  request()->path());
+      if( request()->segment(2)  ){
+        Log::info('%OBJETO_CONTROLLER% - __construct');
+        Log::info('request()->segment(2) -- '.request()->segment(2).' | request()->path() -- '.request()->path());
+        Session::put(request()->segment(2),  request()->path());
       }
   }
 

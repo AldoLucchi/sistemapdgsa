@@ -33,15 +33,12 @@ class GeneradorRutaService
     {
         $menu_ruta = $data['menu']['ruta'];
         $item_nombre = $data['item']['nombre'];
-        $rutas = file_get_contents('../routes/web_crud.php');
-        $search = "'/" . $menu_ruta . "/" . $item_nombre . "'";
 
-        if (!str_contains($rutas, $search)) {
-            //create route
-            $item_controller = $item_nombre . "Controller";
-            $item_datatable = $item_nombre . "DataTable";
+        //create route
+        $item_controller = $item_nombre . "Controller";
+        $item_datatable = $item_nombre . "DataTable";
 
-            $new_route = "
+        $new_route = "
             <?php 
 
 
@@ -54,16 +51,20 @@ class GeneradorRutaService
 
                 ";
 
-                $new_route_item = "web_crud_" . $item_nombre . ".php";
+        $new_route_item = "web_crud_" . $item_nombre . ".php";
 
-            $file_route = fopen("../routes/".$new_route_item, "w") or die("Unable to open file - web_crud_ " . $item_nombre);
-            fwrite($file_route, $new_route);
-            fclose($file_route);
+        $file_route = fopen("../routes/" . $new_route_item, "w") or die("Unable to open file - web_crud_ " . $item_nombre);
+        fwrite($file_route, $new_route);
+        fclose($file_route);
 
-            $new_route_crud = "    
-            require __DIR__ . '/". $new_route_item."';
+        $new_route_crud = "    
+            require __DIR__ . '/" . $new_route_item . "';
             ";
 
+        $rutas = file_get_contents('../routes/web_crud.php');
+        $search = $new_route_item;
+
+        if (!str_contains($rutas, $search)) {
             $template_route = file_put_contents('../routes/web_crud.php', $new_route_crud . PHP_EOL, FILE_APPEND | LOCK_EX);
         }
     }
@@ -198,9 +199,9 @@ class GeneradorRutaService
 
     public function limpiarCache()
     {
-        //Artisan::call('cache:clear');
-        //Artisan::call('config:clear');
-        //Artisan::call('view:clear');
+        Artisan::call('cache:clear');
+        Artisan::call('config:clear');
+        Artisan::call('view:clear');
         //Artisan::call('route:clear');
         //artisan optimize:clear
         Artisan::call('optimize:clear');
