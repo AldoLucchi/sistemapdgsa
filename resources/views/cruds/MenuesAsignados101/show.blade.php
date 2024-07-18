@@ -3,10 +3,6 @@
 MenuesAsignados
 @endsection
 
-@section('breadcrumbs')
-{{ Breadcrumbs::render('admin.menuAsignado.show', $MenuesAsignados101) }}
-@endsection
-
 <div class="card">
     <!--begin::Card header-->
     <div class="card-header border-0 pt-6">

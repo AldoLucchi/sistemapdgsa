@@ -32,6 +32,10 @@ class %OBJETO_CONTROLLER% extends Controller
   ) {
       $this->functionsService = $functionsService;
       $this->etiquetasDocumentosService = $etiquetasDocumentosService;
+
+      if( request()->segments(1)  ){
+        Session::put(request()->segments(1),  request()->path());
+      }
   }
 
     /**
@@ -105,11 +109,17 @@ class %OBJETO_CONTROLLER% extends Controller
 
         $message =  ' %OBJETO_LABEL_INDIVIDUAL%: registro creado correctamente: ';
 
-        return redirect('/%MENU_RUTA%/%OBJETO_ROUTE%')->with('message',$message);
+        $rutaCrud = '/crud/%OBJETO_ROUTE%';
+
+        if( Session::has('%OBJETO_ROUTE%')){
+          $rutaCrud = '/'.Session::get('%OBJETO_ROUTE%');
+        }  
+
+        return redirect( $rutaCrud)->with('message',$message);
       } catch (Exception $e) {
           Log::info('%OBJETO_CONTROLLER% - store - Exception ' . $e->getMessage());
 
-          return redirect('/%MENU_RUTA%/%OBJETO_VARIABLE%')->with('message-error',$e->getMessage());
+          return redirect( $rutaCrud)->with('message-error',$e->getMessage());
       }
     }
 
@@ -179,12 +189,18 @@ class %OBJETO_CONTROLLER% extends Controller
 
       $message =  ' %OBJETO_LABEL_INDIVIDUAL%: registro actualizado correctamente: ';
 
-      return redirect('/%MENU_RUTA%/%OBJETO_VARIABLE%')->with('message',$message);
+      $rutaCrud = '/crud/%OBJETO_ROUTE%';
+
+      if( Session::has('%OBJETO_ROUTE%')){
+        $rutaCrud = '/'.Session::get('%OBJETO_ROUTE%');
+      }  
+
+      return redirect($rutaCrud)->with('message',$message);
       
     } catch (Exception $e) {
         Log::info('%OBJETO_CONTROLLER% - store - Exception ' . $e->getMessage());
 
-        return redirect('/%MENU_RUTA%/%OBJETO_VARIABLE%')->with('message-error',$e->getMessage());
+        return redirect($rutaCrud)->with('message-error',$e->getMessage());
     }
     
     }

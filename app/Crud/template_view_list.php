@@ -4,10 +4,6 @@
     %OBJETO_LABEL%
     @endsection
 
-    @section('breadcrumbs')
-    {{ Breadcrumbs::render('%OBJETO_ROUTE%.index') }}
-    @endsection
-
     <div class="card">
         <!--begin::Card header-->
         <div class="card-header border-0 pt-6">
@@ -34,11 +30,7 @@
                     <!--end::Filter-->
 
                     <!--begin::Add %OBJETO_VIEW%-->
-                    <!--<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_%OBJETO_VIEW%">
-                        {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                        Agregar %OBJETO_LABEL_INDIVIDUAL%
-                        </button>-->
-                    <a href="{{ url('/%MENU_RUTA%/%OBJETO_ROUTE%/create' ) }}" class="btn btn-primary">
+                    <a href="{{ url('/'. (Session::has('%OBJETO_ROUTE%')?Session::get('%OBJETO_ROUTE%'):'crud/%OBJETO_ROUTE%').'/create' ) }}" class="btn btn-primary">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
                         Agregar %OBJETO_LABEL_INDIVIDUAL%
                     </a>
@@ -46,9 +38,7 @@
                 </div>
                 <!--end::Toolbar-->
 
-                <!--begin::Modal-->
-                <livewire:%OBJETO_VIEW%.add-%OBJETO_VIEW%-modal></livewire:%OBJETO_VIEW%.add-%OBJETO_VIEW%-modal>
-                <!--end::Modal-->
+                
             </div>
             <!--end::Card toolbar-->
         </div>
@@ -101,7 +91,7 @@
 
         //filtros
         function redirectFiltros() {
-            var urlFilter = "{{ url('/%MENU_RUTA%/%OBJETO_ROUTE%' ) }}"+"?";
+            var urlFilter = "{{ url('/'.(Session::has('%OBJETO_ROUTE%')?Session::get('%OBJETO_ROUTE%'):'crud/%OBJETO_ROUTE%') ) }}"+"?";
 
             const texto = document.getElementById("texto").value;            
             urlFilter = urlFilter+ "texto="+texto+"&";

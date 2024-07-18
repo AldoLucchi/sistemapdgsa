@@ -36,7 +36,7 @@
     <!--begin::Card body-->
     <div class="card-body py-4">
         <!--begin::Table-->
-        <form id="add_%OBJETO_ROUTE%_form" name="add_%OBJETO_ROUTE%_form" class="form" action="{{ route('%MENU_RUTA%.%OBJETO_ROUTE%.store') }}" method="POST" enctype="multipart/form-data">
+        <form id="add_%OBJETO_ROUTE%_form" name="add_%OBJETO_ROUTE%_form" class="form" action="{{ route('crud.%OBJETO_ROUTE%.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="row">
         @include('cruds.%OBJETO_VIEW%.fields')

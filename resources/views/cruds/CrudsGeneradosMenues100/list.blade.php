@@ -2,11 +2,7 @@
 
     @section('title')
     CrudsGeneradosMenues
-    @endsection
-
-    @section('breadcrumbs')
-    {{ Breadcrumbs::render('admin.menuCrud.index') }}
-    @endsection
+    @endsection  
 
     <div class="card">
         <!--begin::Card header-->

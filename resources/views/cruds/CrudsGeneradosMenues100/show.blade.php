@@ -3,10 +3,6 @@
 CrudsGeneradosMenues
 @endsection
 
-@section('breadcrumbs')
-{{ Breadcrumbs::render('admin.menuCrud.show', $CrudsGeneradosMenues100) }}
-@endsection
-
 <div class="card">
     <!--begin::Card header-->
     <div class="card-header border-0 pt-6">

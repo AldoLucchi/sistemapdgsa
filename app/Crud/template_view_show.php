@@ -3,11 +3,7 @@
     %OBJETO_LABEL%
     @endsection
 
-    @section('breadcrumbs')
-    {{ Breadcrumbs::render('%OBJETO_ROUTE%.show', $%OBJETO_VARIABLE%) }}
-    @endsection
-
-    <div class="card">
+     <div class="card">
         <!--begin::Card header-->
         <div class="card-header border-0 pt-6">
             <!--begin::Card title-->
@@ -25,11 +21,8 @@
                 <!--begin::Toolbar-->
                 <div class="d-flex justify-content-end" data-kt-%OBJETO_ROUTE%-table-toolbar="base">
                     <!--begin::Add %OBJETO_ROUTE%-->
-                    <!--<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_%OBJETO_ROUTE%">
-                {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                Agregar %OBJETO_LABEL_INDIVIDUAL%
-                </button>-->
-                    <a href="{{ url('/%MENU_RUTA%/%OBJETO_ROUTE%/create' ) }}" class="btn btn-primary">
+                    
+                    <a href="{{ url('/'.(Session::has('%OBJETO_ROUTE%')?Session::get('%OBJETO_ROUTE%'):'crud/%OBJETO_ROUTE%').'/create' ) }}" class="btn btn-primary">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
                         Agregar %OBJETO_LABEL_INDIVIDUAL%
                     </a>
@@ -37,10 +30,7 @@
                     <!--end::Add %OBJETO_ROUTE%-->
                 </div>
                 <!--end::Toolbar-->
-
-                <!--begin::Modal-->
-                <livewire:%OBJETO_VIEW%.add-%OBJETO_VIEW%-modal></livewire:%OBJETO_VIEW%.add-%OBJETO_VIEW%-modal>
-                <!--end::Modal-->
+                
             </div>
             <!--end::Card toolbar-->
         </div>

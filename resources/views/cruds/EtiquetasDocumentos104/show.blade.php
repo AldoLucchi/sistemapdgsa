@@ -3,10 +3,6 @@
     EtiquetasDocumentos
     @endsection
 
-    @section('breadcrumbs')
-    {{ Breadcrumbs::render('admin.etiquetaDocumento.show', $EtiquetasDocumentos104) }}
-    @endsection
-
     <div class="card">
         <!--begin::Card header-->
         <div class="card-header border-0 pt-6">

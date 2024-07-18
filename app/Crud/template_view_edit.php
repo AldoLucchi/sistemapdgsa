@@ -37,7 +37,7 @@
     <div class="card-body py-4">
         <!--begin::Table-->
 
-        <form id="edit_%OBJETO_ROUTE%_form" name="edit_%OBJETO_ROUTE%_form" class="form" action="{{ route('%MENU_RUTA%.%OBJETO_ROUTE%.update', $%OBJETO_ROUTE%) }}" method="POST" enctype="multipart/form-data">
+        <form id="edit_%OBJETO_ROUTE%_form" name="edit_%OBJETO_ROUTE%_form" class="form" action="{{ route('crud.%OBJETO_ROUTE%.update', $%OBJETO_ROUTE%) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="row">

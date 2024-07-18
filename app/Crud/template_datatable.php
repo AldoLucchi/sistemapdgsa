@@ -76,7 +76,7 @@ class %OBJETO_DATATABLE% extends DataTable
     {
         $rutaDatatable = '';
         if( isset( $this->filters) && isset( $this->filters['rutaDatatable'])){
-            $rutaDatatable = route('%MENU_RUTA%.%OBJETO_VARIABLE%DataTable');
+            $rutaDatatable = route('crud.%OBJETO_VARIABLE%DataTable');
         }
 
         return $this->builder()

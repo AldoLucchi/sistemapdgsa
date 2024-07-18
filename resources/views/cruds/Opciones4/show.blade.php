@@ -3,10 +3,6 @@
 Opciones
 @endsection
 
-@section('breadcrumbs')
-{{ Breadcrumbs::render('Opciones4.show', $Opciones4) }}
-@endsection
-
 <div class="card">
     <!--begin::Card header-->
     <div class="card-header border-0 pt-6">

@@ -4,10 +4,7 @@
     Dashboard
     @endsection
 
-    @section('breadcrumbs')
-    {{ Breadcrumbs::render('dashboard') }}
-    @endsection
-
+    
     <style>
         .centered-element {
             margin: 0;

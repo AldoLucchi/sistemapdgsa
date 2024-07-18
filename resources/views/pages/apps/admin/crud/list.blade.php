@@ -4,9 +4,7 @@
         CRUD
     @endsection
 
-    @section('breadcrumbs')
-        {{ Breadcrumbs::render('admin.crud.index') }}
-    @endsection
+
 
     <div class="card">
         <!--begin::Card header-->

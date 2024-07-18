@@ -12,6 +12,7 @@ use Exception;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -29,7 +30,12 @@ class EtiquetasDocumentos104Controller extends Controller
     EtiquetaDocumentoService $etiquetaDocumentoService
   ) {
     $this->functionsService = $functionsService;
-    $this->etiquetaDocumentoService = $etiquetaDocumentoService;
+    $this->etiquetaDocumentoService = $etiquetaDocumentoService; 
+
+    if( request()->segments(1)  ){
+      Session::put(request()->segments(1),  request()->path());
+    }
+    
   }
 
   /**
@@ -97,11 +103,17 @@ class EtiquetasDocumentos104Controller extends Controller
 
       $message =  ' Etiqueta Documento: registro creado correctamente: ';
 
-      return redirect('/admin/etiquetaDocumento')->with('message', $message);
+      $rutaCrud = '/admin/etiquetaDocumento';
+
+      if( Session::has('etiquetaDocumento')){
+        $rutaCrud = '/'.Session::get('etiquetaDocumento');
+      }
+
+      return redirect($rutaCrud )->with('message', $message);
     } catch (Exception $e) {
       Log::info('EtiquetasDocumentos104Controller - store - Exception ' . $e->getMessage());
 
-      return redirect('/admin/etiquetaDocumento')->with('message-error', $e->getMessage());
+      return redirect($rutaCrud )->with('message-error', $e->getMessage());
     }
   }
 

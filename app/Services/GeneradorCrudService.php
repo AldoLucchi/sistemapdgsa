@@ -249,7 +249,7 @@ class GeneradorCrudService
         $this->generateCrudLivewire($data);
         $this->generateCrudRelations($data);
 
-        //$this->generateCrudRoute($data);
+        $this->generateCrudRoute($data);
         //$this->generateCrudMenu($data);
         //$this->generateCrudBreadcrumb($data);
 
@@ -1374,7 +1374,7 @@ class GeneradorCrudService
 
     public function generateCrudRoute($data)
     {
-        $menu = file_get_contents('../routes/web_crud.php');
+        $menu = file_get_contents('../routes/web_base.php');
         $search = $this->generateCrudReplace("'/crud/%OBJETO_VIEW%'", $data);
 
         if (!str_contains($menu, $search)) {
@@ -1387,7 +1387,7 @@ class GeneradorCrudService
         ";
             $new_route = $this->generateCrudReplace($new_route, $data);
 
-            $template_route = file_put_contents('../routes/web_crud.php', $new_route . PHP_EOL, FILE_APPEND | LOCK_EX);
+            $template_route = file_put_contents('../routes/web_base.php', $new_route . PHP_EOL, FILE_APPEND | LOCK_EX);
         }
     }
 
