@@ -1,6 +1,8 @@
 <x-default-layout>
 @section('title')
+<a href="{{ url('/'. (Session::has('%OBJETO_ROUTE%')?Session::get('%OBJETO_ROUTE%'):'crud/%OBJETO_ROUTE%') ) }}">
 %OBJETO_LABEL%
+</a>
 @endsection
 
 <div class="card">

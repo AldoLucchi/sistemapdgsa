@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
                 use App\Models\CrudsGenerados;
                 use App\Models\Menues;
-use App\Services\GeneradorCrudService;
+use App\Services\GeneradorRutaService;
 
 class AddCrudsGeneradosMenues100Modal extends Component
 {
@@ -103,9 +103,9 @@ class AddCrudsGeneradosMenues100Modal extends Component
                 $this->dispatch('success', __('Actualizado correctamente!'));
             } else {                
 
-                $generadorCrudService = new GeneradorCrudService();
+                $generadorRutaService = new GeneradorRutaService();
 
-                $generadorCrudService->generateRutaBreadCrumb($CrudsGeneradosMenues100);
+                $generadorRutaService->generateRutaBreadCrumb($CrudsGeneradosMenues100);
 
                 // Emit a success event with a message
                 $this->dispatch('success', __('Creado correctamente!'));
