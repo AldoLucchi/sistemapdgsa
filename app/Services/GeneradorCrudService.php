@@ -87,7 +87,7 @@ class GeneradorCrudService
                 } else if (str_contains($colum->Type, 'timestamp')) {
                     $type_html = 'datetime-local';
                 } else if (str_contains($colum->Type, 'date')) {
-                    $type_html = 'datetime-local';
+                    $type_html = 'date';
                 } else if (str_contains($colum->Type, 'int')) {
                     $type_html = 'number';
                 } else if (str_contains($colum->Type, 'char')) {
@@ -394,7 +394,7 @@ class GeneradorCrudService
                 $filter_variable_all = str_replace('%OBJETO_VARIABLE%', $model_name_fk, $filter_variable_all);
                 $filters_variables .= $filter_variable_all;
             }
-            if ($column['type_html'] == 'datetime-local') {
+            if (in_array( $column['type_html'] , ['date', 'datetime-local']) ) {
                 $date_name = $column['name'];
                 $date_from = $column['name'] . '_from';
                 $date_to = $column['name'] . '_to';
@@ -516,7 +516,7 @@ class GeneradorCrudService
                 $template_filters_javascript .= $list_filters_javascript;
             }
 
-            if ($column['type_html'] == 'datetime-local') {
+            if ( in_array($column['type_html'] ,['date', 'datetime-local'])) {
                 $list_filters_date = $template_list_filters_date;
                 $list_filters_javascript_from = $template_list_filters_javascript;
                 $list_filters_javascript_to = $template_list_filters_javascript;
@@ -843,7 +843,7 @@ class GeneradorCrudService
                 $filters .= $list_filters;
             }
 
-            if ($column['type_html'] == 'datetime-local') {
+            if (in_array($column['type_html'] ,['date', 'datetime-local']) ) {
                 $list_filters_from = $template_filters_min;
                 $date_name = $column['name'];
                 $date_from = $column['name'] . '_from';

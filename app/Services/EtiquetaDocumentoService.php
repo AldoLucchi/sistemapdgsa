@@ -54,7 +54,7 @@ class EtiquetaDocumentoService
                     } else if (str_contains($colum->Type, 'timestamp')) {
                         $type_html = 'datetime-local';
                     } else if (str_contains($colum->Type, 'date')) {
-                        $type_html = 'datetime-local';
+                        $type_html = 'date';
                     } else if (str_contains($colum->Type, 'int')) {
                         $type_html = 'number';
                     } else if (str_contains($colum->Type, 'char')) {
@@ -91,7 +91,7 @@ class EtiquetaDocumentoService
                     $path = $APP_URL . '/images/' . $campoValue;
                     $campoFormat = '<img src="' . $path . '">';
                 }
-                if ($type_html == 'datetime-local') {
+                if ( in_array($type_html ,[ 'date','datetime-local']) ) {
                     $date = date_create($campoValue);
                     $campoFormat = date_format($date, "d/m/Y");
                 }
