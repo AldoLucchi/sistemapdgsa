@@ -36,7 +36,7 @@ class GeneradorCrudService
 
         try {
             $table_name_label = $this->getTableName($request['nombre']);
-            $table_name_format = $table_name_label . $request['crud_id'];
+            $crud_name_format = $table_name_label . $request['crud_id'];
 
             $table_crud = $request['nombre'];
             $alias_opcion = $request['alias_opcion'];
@@ -213,7 +213,7 @@ class GeneradorCrudService
 
             $data = [
                 'table_fullname' => $table_crud,
-                'table_name' => $table_name_format,
+                'crud_name' => $crud_name_format,
                 'table_name_label' => $table_name_label,
                 'table_name_label_alias' => $alias_opcion,
                 'table_name_label_individual' => $alias_opcion_individual,
@@ -223,9 +223,9 @@ class GeneradorCrudService
                 'table_column_name' => $table_column_name,
                 'tables_fk' => $tables_data_fk,
                 'tables_crud_relation_fk' => $tables_crud_relation_fk,
-                'model_name' => $table_name_format,
-                'controller_name' => $table_name_format . 'Controller',
-                'datatable_name' => $table_name_format . 'DataTable',
+                'model_name' => $crud_name_format,
+                'controller_name' => $crud_name_format . 'Controller',
+                'datatable_name' => $crud_name_format . 'DataTable',
             ];
 
             Log::info($data);
@@ -471,16 +471,16 @@ class GeneradorCrudService
             mkdir("../resources/views/cruds");
         }
 
-        if (!is_dir("../resources/views/cruds/" . $data['table_name'])) {
-            mkdir("../resources/views/cruds/" . $data['table_name']);
+        if (!is_dir("../resources/views/cruds/" . $data['crud_name'])) {
+            mkdir("../resources/views/cruds/" . $data['crud_name']);
         }
-        if (!is_dir("../resources/views/cruds/" . $data['table_name'] . '/columns')) {
-            mkdir("../resources/views/cruds/" . $data['table_name'] . '/columns');
+        if (!is_dir("../resources/views/cruds/" . $data['crud_name'] . '/columns')) {
+            mkdir("../resources/views/cruds/" . $data['crud_name'] . '/columns');
         }
 
         //create views
         //list -------------------------------
-        $file_list_view = fopen("../resources/views/cruds/" . $data['table_name'] . "/list.blade.php", "w") or die("Unable to open file - view list.blade.php");
+        $file_list_view = fopen("../resources/views/cruds/" . $data['crud_name'] . "/list.blade.php", "w") or die("Unable to open file - view list.blade.php");
         $template_list_view = file_get_contents('../app/Crud/template_view_list.php');
         $template_list_view = $this->generateCrudReplace($template_list_view, $data);
 
@@ -548,7 +548,7 @@ class GeneradorCrudService
         fclose($file_list_view);
 
         //show-------------------
-        $file_show_view = fopen("../resources/views/cruds/" . $data['table_name'] . "/show.blade.php", "w") or die("Unable to open file - view show.blade.php");
+        $file_show_view = fopen("../resources/views/cruds/" . $data['crud_name'] . "/show.blade.php", "w") or die("Unable to open file - view show.blade.php");
         $template_list_show = file_get_contents('../app/Crud/template_view_show.php');
         $template_list_show = $this->generateCrudReplace($template_list_show, $data);
 
@@ -556,7 +556,7 @@ class GeneradorCrudService
         fclose($file_show_view);
 
         //create-------------------
-        $file_create = fopen("../resources/views/cruds/" . $data['table_name'] . "/create.blade.php", "w") or die("Unable to open file - view create.blade.php");
+        $file_create = fopen("../resources/views/cruds/" . $data['crud_name'] . "/create.blade.php", "w") or die("Unable to open file - view create.blade.php");
         $template_create = file_get_contents('../app/Crud/template_view_create.php');
         $template_create = $this->generateCrudReplace($template_create, $data);
 
@@ -564,7 +564,7 @@ class GeneradorCrudService
         fclose($file_create);
 
         //edit-------------------
-        $file_edit = fopen("../resources/views/cruds/" . $data['table_name'] . "/edit.blade.php", "w") or die("Unable to open file - view edit.blade.php");
+        $file_edit = fopen("../resources/views/cruds/" . $data['crud_name'] . "/edit.blade.php", "w") or die("Unable to open file - view edit.blade.php");
         $template_edit = file_get_contents('../app/Crud/template_view_edit.php');
         $template_edit = $this->generateCrudReplace($template_edit, $data);
 
@@ -572,7 +572,7 @@ class GeneradorCrudService
         fclose($file_edit);
 
         //datatable-------------------
-        $file_datatable_view = fopen("../resources/views/cruds/" . $data['table_name'] . "/datatable.blade.php", "w") or die("Unable to open file - view dattable.blade.php");
+        $file_datatable_view = fopen("../resources/views/cruds/" . $data['crud_name'] . "/datatable.blade.php", "w") or die("Unable to open file - view dattable.blade.php");
         $template_datatable = file_get_contents('../app/Crud/template_view_datatable.php');
         $template_datatable = $this->generateCrudReplace($template_datatable, $data);
 
@@ -580,7 +580,7 @@ class GeneradorCrudService
         fclose($file_datatable_view);
 
         // field------------------
-        $file_fields = fopen("../resources/views/cruds/" . $data['table_name'] . "/fields.blade.php", "w") or die("Unable to open file - view fields.blade.php");
+        $file_fields = fopen("../resources/views/cruds/" . $data['crud_name'] . "/fields.blade.php", "w") or die("Unable to open file - view fields.blade.php");
         $template_fields = file_get_contents('../app/Crud/template_view_show_field.php');
         $template_fields_select = file_get_contents('../app/Crud/template_view_show_field_select.php');
         $template_fields_html = file_get_contents('../app/Crud/template_view_show_field_html.php');
@@ -606,25 +606,24 @@ class GeneradorCrudService
                 $column_name = $data['tables_fk'][$column['name']]['table_column_fk_name'];
                 $column_id = $data['tables_fk'][$column['name']]['table_column_fk_id'];
 
-                //$value = '(isset($' . $data['table_name'] . ') ? $' . $data['table_name'] . '->' . $model_name . '->first()?->' . $column_name . ':"")';
                 $value = '
                     @foreach($' . $model_name . ' as $item)
-                    <option value="{{ $item->' . $column_id . ' }}"  {{ (isset($' . $data['table_name'] . ') && $item->' . $column_id . ' == $' . $data['table_name'] . '->' . $show_column_name . ')?"selected":"" }}>{{ $item->' . $column_name . ' }}</option>
+                    <option value="{{ $item->' . $column_id . ' }}"  {{ (isset($' . $data['crud_name'] . ') && $item->' . $column_id . ' == $' . $data['crud_name'] . '->' . $show_column_name . ')?"selected":"" }}>{{ $item->' . $column_name . ' }}</option>
                     @endforeach';
 
                 $template = str_replace('%FIELD_SELECT_OPTIONS%', $value, $template);
             } elseif ($column['type_html'] == 'html') {
                 $template = $template_fields_html;
 
-                $value = '( isset($' . $data['table_name'] . ')?$' . $data['table_name'] . '->' . $column['name'] . ':"")';
+                $value = '( isset($' . $data['crud_name'] . ')?$' . $data['crud_name'] . '->' . $column['name'] . ':"")';
                 $template = str_replace('%FIELD_VALUE_SHOW%', $value, $template);
                 $template = str_replace('%FIELD_ID%', $data['table_column_id'], $template);
-                $template = str_replace('%OBJETO%', $data['table_name'], $template);
+                $template = str_replace('%OBJETO%', $data['crud_name'], $template);
 
                 $action_documento = '
                 <!--begin::Menu item-->
                 <div class="menu-item px-3">
-                    <a href="{{ url("/docs/' . $data['table_name'] . '_". $' . $data['table_name'] . '->' . $data['table_column_id'] . '.".pdf" ) }}" class="menu-link px-3" target="_blank">
+                    <a href="{{ url("/docs/' . $data['crud_name'] . '_". $' . $data['crud_name'] . '->' . $data['table_column_id'] . '.".pdf" ) }}" class="menu-link px-3" target="_blank">
                         Pdf
                     </a>
                 </div>
@@ -635,7 +634,7 @@ class GeneradorCrudService
 
                 $template = str_replace('%FIELD_TYPE%', $column['type_html'], $template);
 
-                $value = '( isset($' . $data['table_name'] . ')?$' . $data['table_name'] . '->' . $column['name'] . ':"")';
+                $value = '( isset($' . $data['crud_name'] . ')?$' . $data['crud_name'] . '->' . $column['name'] . ':"")';
                 $value_file = '';
                 $value_readonly = "";
 
@@ -643,17 +642,17 @@ class GeneradorCrudService
                 $field_checked = '';
 
                 if ($column['type_html'] == 'checkbox') {
-                    $value = '(isset($' . $data['table_name'] . ') && $' . $data['table_name'] . '->' . $column['name'] . '?"ON":"OFF")';
+                    $value = '(isset($' . $data['crud_name'] . ') && $' . $data['crud_name'] . '->' . $column['name'] . '?"ON":"OFF")';
                     $field_style = "form-check-input";
-                    $field_checked = '{{ (isset($' . $data['table_name'] . ') && $' . $data['table_name'] . '->' . $column['name'] . '?"checked":"") }}';
+                    $field_checked = '{{ (isset($' . $data['crud_name'] . ') && $' . $data['crud_name'] . '->' . $column['name'] . '?"checked":"") }}';
                 }
                 if ($column['type_html'] == 'password') {
                     $value = '"---"';
                 }
                 if ($column['type_html'] == 'file') {
                     $value_file = '
-                    @if( isset($' . $data['table_name'] . ') && $' . $data['table_name'] . '->' . $column['name'] . ' )
-                    <br><img src="/images/{{ $' . $data['table_name'] . '->' . $column['name'] . ' }}" style="width:100px;">
+                    @if( isset($' . $data['crud_name'] . ') && $' . $data['crud_name'] . '->' . $column['name'] . ' )
+                    <br><img src="/images/{{ $' . $data['crud_name'] . '->' . $column['name'] . ' }}" style="width:100px;">
                     @endif
                     ';
 
@@ -682,7 +681,7 @@ class GeneradorCrudService
         fclose($file_fields);
 
         //actions ----------------------
-        $file_action_view = fopen("../resources/views/cruds/" . $data['table_name'] . "/columns/_actions.blade.php", "w") or die("Unable to open file - view actions.blade.php");
+        $file_action_view = fopen("../resources/views/cruds/" . $data['crud_name'] . "/columns/_actions.blade.php", "w") or die("Unable to open file - view actions.blade.php");
         $template_list_actions = file_get_contents('../app/Crud/template_view_actions.php');
         $template_list_actions = $this->generateCrudReplace($template_list_actions, $data);
         $template_list_actions = str_replace('%ACTION_DOCUMENTO%', $action_documento, $template_list_actions);
@@ -692,7 +691,7 @@ class GeneradorCrudService
         fclose($file_action_view);
 
         //draw scripts -------------------
-        $file_draw_scripts_view = fopen("../resources/views/cruds/" . $data['table_name'] . "/columns/_draw-scripts.js", "w") or die("Unable to open file - view _draw-scripts.js");
+        $file_draw_scripts_view = fopen("../resources/views/cruds/" . $data['crud_name'] . "/columns/_draw-scripts.js", "w") or die("Unable to open file - view _draw-scripts.js");
         $template_list_draw_js = file_get_contents('../app/Crud/template_view_draw_js.php');
         $template_list_draw_js = $this->generateCrudReplace($template_list_draw_js, $data);
 
@@ -700,7 +699,7 @@ class GeneradorCrudService
         fclose($file_draw_scripts_view);
 
         //view table---------------------------------
-        $file_table = fopen("../resources/views/cruds/" . $data['table_name'] . "/columns/_table.blade.php", "w") or die("Unable to open file - view table.blade.php");
+        $file_table = fopen("../resources/views/cruds/" . $data['crud_name'] . "/columns/_table.blade.php", "w") or die("Unable to open file - view table.blade.php");
 
         $template_table = file_get_contents('../app/Crud/template_view_table.php');
         $template_table = $this->generateCrudReplace($template_table, $data);
@@ -901,7 +900,7 @@ class GeneradorCrudService
         $columns = '';
         $datasSubmit = '';
         $datasUpdate = '';
-        $table_name = $data['table_name'];
+        $crud_name = $data['crud_name'];
 
         $livewire_select = '';
         $livewire_select_use = '';
@@ -944,7 +943,7 @@ class GeneradorCrudService
 
 
             $dataUpdate = '
-            $this->' . $column_name . ' = $' . $table_name . '->' . $column_name . ';
+            $this->' . $column_name . ' = $' . $crud_name . '->' . $column_name . ';
             ';
             $datasUpdate .= $dataUpdate;
             //--------
@@ -979,11 +978,11 @@ class GeneradorCrudService
         fclose($file);
 
         //create views
-        if (!is_dir("../resources/views/livewire/" . $data['table_name'])) {
-            mkdir("../resources/views/livewire/" . $data['table_name']);
+        if (!is_dir("../resources/views/livewire/" . $data['crud_name'])) {
+            mkdir("../resources/views/livewire/" . $data['crud_name']);
         }
 
-        $file_list = fopen("../resources/views/livewire/" . $data['table_name'] . "/list.blade.php", "w") or die("Unable to open file - view list.blade.php");
+        $file_list = fopen("../resources/views/livewire/" . $data['crud_name'] . "/list.blade.php", "w") or die("Unable to open file - view list.blade.php");
         $template_list = file_get_contents('../app/Crud/template_livewire_view_list.php');
         $template_list = $this->generateCrudReplace($template_list, $data);
 
@@ -991,7 +990,7 @@ class GeneradorCrudService
         fclose($file_list);
 
         //Modal
-        $file_modal = fopen("../resources/views/livewire/" . $data['table_name'] . "/add-" . $data['table_name'] . "-modal.blade.php", "w") or die("Unable to open file - view add-modal.blade.php");
+        $file_modal = fopen("../resources/views/livewire/" . $data['crud_name'] . "/add-" . $data['crud_name'] . "-modal.blade.php", "w") or die("Unable to open file - view add-modal.blade.php");
         $template_modal = file_get_contents('../app/Crud/template_livewire_view_modal.php');
         $template_modal = $this->generateCrudReplace($template_modal, $data);
 
@@ -999,7 +998,7 @@ class GeneradorCrudService
         fclose($file_modal);
 
 
-        $file_fields = fopen("../resources/views/livewire/" . $data['table_name'] . "/fields.blade.php", "w") or die("Unable to open file - view fields.blade.php");
+        $file_fields = fopen("../resources/views/livewire/" . $data['crud_name'] . "/fields.blade.php", "w") or die("Unable to open file - view fields.blade.php");
         $template_fields = file_get_contents('../app/Crud/template_livewire_view_modal_fields.php');
 
         $template_modal_fields = '<div class="row">';
@@ -1065,10 +1064,10 @@ class GeneradorCrudService
     {
         Log::info('GeneradorCrudService - generateCrudRelations ----');
         $template_show_datatable = file_get_contents('../app/Crud/template_view_show_datatable.php');
-        $tableName = $data['table_name'];
+        $tableName = $data['crud_name'];
         $tableNameLabel = $data['table_name_label'];
-        $tableNameDatatable = $data['table_name'] . 'DataTable';
-        $tableVariableDatatable = 'datatable' . $data['table_name'];
+        $tableNameDatatable = $data['crud_name'] . 'DataTable';
+        $tableVariableDatatable = 'datatable' . $data['crud_name'];
 
         foreach ($data['tables_crud_relation_fk'] as $crud_relation) {
 
@@ -1252,11 +1251,11 @@ class GeneradorCrudService
 
         $content = str_replace('%OBJETO_CONTROLLER%', $data['controller_name'], $content);
         $content = str_replace('%SELECT_USE%', '', $content);
-        $content = str_replace('%OBJETO_VIEW%', $data['table_name'], $content);
-        $content = str_replace('%OBJETO_VARIABLE%', $data['table_name'], $content);
+        $content = str_replace('%OBJETO_VIEW%', $data['crud_name'], $content);
+        $content = str_replace('%OBJETO_VARIABLE%', $data['crud_name'], $content);
         $content = str_replace('%OBJETO_DATATABLE%', $data['datatable_name'], $content);
 
-        $content = str_replace('%OBJETO_ROUTE%', $data['table_name'], $content);
+        $content = str_replace('%OBJETO_ROUTE%', $data['crud_name'], $content);
 
         if (isset($data['objeto_fk'])) {
             $content = str_replace('%OBJETO_FK%', $data['objeto_fk'], $content);

@@ -22,36 +22,44 @@ class CrudService
         $campos = '[';
         $table_fk_columns = DB::select("SHOW COLUMNS FROM " . $table_name);
         foreach ($table_fk_columns as $colum) {
-            $incluir_campo = (isset($request[$table_name.'_'.$colum->Field])?1:0);
-            $incluir_list = (isset($request[$table_name.'_'.$colum->Field.'_list'])?1:0);
-            $alias = (isset($request[$table_name.'_'.$colum->Field.'_alias'])?$request[$table_name.'_'.$colum->Field.'_alias']:null);
-            $select = (isset($request[$table_name.'_'.$colum->Field.'_select'])?$request[$table_name.'_'.$colum->Field.'_select']:null);
-            $show_fk = (isset($request[$table_name.'_'.$colum->Field.'_show_fk'])?$request[$table_name.'_'.$colum->Field.'_show_fk']:null);
-            $show_fk_permisos = (isset($request[$table_name.'_'.$colum->Field.'_show_fk_permisos'])?$request[$table_name.'_'.$colum->Field.'_show_fk_permisos']:null);
-            if($show_fk_permisos){
-                $show_fk_permisos = implode(',',$show_fk_permisos);
+            $incluir_campo = (isset($request[$table_name . '_' . $colum->Field]) ? 1 : 0);
+            $incluir_list = (isset($request[$table_name . '_' . $colum->Field . '_list']) ? 1 : 0);
+            $alias = (isset($request[$table_name . '_' . $colum->Field . '_alias']) ? $request[$table_name . '_' . $colum->Field . '_alias'] : null);
+            $select = (isset($request[$table_name . '_' . $colum->Field . '_select']) ? $request[$table_name . '_' . $colum->Field . '_select'] : null);
+            $show_fk = (isset($request[$table_name . '_' . $colum->Field . '_show_fk']) ? $request[$table_name . '_' . $colum->Field . '_show_fk'] : null);
+            $show_fk_permisos = (isset($request[$table_name . '_' . $colum->Field . '_show_fk_permisos']) ? $request[$table_name . '_' . $colum->Field . '_show_fk_permisos'] : null);
+            if ($show_fk_permisos) {
+                $show_fk_permisos = implode(',', $show_fk_permisos);
             }
 
-            $campos .=  '{"field": "'.$colum->Field.'", "type": "'.$colum->Type.'", "null": "'.$colum->Null.'", "key": "'.$colum->Key.'", "default": "'.$colum->Default.'", "extra": "'.$colum->Extra.'", ';
-            $campos .=  '"incluir_campo": '.$incluir_campo.', "incluir_list": '.$incluir_list.', "alias": "'.$alias.'",  "select": "'.$select.'",  "show_fk": "'.$show_fk.'",  "show_fk_permisos": "'.$show_fk_permisos.'" },';
+            $campos .=  '{"field": "' . $colum->Field . '", "type": "' . $colum->Type . '", "null": "' . $colum->Null . '", "key": "' . $colum->Key . '", "default": "' . $colum->Default . '", "extra": "' . $colum->Extra . '", ';
+            $campos .=  '"incluir_campo": ' . $incluir_campo . ', "incluir_list": ' . $incluir_list . ', "alias": "' . $alias . '",  "select": "' . $select . '",  "show_fk": "' . $show_fk . '",  "show_fk_permisos": "' . $show_fk_permisos . '" },';
         }
-         $campos = substr($campos, 0, -1);
+        $campos = substr($campos, 0, -1);
         $campos .= ']';
 
         //dd($campos);
 
+        $crud = null;
+        $data = [
+            'nombre' => $request['nombre'],
+            'alias_opcion' => $request['alias_opcion'],
+            'alias_opcion_individual' => $request['alias_opcion_individual'],
+            'status' => $request['estatus'],
+            'campos' => $campos,
+        ];
+
         try {
-            $crud = Crud::create([
-                'nombre' => $request['nombre'],
-                'alias_opcion' => $request['alias_opcion'],
-                'alias_opcion_indivual' => $request['alias_opcion_individual'],
-                'campos' => $campos,
-            ]);
+            if (isset($request['crud_id'])) {
+                $crud = Crud::find($request['crud_id']);
+                $crudUpdate = $crud->update($data);
+            } else {
+                $crud = Crud::create($data);
 
-            $table_name_label = $this->getTableNameFormat($request['nombre']);
-            $crud->nombre_componente = $table_name_label . $crud->id;
-            $crud->save();
-
+                $table_name_label = $this->getTableNameFormat($request['nombre']);
+                $crud->nombre_componente = $table_name_label . $crud->id;
+                $crud->save();
+            }
             Log::info($crud);
 
             return $crud;

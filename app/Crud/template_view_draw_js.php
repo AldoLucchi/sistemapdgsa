@@ -5,22 +5,14 @@ KTMenu.init();
 document.querySelectorAll('[data-kt-action="delete_row"]').forEach(function (element) {
     element.addEventListener('click', function () {
         if (confirm('Are you sure you want to remove?')) {            
-             $('.destroy_%OBJETO_VIEW%_form').submit();
+            var selectorForm = '#destroy_Contactos133_form_'+element.value;      
+            $(selectorForm).submit();
             return true;
         }        
         return false; 
     });
 });
 
-// Add click event listener to update buttons
-document.querySelectorAll('[data-kt-action="update_row"]').forEach(function (element) {
-    element.addEventListener('click', function () {
-        Livewire.dispatch('update_%OBJETO_VIEW%', [this.getAttribute('data-kt-%OBJETO_VARIABLE%-id')]);
-    });
-});
 
-// Listen for 'success' event emitted by Livewire
-Livewire.on('success', (message) => {
-    // Reload the %OBJETO_VIEW%-table datatable
-    LaravelDataTables['%OBJETO_VIEW%-table'].ajax.reload();
-});
+
+

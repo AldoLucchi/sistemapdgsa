@@ -43,7 +43,7 @@
                 @csrf
                 @method('PUT')
 
-
+                <input type="hidden" name="crud_id" id="crud_id" value="{{ (isset($crud)?$crud->id:'') }}">
 
 
                 <div class="row">

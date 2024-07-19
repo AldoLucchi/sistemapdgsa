@@ -75,9 +75,7 @@
     <!-- %RELATIONS_DATATABLE_SCRIPTS% -->
 
     <script>
-        $('#kt_modal_add_usuarios').on('hidden.bs.modal', function() {
-            Livewire.dispatch('new_usuarios');
-        });
+ 
     </script>
     @endpush
 

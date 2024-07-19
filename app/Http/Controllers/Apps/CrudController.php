@@ -96,6 +96,7 @@ class CrudController extends Controller
             if ($crud) {
                 $request['crud_id'] = $crud->id;
 
+                $request['estatus'] = 1;
                 $crudGenerado = $this->generadorCrudService->store($request->all());
 
                 if ($crudGenerado) {
@@ -166,18 +167,33 @@ class CrudController extends Controller
     public function update(Request $request)
     {
         Log::info('CrudController - update');
+        Log::info($request);
+
+        $validated = $request->validate([
+            'nombre' => 'required',
+            'alias_opcion' => 'required',
+        ]);
 
         $request["estatus"] = (isset($request["estatus"]) ? 1 : 0);
 
         Log::info($request);
         try {
-            $crud = $this->crudService->update($request->all(), $request['crud_id']);
+            $crud = $this->crudService->store($request->all());
 
-            $message = 'Proceso completado. CRUD actualizado correctamente';
+            if ($crud) {                
 
-            return redirect('/admin/crud')->with('message', $message);
+                $crudGenerado = $this->generadorCrudService->store($request->all());
+
+                if ($crudGenerado) {
+                    $message = 'Proceso completado. CRUD actualizado correctamente';
+
+                    return redirect('/admin/crud')->with('message', $message);
+                }
+            }
         } catch (Exception $e) {
             return redirect('/admin/crud')->with('message-error', $e->getMessage());
         }
+
+        
     }
 }
