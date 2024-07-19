@@ -38,16 +38,16 @@ class EtiquetasDocumentos104DataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->editColumn('idetiquetadocumento', function (EtiquetasDocumentos104 $EtiquetasDocumentos104) {
-return $EtiquetasDocumentos104->idetiquetadocumento;
+return mb_convert_encoding($EtiquetasDocumentos104->idetiquetadocumento, 'UTF-8', 'UTF-8') ;
 })
 ->editColumn('alias', function (EtiquetasDocumentos104 $EtiquetasDocumentos104) {
-return $EtiquetasDocumentos104->alias;
+return mb_convert_encoding($EtiquetasDocumentos104->alias, 'UTF-8', 'UTF-8') ;
 })
 ->editColumn('tabla', function (EtiquetasDocumentos104 $EtiquetasDocumentos104) {
-return $EtiquetasDocumentos104->tabla;
+return mb_convert_encoding($EtiquetasDocumentos104->tabla, 'UTF-8', 'UTF-8') ;
 })
 ->editColumn('campo', function (EtiquetasDocumentos104 $EtiquetasDocumentos104) {
-return $EtiquetasDocumentos104->campo;
+return mb_convert_encoding($EtiquetasDocumentos104->campo, 'UTF-8', 'UTF-8') ;
 })
 
             

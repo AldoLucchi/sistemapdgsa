@@ -91,12 +91,13 @@ class CrudController extends Controller
         ]);
 
         try {
+            $request['estatus'] = 1;
             $crud = $this->crudService->store($request->all());
 
             if ($crud) {
                 $request['crud_id'] = $crud->id;
 
-                $request['estatus'] = 1;
+                
                 $crudGenerado = $this->generadorCrudService->store($request->all());
 
                 if ($crudGenerado) {
