@@ -33,7 +33,7 @@ class CrudService
             }
 
             $campos .=  '{"field": "'.$colum->Field.'", "type": "'.$colum->Type.'", "null": "'.$colum->Null.'", "key": "'.$colum->Key.'", "default": "'.$colum->Default.'", "extra": "'.$colum->Extra.'", ';
-            $campos .=  '"incluir_campo": '.$incluir_campo.', "incluir_list": '.$incluir_list.', "alias": "'.$alias.'",  "select": "'.$select.'",  "show_fk": "'.$show_fk.'",  "show_fk_permisos": "'.$show_fk_permisos.'" }, ';
+            $campos .=  '"incluir_campo": '.$incluir_campo.', "incluir_list": '.$incluir_list.', "alias": "'.$alias.'",  "select": "'.$select.'",  "show_fk": "'.$show_fk.'",  "show_fk_permisos": "'.$show_fk_permisos.'" },';
         }
          $campos = substr($campos, 0, -1);
         $campos .= ']';
