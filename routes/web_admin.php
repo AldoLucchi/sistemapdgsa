@@ -11,7 +11,9 @@ use App\Http\Controllers\FirmaController;
 
 Route::name('admin.')->group(function () {
     Route::get('/admin/crud', [CrudController::class, 'index'])->name('crud.index');
+    Route::get('/admin/crud/create', [CrudController::class, 'create'])->name('crud.create');
     Route::post('/admin/crud', [CrudController::class, 'store'])->name('crud.store');
+    Route::get('/admin/crud/{id}/edit', [CrudController::class, 'edit'])->name('crud.edit');
     Route::put('/admin/crud', [CrudController::class, 'update'])->name('crud.update');
 
     /*

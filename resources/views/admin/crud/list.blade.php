@@ -1,7 +1,9 @@
 <x-default-layout>
 
     @section('title')
+    <a href="{{ url('/admin/crud' ) }}">
         CRUD
+    </a>
     @endsection
 
 
@@ -14,7 +16,7 @@
                 <!--begin::Search-->
                 <div class="d-flex align-items-center position-relative my-1">
                     {!! getIcon('magnifier', 'fs-3 position-absolute ms-5') !!}
-                    <input type="text" data-kt-crud-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Buscar" id="mySearchInput"/>
+                    <input type="text" data-kt-crud-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Buscar" id="mySearchInput" />
                 </div>
                 <!--end::Search-->
             </div>
@@ -25,10 +27,10 @@
                 <!--begin::Toolbar-->
                 <div class="d-flex justify-content-end" data-kt-crud-table-toolbar="base">
                     <!--begin::Add crud-->
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_crud">
+                    <a href="{{ url('/admin/crud/create' ) }}" class="btn btn-primary">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
                         Agregar CRUD
-                    </button>
+                    </a>
                     <!--end::Add crud-->
                 </div>
                 <!--end::Toolbar-->
@@ -54,24 +56,13 @@
     </div>
 
     @push('scripts')
-        {{ $dataTable->scripts() }}
-        <script>
-            document.getElementById('mySearchInput').addEventListener('keyup', function () {
-                window.LaravelDataTables['crud-table'].search(this.value).draw();
-            });
-            document.addEventListener('livewire:init', function () {
-                Livewire.on('success', function () {
-                    $('#kt_modal_add_crud').modal('hide');
-                    window.LaravelDataTables['crud-table'].ajax.reload();
-                });
-            });
-            $('#kt_modal_add_crud').on('hidden.bs.modal', function () {
-                Livewire.dispatch('new_crud');
-            });
-            $('#kt_modal_edit_crud').on('hidden.bs.modal', function () {
-                Livewire.dispatch('edit_crud');
-            });
-        </script>
+    {{ $dataTable->scripts() }}
+    <script>
+        document.getElementById('mySearchInput').addEventListener('keyup', function() {
+            window.LaravelDataTables['crud-table'].search(this.value).draw();
+        });
+       
+    </script>
     @endpush
 
 </x-default-layout>

@@ -7,8 +7,8 @@
 
 
     <!--begin::Menu item-->
-    <div class="menu-item px-3">
-        <a href="#" class="menu-link px-3" data-kt-crud-id="{{ $crud->id }}" data-bs-toggle="modal" data-bs-target="#kt_modal_edit_crud" data-kt-action="update_row">
+    <div class="menu-item px-3">        
+        <a href="{{ url('/admin/crud/'. $crud->id .'/edit' ) }}" class="menu-link px-3">
             Editar
         </a>
     </div>

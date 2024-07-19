@@ -38,7 +38,7 @@ class CrudDataTable extends DataTable
                 return $crud->created_at;
             })
             ->addColumn('action', function (Crud $crud) {
-                return view('pages/apps.admin.crud.columns._actions', compact('crud'));
+                return view('admin.crud.columns._actions', compact('crud'));
             })
             ->setRowId('id');
     }
@@ -65,7 +65,7 @@ class CrudDataTable extends DataTable
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(0, 'desc')
-            ->drawCallback("function() {" . file_get_contents(resource_path('views/pages/apps/admin/crud/columns/_draw-scripts.js')) . "}");
+            ->drawCallback("function() {" . file_get_contents(resource_path('views/admin/crud/columns/_draw-scripts.js')) . "}");
     }
 
     /**

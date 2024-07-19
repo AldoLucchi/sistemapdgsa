@@ -22,8 +22,8 @@ class CrudService
         $campos = '[';
         $table_fk_columns = DB::select("SHOW COLUMNS FROM " . $table_name);
         foreach ($table_fk_columns as $colum) {
-            $incluir_campo = (isset($request[$table_name.'_'.$colum->Field])?true:null);
-            $incluir_list = (isset($request[$table_name.'_'.$colum->Field.'_list'])?true:null);
+            $incluir_campo = (isset($request[$table_name.'_'.$colum->Field])?1:0);
+            $incluir_list = (isset($request[$table_name.'_'.$colum->Field.'_list'])?1:0);
             $alias = (isset($request[$table_name.'_'.$colum->Field.'_alias'])?$request[$table_name.'_'.$colum->Field.'_alias']:null);
             $select = (isset($request[$table_name.'_'.$colum->Field.'_select'])?$request[$table_name.'_'.$colum->Field.'_select']:null);
             $show_fk = (isset($request[$table_name.'_'.$colum->Field.'_show_fk'])?$request[$table_name.'_'.$colum->Field.'_show_fk']:null);
@@ -35,6 +35,7 @@ class CrudService
             $campos .=  '{"field": "'.$colum->Field.'", "type": "'.$colum->Type.'", "null": "'.$colum->Null.'", "key": "'.$colum->Key.'", "default": "'.$colum->Default.'", "extra": "'.$colum->Extra.'", ';
             $campos .=  '"incluir_campo": '.$incluir_campo.', "incluir_list": '.$incluir_list.', "alias": "'.$alias.'",  "select": "'.$select.'",  "show_fk": "'.$show_fk.'",  "show_fk_permisos": "'.$show_fk_permisos.'" }, ';
         }
+         $campos = substr($campos, 0, -1);
         $campos .= ']';
 
         //dd($campos);

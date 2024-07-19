@@ -31,6 +31,13 @@
         <a href="#" class="menu-link px-3" data-kt-%OBJETO_ROUTE%-id="{{ $%OBJETO_VARIABLE%->%FIELD_ID% }}" data-kt-action="delete_row">
             Eliminar
         </a>
+        <form id="destroy_%OBJETO_ROUTE%_form_{{ $%OBJETO_ROUTE%->%FIELD_ID% }}" name="destroy_%OBJETO_ROUTE%_form_{{ $%OBJETO_ROUTE%->%FIELD_ID% }}" class="form destroy_%OBJETO_ROUTE%_form" action="{{ route('crud.%OBJETO_ROUTE%.destroy', $%OBJETO_ROUTE%) }}" method="POST">
+            @csrf
+            @method('DELETE')
+            <button type="button" class="btn btn-link btn-xs menu-link fs-7  ms-3 px-3" data-kt-%OBJETO_ROUTE%-id="{{ $%OBJETO_ROUTE%->%FIELD_ID% }}" data-kt-action="delete_row">
+                Eliminar
+            </button>
+        </form>
     </div>
     <!--end::Menu item-->
     @endif

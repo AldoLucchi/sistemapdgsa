@@ -31,7 +31,7 @@ class CrudController extends Controller
      */
     public function index(CrudDataTable $dataTable)
     {
-        return $dataTable->render('pages/apps.admin.crud.list');
+        return $dataTable->render('admin.crud.list');
     }
 
     /**
@@ -39,7 +39,42 @@ class CrudController extends Controller
      */
     public function create()
     {
-        return view('pages/apps.admin.crud.create');
+        $cruds_created = []; //Crud::pluck('name')->toArray();
+        $cruds_availables = $cruds_filtered =  $cruds_filtered_columns = [];
+        $tables = DB::select('SHOW TABLES'); // returns an array of stdObjects  
+        $tables_excluded_env = env('CRUD_TABLES_EXCLUDED', 'addresses,cruds,failed_jobs,migrations,model_has_permissions,model_has_roles,password_resets,permissions,personal_access_tokens,role_has_permissions,roles');
+        $tables_excluded = explode(',', $tables_excluded_env);
+
+        $options_crud = [
+            'create' => 'create',
+            'read' => 'read',
+            'update' => 'update',
+            'delete' => 'delete',
+        ];
+
+        $cruds_generated = Crud::all();
+
+        foreach ($tables as $i => $crud_table) {
+            $table_name = $crud_table->Tables_in_pdgsabd;
+
+            if (!in_array($table_name, $tables_excluded)) {
+                $cruds_availables[$i] = $crud_table->Tables_in_pdgsabd;
+                if (!array_search($table_name, $cruds_created)) {
+                    $cruds_filtered[$i] = $crud_table->Tables_in_pdgsabd ?? '';
+                    $cruds_filtered_columns[$table_name] = DB::select("SHOW COLUMNS FROM " . $table_name);
+                }
+            }
+        }
+
+        $data = [
+            'cruds_availables' => $cruds_availables,
+            'cruds_filtered' => $cruds_filtered,
+            'cruds_filtered_columns' => $cruds_filtered_columns,
+            'cruds_generated' => $cruds_generated,
+            'options_crud' => $options_crud,
+        ];
+
+        return view('admin.crud.create', $data);
     }
 
     /**
@@ -73,6 +108,55 @@ class CrudController extends Controller
             return redirect('/admin/crud')->with('message-error', $e->getMessage());
         }
         return redirect('/admin/crud')->with('message-error', 'No se ha podido completar la generación de CRUD');
+    }
+
+
+
+    /**
+     * Show the form for editing a new resource.
+     */
+    public function edit($crud_id)
+    {
+        $crud = Crud::find($crud_id);
+        $crud_campos = json_decode($crud->campos);
+        $cruds_created = []; //Crud::pluck('name')->toArray();
+        $cruds_availables = $cruds_filtered =  $cruds_filtered_columns = [];
+        $tables = DB::select('SHOW TABLES'); // returns an array of stdObjects  
+        $tables_excluded_env = env('CRUD_TABLES_EXCLUDED', 'addresses,cruds,failed_jobs,migrations,model_has_permissions,model_has_roles,password_resets,permissions,personal_access_tokens,role_has_permissions,roles');
+        $tables_excluded = explode(',', $tables_excluded_env);
+
+        $options_crud = [
+            'create' => 'create',
+            'read' => 'read',
+            'update' => 'update',
+            'delete' => 'delete',
+        ];
+
+        $cruds_generated = Crud::all();
+
+        foreach ($tables as $i => $crud_table) {
+            $table_name = $crud_table->Tables_in_pdgsabd;
+
+            if (!in_array($table_name, $tables_excluded)) {
+                $cruds_availables[$i] = $crud_table->Tables_in_pdgsabd;
+                if (!array_search($table_name, $cruds_created)) {
+                    $cruds_filtered[$i] = $crud_table->Tables_in_pdgsabd ?? '';
+                    $cruds_filtered_columns[$table_name] = DB::select("SHOW COLUMNS FROM " . $table_name);
+                }
+            }
+        }
+
+        $data = [
+            'crud' => $crud,
+            'crud_campos' => $crud_campos,
+            'cruds_availables' => $cruds_availables,
+            'cruds_filtered' => $cruds_filtered,
+            'cruds_filtered_columns' => $cruds_filtered_columns,
+            'cruds_generated' => $cruds_generated,
+            'options_crud' => $options_crud,
+        ];
+
+        return view('admin.crud.edit', $data);
     }
 
 

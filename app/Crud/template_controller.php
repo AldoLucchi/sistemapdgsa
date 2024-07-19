@@ -214,9 +214,22 @@ class %OBJETO_CONTROLLER% extends Controller
      * @param  %OBJETO% $%OBJETO_VARIABLE%
      * @return \Illuminate\Http\Response
      */
-    public function destroy(%OBJETO% $%OBJETO_VARIABLE%)
+    public function destroy(Request $request, $%OBJETO_VARIABLE%)
     {
-		//
+      Log::info('%OBJETO_CONTROLLER% - destroy');
+      Log::info($%OBJETO_VARIABLE%);
+       $%OBJETO_VARIABLE%_delete = %OBJETO_VARIABLE%::find($%OBJETO_VARIABLE%);
+      $%OBJETO_VARIABLE%_delete = $%OBJETO_VARIABLE%_delete->delete();       
+
+      $message =  ' %OBJETO_LABEL_INDIVIDUAL%: registro eliminado correctamente: ';
+
+      $rutaCrud = '/crud/%OBJETO_ROUTE%';
+
+      if( Session::has('%OBJETO_ROUTE%')){
+        $rutaCrud = '/'.Session::get('%OBJETO_ROUTE%');
+      }  
+
+      return redirect($rutaCrud)->with('message',$message);	
     }
 	
     public function get%OBJETO_DATATABLE%(%OBJETO_DATATABLE% $dataTable%OBJETO%)
