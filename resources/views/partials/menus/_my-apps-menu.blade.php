@@ -27,7 +27,7 @@
 					@foreach(Session::get('usuario_proyectos') as $proyecto)
 					<!--begin::Col-->
 					<div class="col-4">
-						<a href="{{ url('/proyecto/'.$proyecto->idproyecto) }}" class="d-flex flex-column flex-center text-center text-gray-800 text-hover-primary bg-hover-light rounded py-4 px-3 mb-3">
+						<a href="{{ url('/proyectoDetalle/'.$proyecto->idproyecto) }}" class="d-flex flex-column flex-center text-center text-gray-800 text-hover-primary bg-hover-light rounded py-4 px-3 mb-3">
 							<img src="{{ '/images/'.$proyecto->logo   }}" class="w-25px h-25px mb-2" alt="" />
 							<span class="fw-semibold">{{ $proyecto->nombre }}</span>
 						</a>

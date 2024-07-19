@@ -29,7 +29,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/accordion', [DashboardController::class, 'accordion'])->name('accordion');
     
-    Route::get('/proyecto/{id}', [DashboardController::class, 'dashboardProyecto'])->name('dashboardProyecto');
+    Route::get('/proyectoDetalle/{id}', [DashboardController::class, 'dashboardProyecto'])->name('dashboardProyecto');
     /* Grupo de rutas para la gestión de usuarios, roles y permisos: */
     Route::name('user-management.')->group(function () {
         Route::resource('/user-management/users', UserManagementController::class);

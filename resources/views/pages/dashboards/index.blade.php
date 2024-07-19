@@ -46,7 +46,7 @@
         @if(Session::has('usuario_proyectos'))
         @foreach(Session::get('usuario_proyectos') as $proyecto)
         <div class="col-12 col-lg-3 mb-md-5 mb-xl-10 card-dashboard ">
-            <a href="{{ url('/proyecto/'.$proyecto->idproyecto) }}" class="btn btn-primary p-5 card-dashboard-link">
+            <a href="{{ url('/proyectoDetalle/'.$proyecto->idproyecto) }}" class="btn btn-primary p-5 card-dashboard-link">
                 <image src="/images/{{ $proyecto->logo }}" class="card-dashboard-image">
                     <label class="card-dashboard-label">{{ $proyecto->nombre }} </label>
             </a>

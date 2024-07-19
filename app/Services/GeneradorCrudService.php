@@ -39,6 +39,7 @@ class GeneradorCrudService
             $table_name_format = $table_name_label . $request['crud_id'];
 
             $table_crud = $request['nombre'];
+            $alias_opcion = $request['alias_opcion'];
             $alias_opcion_individual = $request['alias_opcion_individual'];
 
             $table_crud_columns = DB::select("SHOW COLUMNS FROM " . $table_crud);
@@ -214,6 +215,7 @@ class GeneradorCrudService
                 'table_fullname' => $table_crud,
                 'table_name' => $table_name_format,
                 'table_name_label' => $table_name_label,
+                'table_name_label_alias' => $alias_opcion,
                 'table_name_label_individual' => $alias_opcion_individual,
                 'table_columns' =>  $table_columns,
                 'table_columns_string' =>  $table_columns_string,
@@ -1242,6 +1244,7 @@ class GeneradorCrudService
     {
         $content = str_replace('%OBJETO%', $data['model_name'], $content);
         $content = str_replace('%OBJETO_LABEL%', $data['table_name_label'], $content);
+        $content = str_replace('%OBJETO_LABEL_ALIAS%', $data['table_name_label_alias'], $content);
         $content = str_replace('%OBJETO_LABEL_INDIVIDUAL%', $data['table_name_label_individual'], $content);
         $content = str_replace('%TABLA%', $data['table_fullname'], $content);
         $content = str_replace('%TABLA_CAMPOS%', $data['table_columns_string'], $content);

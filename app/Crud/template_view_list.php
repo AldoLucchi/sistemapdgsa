@@ -2,7 +2,7 @@
 
     @section('title')
     <a href="{{ url('/'. (Session::has('%OBJETO_ROUTE%')?Session::get('%OBJETO_ROUTE%'):'crud/%OBJETO_ROUTE%') ) }}">
-    %OBJETO_LABEL%
+    %OBJETO_LABEL_ALIAS%
     </a>
     @endsection
 
