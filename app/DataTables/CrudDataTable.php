@@ -19,23 +19,23 @@ class CrudDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-        ->editColumn('id', function (Crud $crud) {
-            return $crud->id;
-        })
+            ->editColumn('id', function (Crud $crud) {
+                return  mb_convert_encoding($crud->id, 'UTF-8', 'UTF-8');
+            })
             ->editColumn('nombre', function (Crud $crud) {
-                return $crud->nombre;
+                return mb_convert_encoding($crud->nombre, 'UTF-8', 'UTF-8');
             })
             ->editColumn('alias_opcion', function (Crud $crud) {
-                return $crud->alias_opcion;
+                return mb_convert_encoding($crud->alias_opcion, 'UTF-8', 'UTF-8');
             })
             ->editColumn('nombre_componente', function (Crud $crud) {
-                return $crud->nombre_componente;
+                return mb_convert_encoding($crud->nombre_componente, 'UTF-8', 'UTF-8');
             })
             ->editColumn('estatus', function (Crud $crud) {
-                return ($crud->estatus?'ON':'OFF');
+                return   mb_convert_encoding(($crud->estatus ? 'ON' : 'OFF'), 'UTF-8', 'UTF-8');
             })
             ->editColumn('created_at', function (Crud $crud) {
-                return $crud->created_at;
+                return mb_convert_encoding($crud->created_at, 'UTF-8', 'UTF-8');
             })
             ->addColumn('action', function (Crud $crud) {
                 return view('admin.crud.columns._actions', compact('crud'));
@@ -81,10 +81,10 @@ class CrudDataTable extends DataTable
             Column::make('estatus')->name('estatus'),
             Column::make('created_at')->title('Created Date')->addClass('text-nowrap'),
             Column::computed('action')
-            ->addClass('text-end text-nowrap')
-            ->exportable(false)
-            ->printable(false)
-            ->width(60)
+                ->addClass('text-end text-nowrap')
+                ->exportable(false)
+                ->printable(false)
+                ->width(60)
 
         ];
     }
