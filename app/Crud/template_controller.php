@@ -122,6 +122,12 @@ class %OBJETO_CONTROLLER% extends Controller
       } catch (Exception $e) {
           Log::info('%OBJETO_CONTROLLER% - store - Exception ' . $e->getMessage());
 
+          $rutaCrud = '/crud/%OBJETO_ROUTE%';
+
+          if( Session::has('%OBJETO_ROUTE%')){
+            $rutaCrud = '/'.Session::get('%OBJETO_ROUTE%');
+          } 
+
           return redirect( $rutaCrud)->with('message-error',$e->getMessage());
       }
     }
@@ -202,6 +208,12 @@ class %OBJETO_CONTROLLER% extends Controller
       
     } catch (Exception $e) {
         Log::info('%OBJETO_CONTROLLER% - store - Exception ' . $e->getMessage());
+
+        $rutaCrud = '/crud/%OBJETO_ROUTE%';
+
+        if( Session::has('%OBJETO_ROUTE%')){
+          $rutaCrud = '/'.Session::get('%OBJETO_ROUTE%');
+        }    
 
         return redirect($rutaCrud)->with('message-error',$e->getMessage());
     }
