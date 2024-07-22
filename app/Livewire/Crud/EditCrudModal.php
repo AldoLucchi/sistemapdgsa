@@ -37,14 +37,15 @@ class EditCrudModal extends Component
         $tables = DB::select('SHOW TABLES'); // returns an array of stdObjects  
         $tables_excluded_env = env('CRUD_TABLES_EXCLUDED', 'addresses,cruds,failed_jobs,migrations,model_has_permissions,model_has_roles,password_resets,permissions,personal_access_tokens,role_has_permissions,roles');
         $tables_excluded = explode(',', $tables_excluded_env);
+        $tables_in = 'Tables_in_'.env('DB_DATABASE');
 
         foreach ($tables as $i => $crud_table) {
-            $table_name = $crud_table->Tables_in_pdgsabd;
+            $table_name = $crud_table->$tables_in;
 
             if (!in_array($table_name, $tables_excluded)) {
-                $cruds_availables[$i] = $crud_table->Tables_in_pdgsabd;
+                $cruds_availables[$i] = $crud_table->$tables_in;
                 if (!array_search($table_name, $cruds_created)) {
-                    $cruds_filtered[$i] = $crud_table->Tables_in_pdgsabd ?? '';
+                    $cruds_filtered[$i] = $crud_table->$tables_in ?? '';
                     $cruds_filtered_columns[$table_name] = DB::select("SHOW COLUMNS FROM " . $table_name);
                 }
             }

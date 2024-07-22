@@ -20,9 +20,10 @@ class FirmaService
         $tables_firma = [];
         // $registers_firma = [];
         $register = null;
+        $tables_in = 'Tables_in_'.env('DB_DATABASE');
 
         foreach ($tables as $i => $crud_table) {
-            $table_name = $crud_table->Tables_in_pdgsabd;
+            $table_name = $crud_table->$tables_in;
 
             $columns = DB::select("SHOW COLUMNS FROM " . $table_name);
 
