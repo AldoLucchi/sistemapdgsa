@@ -61,7 +61,7 @@ class %OBJETO_DATATABLE% extends DataTable
 
         if ($this->filters && isset($this->filters["texto"])) {
             $this->filters["texto"] = strtolower($this->filters["texto"]);
-            $query->whereRaw("LOWER( CONCAT(%DATATABLE_QUERY_FILTERS_DYNAMIC_TEXTO%) ) LIKE '%". $this->filters["texto"]."%' ");
+            $query->whereRaw("LOWER( CONCAT_WS(%DATATABLE_QUERY_FILTERS_DYNAMIC_TEXTO%) ) LIKE '%". $this->filters["texto"]."%' ");
         }
 
         %DATATABLE_QUERY_FILTERS_DYNAMIC%
