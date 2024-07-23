@@ -1069,10 +1069,10 @@ class GeneradorCrudService
         $tableNameDatatable = $data['crud_name'] . 'DataTable';
         $tableVariableDatatable = 'datatable' . $data['crud_name'];
 
-        foreach ($data['tables_crud_relation_fk'] as $key =>$crud_relation) {
+        foreach ($data['tables_crud_relation_fk'] as $keyCrud =>$crud_relation) {
             $crud = Crud::find($crud_relation['crud']);
             $permisos = (isset($crud_relation['permisos']) ? $crud_relation['permisos'] : null);
-            Log::info($key);
+            Log::info($keyCrud);
             Log::info($crud_relation);
 
             if ($crud) {
@@ -1083,10 +1083,10 @@ class GeneradorCrudService
                 $viewShowName = 'show';
 
                 $template_controller = file_get_contents('../app/Http/Controllers/Crud/' . $controllerName . '.php');
-                $search_datatable = 'use App\DataTables\\' . $tableNameDatatable . ';';
+                //$search_datatable = 'use App\DataTables\\' . $tableNameDatatable . ';';
                 $create = false;
 
-                if (!str_contains($search_datatable, $template_controller)) {
+                if (!str_contains( $template_controller, $tableNameDatatable)) {
                     $relation_variables_data_use = '
                     use App\DataTables\\' . $tableNameDatatable . ';
                     //%RELATION_DATATABLE_VARIABLES_USE%
@@ -1128,8 +1128,8 @@ class GeneradorCrudService
 
                 $template_controller = str_replace("//%RELATION_DATATABLE_VARIABLES%", $relation_variables, $template_controller);
 
-                $search_datatable_html = '$dataTable' . $crudName . '->html()';
-                if (!str_contains($search_datatable_html, $template_controller)) {
+                $search = '$dataTable' . $crudName;
+                if (!str_contains( $template_controller, $search)) {
 
                     $relation_variables_data = '
                     "dataTable' . $crudName . '" => $dataTable' . $crudName . '->html(),
@@ -1151,7 +1151,7 @@ class GeneradorCrudService
                 $template_datatable = str_replace("%OBJETO_DATATABLE%", $tableNameDatatable, $template_datatable);
 
                 if ($create) {
-                    $link = '<a href="{{ route("' . $tableNameDatatable . '.create") }}?'.$key.'=${{ ' . $tableNameDatatable . ' }}" class="btn btn-primary float-end"> Agregar</a> ';
+                    $link = '<a href="{{ route("' . $tableNameDatatable . '.create") }}?'.$keyCrud.'={{ $' . $componentName . '->'.$keyCrud.' }}" class="btn btn-primary float-end"> Agregar</a> ';
                     $template_datatable = str_replace("%CREATE%", $link, $template_datatable);
                 } else {
                     $template_datatable = str_replace("%CREATE%", '', $template_datatable);
@@ -1162,9 +1162,9 @@ class GeneradorCrudService
                 fclose($file_datatable_show);
 
                 $template_show = file_get_contents('../resources/views/cruds/' . $componentName . '/show.blade.php');
-                $search_include_datatable = '@include("cruds.' . $componentName . '.datatable_' . $crudName . '")';
+                $search = 'datatable_' . $crudName ;
 
-                if (!str_contains($search_include_datatable, $template_show)) {
+                if (!str_contains( $template_show, $search)) {
                     $template_datatable = '
                     @include("cruds.' . $componentName . '.datatable_' . $crudName . '")
     
