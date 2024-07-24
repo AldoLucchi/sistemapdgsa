@@ -338,8 +338,8 @@ class GeneradorCrudService
         $tablas_asociadas_uses = '';
         $field_file_storage = '';
         $pdf = '';
+        $filtersControllerIndex = '';
 
-        $filters = '';
         $template_filters = '
             if(isset($request["%OBJETO_VARIABLE%"]) ){
                 $filters["%OBJETO_VARIABLE%"]=$request["%OBJETO_VARIABLE%"];
@@ -351,7 +351,7 @@ class GeneradorCrudService
 
         $filters_variables = '';
         $template_filters_variables_all = '
-            "%OBJETO_VARIABLE%List" => %OBJETO_VARIABLE%::all(),
+            "%OBJETO_VARIABLE%List" => %OBJETO_VARIABLE%::%VARIABLE_CONDITION%->get(),
         ';
 
         $template_filters_variables = '
@@ -374,8 +374,17 @@ class GeneradorCrudService
                 $column_name_fk = $data['tables_fk'][$column['name']]['table_column_fk_name'];
                 $column_id_fk = $data['tables_fk'][$column['name']]['table_column_fk_id'];
 
+                $condition = '';
+
+                if (isset($column['select_id'])) {
+                    $condition = 'whereIn("'.$column_id_fk .'","['.$column['select_id'].']")';
+                }
+                else{
+                    $condition = 'where("1","1")';                      
+                }
+
                 $tabla = '
-                "' . $model_name_fk . '" => ' . $model_name_fk . '::all(), 
+                "' . $model_name_fk . '" => ' . $model_name_fk . '::'.$condition.'->get(), 
                 ';
 
                 $use = '
@@ -383,15 +392,21 @@ class GeneradorCrudService
                 ';
 
                 $tablas_asociadas .= $tabla;
+
                 $tablas_asociadas_uses .= $use;
 
                 //filter
                 $filter = str_replace('%OBJETO_VARIABLE%', $model_name_fk, $filter);
-                $filters .= $filter;
+                $filtersControllerIndex .= $filter;
 
                 $filter_variable = str_replace('%OBJETO_VARIABLE%', $model_name_fk, $filter_variable);
                 $filters_variables .= $filter_variable;
+
                 $filter_variable_all = str_replace('%OBJETO_VARIABLE%', $model_name_fk, $filter_variable_all);
+
+                
+
+                $filter_variable_all = str_replace('%VARIABLE_CONDITION%', $condition, $filter_variable_all);
                 $filters_variables .= $filter_variable_all;
             }
             if (in_array($column['type_html'], ['date', 'datetime-local'])) {
@@ -404,7 +419,7 @@ class GeneradorCrudService
 
                 //filter from
                 $filter_from = str_replace('%OBJETO_VARIABLE%', $date_from, $filter_from);
-                $filters .= $filter_from;
+                $filtersControllerIndex .= $filter_from;
 
                 $filter_variable_from = str_replace('%OBJETO_VARIABLE%', $date_from, $filter_variable_from);
                 $filters_variables .= $filter_variable_from;
@@ -415,7 +430,7 @@ class GeneradorCrudService
                 $filter_variable_to = $template_filters_variables;
 
                 $filter_to = str_replace('%OBJETO_VARIABLE%', $date_to, $filter_to);
-                $filters .= $filter_to;
+                $filtersControllerIndex .= $filter_to;
 
                 $filter_variable_to = str_replace('%OBJETO_VARIABLE%', $date_to, $filter_variable_to);
                 $filters_variables .= $filter_variable_to;
@@ -455,7 +470,7 @@ class GeneradorCrudService
         $template_controller = str_replace('%TABLAS_ASOCIADAS%', $tablas_asociadas, $template_controller);
         $template_controller = str_replace('%TABLAS_ASOCIADAS_USE%', $tablas_asociadas_uses, $template_controller);
         $template_controller = str_replace('%FIELD_FILE_STORAGE%', $field_file_storage, $template_controller);
-        $template_controller = str_replace('%FILTERS%', $filters, $template_controller);
+        $template_controller = str_replace('%FILTERS_CONTROLLER_INDEX%', $filtersControllerIndex, $template_controller);
         $template_controller = str_replace('%FILTERS_VARIABLES%', $filters_variables, $template_controller);
         $template_controller = str_replace('%FIELD_PDF%', $pdf, $template_controller);
 

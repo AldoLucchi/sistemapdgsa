@@ -58,7 +58,7 @@ class %OBJETO_CONTROLLER% extends Controller
           $request["texto"]="";
       }	
 
-      %FILTERS%
+      %FILTERS_CONTROLLER_INDEX%
       
       $dataTable = new %OBJETO_DATATABLE%($filters);
 
