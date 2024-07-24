@@ -1128,7 +1128,7 @@ class GeneradorCrudService
 
                 $template_controller = str_replace("//%RELATION_DATATABLE_VARIABLES%", $relation_variables, $template_controller);
 
-                $search = '$dataTable' . $crudName;
+                $search = '$dataTable' . $crudName . '->html()';
                 if (!str_contains( $template_controller, $search)) {
 
                     $relation_variables_data = '
