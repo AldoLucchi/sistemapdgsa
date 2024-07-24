@@ -1098,6 +1098,7 @@ class GeneradorCrudService
                 $relation_variables = '
                     $filters' . $crudName . ' = ["rutaDatatable" => true];
                     ';
+                    
 
                 foreach ($permisos as $key => $permiso) {
                     if ($permiso == 'read') {
@@ -1119,6 +1120,10 @@ class GeneradorCrudService
                         $create = true;
                     }
                 }
+
+                $relation_variables .= '
+                            $filters' . $crudName . ' ["datatableFilters"] = ["'.$keyCrud.'" => $idRegister];
+                            ';
 
                 $relation_variables .= '
                     $dataTable' . $crudName . ' = new ' . $tableNameDatatable . '($filters' . $crudName . ');

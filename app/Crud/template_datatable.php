@@ -75,14 +75,18 @@ class %OBJETO_DATATABLE% extends DataTable
     public function html(): HtmlBuilder
     {
         $rutaDatatable = '';
+        $dataFilter = [];
         if( isset( $this->filters) && isset( $this->filters['rutaDatatable'])){
             $rutaDatatable = route('crud.%OBJETO_VARIABLE%DataTable');
+            if(isset( $this->filters['datatableFilters']) ){
+            $dataFilter = $this->filters['datatableFilters'];
+            }
         }
 
         return $this->builder()
             ->setTableId('%OBJETO_VARIABLE%-table')
             ->columns($this->getColumns())
-            ->minifiedAjax($rutaDatatable)
+            ->minifiedAjax($rutaDatatable, null, $dataFilter)
             ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')

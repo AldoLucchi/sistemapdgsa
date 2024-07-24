@@ -141,6 +141,7 @@ class %OBJETO_CONTROLLER% extends Controller
     public function show( $%OBJETO_VARIABLE%)
     {
 
+      $idRegister = $%OBJETO_VARIABLE%;
 
       //%RELATION_DATATABLE_VARIABLES%
 
@@ -162,6 +163,8 @@ class %OBJETO_CONTROLLER% extends Controller
      */
     public function edit($%OBJETO_VARIABLE%)
     {
+      $idRegister = $%OBJETO_VARIABLE%;
+
       $data = [
         '%OBJETO_VARIABLE%' => %OBJETO%::find($%OBJETO_VARIABLE%),
         %TABLAS_ASOCIADAS%
@@ -244,8 +247,12 @@ class %OBJETO_CONTROLLER% extends Controller
       return redirect($rutaCrud)->with('message',$message);	
     }
 	
-    public function get%OBJETO_DATATABLE%(%OBJETO_DATATABLE% $dataTable%OBJETO%)
+    public function get%OBJETO_DATATABLE%(Request $request)
     {
+      Log::info('%OBJETO_CONTROLLER% - get%OBJETO_DATATABLE% ');
+      Log::info($request);
+      $filters = $request->all();
+       $dataTable%OBJETO% = new %OBJETO_DATATABLE%($filters);
         return $dataTable%OBJETO%->render('cruds/%OBJETO%.datatable');
     }
 	
