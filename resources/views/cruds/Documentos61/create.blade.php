@@ -1,7 +1,7 @@
 <x-default-layout>
     @section('title')
-    <a href="{{ url('/admin/etiquetaDocumento' ) }}">
-        EtiquetasDocumentos
+    <a href="{{ url('/'. (Session::has('Documentos61')?Session::get('Documentos61'):'admin/documento') ) }}">
+        Documentos
     </a>
     @endsection
 
@@ -12,7 +12,7 @@
             <div class="card-title">
                 <!--begin::Search-->
                 <div class="d-flex align-items-center position-relative my-1">
-                    EDITAR
+                    CREAR
                 </div>
                 <!--end::Search-->
             </div>
@@ -21,10 +21,10 @@
             <!--begin::Card toolbar-->
             <div class="card-toolbar">
                 <!--begin::Toolbar-->
-                <div class="d-flex justify-content-end" data-kt-EtiquetasDocumentos104-table-toolbar="base">
-                    <!--begin::Add EtiquetasDocumentos104-->
+                <div class="d-flex justify-content-end" data-kt-Documentos61-table-toolbar="base">
+                    <!--begin::Add Documentos61-->
 
-                    <!--end::Add EtiquetasDocumentos104-->
+                    <!--end::Add Documentos61-->
                 </div>
                 <!--end::Toolbar-->
 
@@ -38,21 +38,19 @@
         <!--begin::Card body-->
         <div class="card-body py-4">
             <!--begin::Table-->
-
-            <form id="edit_EtiquetasDocumentos104_form" name="edit_EtiquetasDocumentos104_form" class="form" action="{{ route('admin.etiquetaDocumento.update', $EtiquetasDocumentos104) }}" method="POST" enctype="multipart/form-data">
+            <form id="add_Documentos61_form" name="add_Documentos61_form" class="form" action="{{ route('admin.documento.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                @method('PUT')
                 <div class="row">
-                    @include('cruds.EtiquetasDocumentos104.fields')
+                    @include('cruds.Documentos61.fields')
                 </div>
-
                 <div class="row">
                     <div class="d-flex justify-content-end">
                         <button type="submit" class="btn btn-primary">
-                            Guardar
+                            Crear
                         </button>
                     </div>
                 </div>
+
             </form>
             <!--end::Table-->
         </div>
@@ -61,6 +59,7 @@
 
     @push('scripts')
     <script>
+
     </script>
     @endpush
 

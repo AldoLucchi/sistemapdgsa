@@ -1,33 +1,27 @@
 <x-default-layout>
 
     @section('title')
-    <a href="{{ url('/admin/etiquetaDocumento' ) }}">
-        EtiquetasDocumentos
+    <a href="{{ url('/'. (Session::has('Documentos61')?Session::get('Documentos61'):'admin/documento') ) }}">
+        Documentos
     </a>
     @endsection
-
 
     <div class="card">
         <!--begin::Card header-->
         <div class="card-header border-0 pt-6">
             <!--begin::Card title-->
             <div class="card-title">
-                <!--begin::Search-->
-                <div class="d-flex align-items-center position-relative my-1">
-                    {!! getIcon('magnifier', 'fs-3 position-absolute ms-5') !!}
-                    <input type="text" data-kt-EtiquetasDocumentos104-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Buscar" id="mySearchInput" />
-                </div>
-                <!--end::Search-->
+
             </div>
             <!--begin::Card title-->
 
             <!--begin::Card toolbar-->
             <div class="card-toolbar">
                 <!--begin::Toolbar-->
-                <div class="d-flex justify-content-end" data-kt-EtiquetasDocumentos104-table-toolbar="base">
+                <div class="d-flex justify-content-end" data-kt-Documentos61-table-toolbar="base">
 
-                    <a href="{{ url('/admin/getEtiquetaDocumento/alias/id' ) }}" class="btn btn-secondary mx-5">
-                        Test Link Convert
+                    <a href="{{ url('/generarPdf/idRegister/idDocumento' ) }}" class="btn btn-secondary mx-5">
+                        Test Link 
                     </a>
 
                     <!--begin::Filter-->
@@ -37,22 +31,16 @@
                     </button>
                     <!--end::Filter-->
 
-                    <!--begin::Add EtiquetasDocumentos104-->
-                    <!--<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_EtiquetasDocumentos104">
+                    <!--begin::Add Documentos61-->
+                    <a href="{{ url('/'. (Session::has('Documentos61')?Session::get('Documentos61'):'admin/documento').'/create' ) }}" class="btn btn-primary">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                        Agregar Etiqueta Documento
-                        </button>-->
-                    <a href="{{ url('/admin/etiquetaDocumento/create' ) }}" class="btn btn-primary">
-                        {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                        Agregar Etiqueta Documento
+                        Agregar Documento
                     </a>
-                    <!--end::Add EtiquetasDocumentos104-->
+                    <!--end::Add Documentos61-->
                 </div>
                 <!--end::Toolbar-->
 
-                <!--begin::Modal-->
-                <livewire:EtiquetasDocumentos104.add-EtiquetasDocumentos104-modal></livewire:EtiquetasDocumentos104.add-EtiquetasDocumentos104-modal>
-                <!--end::Modal-->
+
             </div>
             <!--end::Card toolbar-->
         </div>
@@ -90,22 +78,9 @@
     @push('scripts')
     {{ $dataTable->scripts() }}
     <script>
-        document.getElementById('mySearchInput').addEventListener('keyup', function() {
-            window.LaravelDataTables['EtiquetasDocumentos104-table'].search(this.value).draw();
-        });
-        document.addEventListener('livewire:init', function() {
-            Livewire.on('success', function() {
-                $('#kt_modal_add_EtiquetasDocumentos104').modal('hide');
-                window.LaravelDataTables['EtiquetasDocumentos104-table'].ajax.reload();
-            });
-        });
-        $('#kt_modal_add_EtiquetasDocumentos104').on('hidden.bs.modal', function() {
-            Livewire.dispatch('new_EtiquetasDocumentos104');
-        });
-
         //filtros
         function redirectFiltros() {
-            var urlFilter = "{{ url('/admin/etiquetaDocumento' ) }}" + "?";
+            var urlFilter = "{{ url('/'.(Session::has('Documentos61')?Session::get('Documentos61'):'admin/documento') ) }}" + "?";
 
             const texto = document.getElementById("texto").value;
             urlFilter = urlFilter + "texto=" + texto + "&";

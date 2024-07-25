@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Apps\CrudController;
 use App\Http\Controllers\Crud\CrudsGeneradosMenues100Controller;
+use App\Http\Controllers\Crud\Documentos61Controller;
 use App\Http\Controllers\Crud\EtiquetasDocumentos104Controller;
 use App\Http\Controllers\Crud\Menues97Controller;
 use App\Http\Controllers\Crud\MenuesAsignados101Controller;
@@ -29,8 +30,12 @@ Route::name('admin.')->group(function () {
     Route::resource('/admin/menuOpcion', OpcionesMenues99Controller::class);
     Route::resource('/admin/menuCrud', CrudsGeneradosMenues100Controller::class);
     Route::resource('/admin/menuAsignado', MenuesAsignados101Controller::class);
+
+    Route::resource('/admin/documento', Documentos61Controller::class);
+    Route::get('/generarPdf/{idRegister}/{idDocumento}', [Documentos61Controller::class, 'generarPdf'])->name('admin.generarPdf');
     Route::resource('/admin/etiquetaDocumento', EtiquetasDocumentos104Controller::class);
     Route::get('/admin/getEtiquetaDocumento/{alias}/{id}', [EtiquetasDocumentos104Controller::class, 'getEtiquetaDocumento'])->name('admin.getEtiquetaDocumento');
+    
     Route::get('/admin/getDataFirma/{table?}/{idRegister?}', [FirmaController::class, 'getDataFirma'])->name('admin.getDataFirma');
     Route::get('/registrarFirma/{table}/{idRegister}', [FirmaController::class, 'registrarFirma'])->name('admin.registrarFirma');
     Route::post('/registrarFirmaGenerada', [FirmaController::class, 'registrarFirmaGenerada'])->name('admin.registrarFirmaGenerada');

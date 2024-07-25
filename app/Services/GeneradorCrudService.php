@@ -446,6 +446,7 @@ class GeneradorCrudService
                 $field_file_storage .= $template_file;
             }
 
+            /*
             if ($column['type_html'] == 'html') {
                 $pdf = '
                     $html = $' . $data['model_name'] . '->' . $column['name'] . ';
@@ -467,6 +468,7 @@ class GeneradorCrudService
                 $tablas_asociadas .= $tabla;
                 $tablas_asociadas_uses .= $use;
             }
+            */
         }
 
         $template_controller = str_replace('%FIELD_CHECKBOX%', $fields_checkobx, $template_controller);

@@ -11,6 +11,7 @@ use App\Services\FunctionsService;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -30,12 +31,11 @@ class EtiquetasDocumentos104Controller extends Controller
     EtiquetaDocumentoService $etiquetaDocumentoService
   ) {
     $this->functionsService = $functionsService;
-    $this->etiquetaDocumentoService = $etiquetaDocumentoService; 
+    $this->etiquetaDocumentoService = $etiquetaDocumentoService;
 
-    if( request()->segments(1)  ){
+    if (request()->segments(1)) {
       Session::put(request()->segments(1),  request()->path());
     }
-    
   }
 
   /**
@@ -73,7 +73,9 @@ class EtiquetasDocumentos104Controller extends Controller
    */
   public function create()
   {
-    $data = [];
+    $data = [
+      "tablesDatabase" => $this->getTablesDatabase(),
+    ];
 
     return view('cruds/EtiquetasDocumentos104.create', $data);
   }
@@ -105,15 +107,15 @@ class EtiquetasDocumentos104Controller extends Controller
 
       $rutaCrud = '/admin/etiquetaDocumento';
 
-      if( Session::has('etiquetaDocumento')){
-        $rutaCrud = '/'.Session::get('etiquetaDocumento');
+      if (Session::has('etiquetaDocumento')) {
+        $rutaCrud = '/' . Session::get('etiquetaDocumento');
       }
 
-      return redirect($rutaCrud )->with('message', $message);
+      return redirect($rutaCrud)->with('message', $message);
     } catch (Exception $e) {
       Log::info('EtiquetasDocumentos104Controller - store - Exception ' . $e->getMessage());
 
-      return redirect($rutaCrud )->with('message-error', $e->getMessage());
+      return redirect($rutaCrud)->with('message-error', $e->getMessage());
     }
   }
 
@@ -130,8 +132,8 @@ class EtiquetasDocumentos104Controller extends Controller
     //%RELATION_DATATABLE_VARIABLES%
 
     $data = [
+      "tablesDatabase" => $this->getTablesDatabase(),
       'EtiquetasDocumentos104' => EtiquetasDocumentos104::find($EtiquetasDocumentos104),
-
 
       //%RELATION_DATATABLE_VARIABLES_DATA%
     ];
@@ -147,8 +149,8 @@ class EtiquetasDocumentos104Controller extends Controller
   public function edit($EtiquetasDocumentos104)
   {
     $data = [
+      "tablesDatabase" => $this->getTablesDatabase(),
       'EtiquetasDocumentos104' => EtiquetasDocumentos104::find($EtiquetasDocumentos104),
-
     ];
 
     return view('cruds/EtiquetasDocumentos104.edit', $data);
@@ -207,5 +209,23 @@ class EtiquetasDocumentos104Controller extends Controller
   public function getEtiquetaDocumento($alias, $id)
   {
     return $this->etiquetaDocumentoService->getValueAlias($alias, $id);
+  }
+
+  protected function getTablesDatabase()
+  {
+    $tables_excluded_env = env('CRUD_TABLES_EXCLUDED');
+    $tables_excluded = explode(',', $tables_excluded_env);
+
+    $tables = DB::select('SHOW TABLES');
+    $tables_in = 'Tables_in_' . env('DB_DATABASE');
+    $tables_database = [];
+
+    foreach ($tables as $i => $crud_table) {
+      if (!in_array($crud_table->$tables_in, $tables_excluded)) {
+        $tables_database[] = $crud_table->$tables_in;
+      }
+    }
+
+    return $tables_database;
   }
 }
