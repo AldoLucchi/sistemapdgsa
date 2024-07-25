@@ -187,7 +187,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                                <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_select_id' }}" id="{{ $key.'_'.$column->Field.'_select_id' }}" value="{{ ($campoPreference)?$campoPreference->select_id:'' }}">
+                                                <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_select_id' }}" id="{{ $key.'_'.$column->Field.'_select_id' }}" value="{{ ($campoPreference && isset($campoPreference->select_id))?$campoPreference->select_id:'' }}">
                                             </td>
                                         <td>
                                             <select name="{{ $key.'_'.$column->Field.'_show_fk' }}" id="{{ $key.'_'.$column->Field.'_show_fk' }}" class="form-select form-select-transparent" aria-label="Seleccione una opción">
