@@ -58,6 +58,7 @@ class GeneradorCrudService
             foreach ($table_crud_columns as $colum) {
                 $column_request = $table_crud . '_' . $colum->Field;
                 $column_select_request = $table_crud . '_' . $colum->Field . '_select';
+                $column_select_id = $table_crud . '_' . $colum->Field . '_select_id';
                 $column_select_alias = $table_crud . '_' . $colum->Field . '_alias';
                 $column_select_list = $table_crud . '_' . $colum->Field . '_list';
                 $column_show_fk = $table_crud . '_' . $colum->Field . '_show_fk';
@@ -112,6 +113,10 @@ class GeneradorCrudService
                 if (isset($request[$column_select_request]) && !empty($request[$column_select_request]) &&  $column_select_request && $column_select_request != 'NULL' && $column_select_request != NULL) {
                     $table_column_detail['select'] = $request[$column_select_request];
                     $tables_fk[$colum->Field] = $request[$column_select_request];
+
+                    if (isset($request[$column_select_id]) && !empty($request[$column_select_id]) &&  $column_select_id && $column_select_id != 'NULL' && $column_select_id != NULL) {
+                        $table_column_detail['select_id'] = $request[$column_select_id];
+                    }
 
                     //
                     if (isset($request[$column_show_fk]) && !empty($request[$column_show_fk]) &&  $column_show_fk && $column_show_fk != 'NULL' && $column_show_fk != NULL) {
@@ -377,10 +382,10 @@ class GeneradorCrudService
                 $condition = '';
 
                 if (isset($column['select_id'])) {
-                    $condition = 'whereIn("'.$column_id_fk .'","['.$column['select_id'].']")';
+                    $condition = 'whereIn("'.$column_id_fk .'",['.$column['select_id'].'])';
                 }
                 else{
-                    $condition = 'where("1","1")';                      
+                    $condition = 'whereRaw("1 = 1")';                      
                 }
 
                 $tabla = '
@@ -402,9 +407,7 @@ class GeneradorCrudService
                 $filter_variable = str_replace('%OBJETO_VARIABLE%', $model_name_fk, $filter_variable);
                 $filters_variables .= $filter_variable;
 
-                $filter_variable_all = str_replace('%OBJETO_VARIABLE%', $model_name_fk, $filter_variable_all);
-
-                
+                $filter_variable_all = str_replace('%OBJETO_VARIABLE%', $model_name_fk, $filter_variable_all);                
 
                 $filter_variable_all = str_replace('%VARIABLE_CONDITION%', $condition, $filter_variable_all);
                 $filters_variables .= $filter_variable_all;
@@ -1118,6 +1121,7 @@ class GeneradorCrudService
                 }
 
                 $relation_variables = '
+                    $filters' . $crudName . ' = [];
                     $filters' . $crudName . ' = ["rutaDatatable" => true];
                     ';
 
