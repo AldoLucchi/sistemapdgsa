@@ -12,7 +12,7 @@ class UsuariosRoles extends Model
     protected $table = "vtc_usuarios_roles";
 	
 	protected $fillable = [
-        'idrol','rol','descripcion',
+        'idrol','rol','descripcion','idvisibilidad',
     ];	
 
     /**

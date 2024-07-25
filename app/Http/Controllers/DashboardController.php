@@ -24,20 +24,24 @@ class DashboardController extends Controller
         Log::info('DashboardController - user logged: ' . Auth::user()->id . ' - ' . Auth::user()->name);
 
         $user = Auth::user();
-
         $proyectos = [];
+        $idusuario = null;
 
-        if ($user) {
-            Session::put('idcliente', $user->idcliente);
-            Session::put('idrol', $user->idrol);
+        if ($user && $user->cliente && $user->cliente->proyectos) {
+            $proyectos = $user->cliente->proyectos;
+        }
 
-            if ($user->cliente && $user->cliente->proyectos) {
-                $proyectos = $user->cliente->proyectos;
+        if ($user && $user->rol) {
+            if ($user->rol->idvisibilidad > 1) {
+                $idusuario = $user->id;
             }
         }
 
         $menues = $this->menuService->getMenuDashboard();
 
+        Session::put('idcliente', $user->idcliente);
+        Session::put('idrol', $user->idrol);
+        Session::put('idusuario', $idusuario);
         Session::put('usuario_proyectos', $proyectos);
         Session::put('menues', $menues);
         Session::put('proyecto_seleccionado', null);
