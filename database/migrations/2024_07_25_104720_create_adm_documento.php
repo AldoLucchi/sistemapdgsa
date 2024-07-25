@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('adm_documentos', function (Blueprint $table) {
             $table->id('iddocumento');
             $table->string('nombre');
+            $table->string('alias');
             $table->text('documento');
             $table->string('tabla');
             $table->timestamps();
@@ -31,6 +32,7 @@ return new class extends Migration
             'idmenu' => 1, //admin
             'posicion' => 9,
         ]);
+        
     }
 
     /**

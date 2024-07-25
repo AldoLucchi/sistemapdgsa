@@ -10,15 +10,21 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\HtmlString;
+use Illuminate\Support\Facades\Log;
 
 class %OBJETO_DATATABLE% extends DataTable
 {
     private $filters;
 
     public function __construct(
-        $filters = null
+        $filters = null,
+        $documentos = null,
     ) {
+        Log::info('%OBJETO_DATATABLE% - __construct');
+
         $this->filters = $filters;
+        $this->documentos = $documentos;
+        Log::info($this->documentos);
 
         if ($filters) {
             if (isset($filters['datatable'])) { 
@@ -36,6 +42,8 @@ class %OBJETO_DATATABLE% extends DataTable
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
+        Log::info($this->documentos);
+
         return (new EloquentDataTable($query))
             %FIELDS_DATATABLES_DATATABLE%
             
@@ -43,6 +51,7 @@ class %OBJETO_DATATABLE% extends DataTable
                 $data = [
                     '%OBJETO_VARIABLE%' =>  $%OBJETO_VARIABLE%,
                     'filters' => $this->filters,
+                    'documentos' => $this->documentos,
                 ];
                 return view('cruds/%OBJETO_VIEW%.columns._actions', $data);
             })

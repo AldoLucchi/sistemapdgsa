@@ -39,8 +39,16 @@
     <!--end::Menu item-->
     @endif
 
-    @if( (request()->segment(2) == '%OBJETO%') || (request()->segment(2) != '%OBJETO%' && Session::has('%OBJETO%_read') ) )
-    %ACTION_DOCUMENTO%
+    @if( (request()->segment(2) == '%OBJETO%') || (request()->segment(2) != '%OBJETO%' && Session::has('%OBJETO%_read') ) )    
+    @foreach($documentos as $key => $documento)
+    <!--begin::Menu item-->
+    <div class="menu-item px-3">
+        <a href="{{ url($documento. $%OBJETO%->%FIELD_ID% ) }}" class="menu-link px-3" target="_blank">
+            Pdf: {{ $key }}
+        </a>
+    </div>
+    <!--end::Menu item-->
+    @endforeach
     @endif    
 </div>
 <!--end::Menu-->

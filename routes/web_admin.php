@@ -32,7 +32,7 @@ Route::name('admin.')->group(function () {
     Route::resource('/admin/menuAsignado', MenuesAsignados101Controller::class);
 
     Route::resource('/admin/documento', Documentos61Controller::class);
-    Route::get('/generarPdf/{idRegister}/{idDocumento}', [Documentos61Controller::class, 'generarPdf'])->name('admin.generarPdf');
+    Route::get('/generarPdf/{idDocumento}/{idRegister}', [Documentos61Controller::class, 'generarPdf'])->name('admin.generarPdf');
     Route::resource('/admin/etiquetaDocumento', EtiquetasDocumentos104Controller::class);
     Route::get('/admin/getEtiquetaDocumento/{alias}/{id}', [EtiquetasDocumentos104Controller::class, 'getEtiquetaDocumento'])->name('admin.getEtiquetaDocumento');
     

@@ -8,6 +8,7 @@ use App\DataTables\%OBJETO_DATATABLE%;
 use App\Models\%OBJETO%;
 use App\Services\EtiquetaDocumentoService;
 use App\Services\FunctionsService;
+use App\Services\DocumentoService;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
@@ -29,14 +30,16 @@ class %OBJETO_CONTROLLER% extends Controller
 
   public function __construct(
       FunctionsService $functionsService,
-      EtiquetaDocumentoService $etiquetasDocumentosService
+      EtiquetaDocumentoService $etiquetasDocumentosService,
+      DocumentoService $documentosService
   ) {
       $this->functionsService = $functionsService;
       $this->etiquetasDocumentosService = $etiquetasDocumentosService;
+      $this->documentosService = $documentosService;
 
       if( request()->segment(2)  ){
         Log::info('%OBJETO_CONTROLLER% - __construct');
-        Log::info('request()->segment(2) -- '.request()->segment(2).' | request()->path() -- '.request()->path());
+        Log::info('%OBJETO_CONTROLLER% - request()->segment(2) -- '.request()->segment(2).' | request()->path() -- '.request()->path());
         Session::put(request()->segment(2),  request()->path());
       }
   }
@@ -59,8 +62,10 @@ class %OBJETO_CONTROLLER% extends Controller
       }	
 
       %FILTERS_CONTROLLER_INDEX%
+
+      $documentos = $this->documentosService->getDocumentosByCrud('%OBJETO%');
       
-      $dataTable = new %OBJETO_DATATABLE%($filters);
+      $dataTable = new %OBJETO_DATATABLE%($filters, $documentos);
 
       $details = [  
         "texto" => $request["texto"],
@@ -142,10 +147,12 @@ class %OBJETO_CONTROLLER% extends Controller
     {
 
       $idRegister = $%OBJETO_VARIABLE%;
+      $documentos = $this->documentosService->getDocumentosByCrud('%OBJETO%');
 
       //%RELATION_DATATABLE_VARIABLES%
 
         $data = [
+          'documentos' => $documentos,
           '%OBJETO_VARIABLE%' => %OBJETO%::find($%OBJETO_VARIABLE%),
           %TABLAS_ASOCIADAS%
 
@@ -164,8 +171,12 @@ class %OBJETO_CONTROLLER% extends Controller
     public function edit($%OBJETO_VARIABLE%)
     {
       $idRegister = $%OBJETO_VARIABLE%;
+      $documentos = $this->documentosService->getDocumentosByCrud('%OBJETO%');
+
 
       $data = [
+        'documentos' => $documentos,
+
         '%OBJETO_VARIABLE%' => %OBJETO%::find($%OBJETO_VARIABLE%),
         %TABLAS_ASOCIADAS%
       ];
@@ -252,7 +263,9 @@ class %OBJETO_CONTROLLER% extends Controller
       Log::info('%OBJETO_CONTROLLER% - get%OBJETO_DATATABLE% ');
       Log::info($request);
       $filters = $request->all();
-       $dataTable%OBJETO% = new %OBJETO_DATATABLE%($filters);
+      $documentos = $this->documentosService->getDocumentosByCrud('%OBJETO%');
+
+       $dataTable%OBJETO% = new %OBJETO_DATATABLE%($filters, $documentos);
         return $dataTable%OBJETO%->render('cruds/%OBJETO%.datatable');
     }
 	

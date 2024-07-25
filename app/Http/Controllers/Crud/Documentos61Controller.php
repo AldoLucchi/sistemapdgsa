@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Session;
 
 
 use App\Models\EtiquetasDocumentos104;
+use App\Services\DocumentoService;
 use Illuminate\Support\Facades\DB;
 
 //%RELATION_DATATABLE_VARIABLES_USE%
@@ -26,13 +27,16 @@ class Documentos61Controller extends Controller
 {
   private $functionsService;
   private $etiquetasDocumentosService;
+  private $documentosService;
 
   public function __construct(
     FunctionsService $functionsService,
-    EtiquetaDocumentoService $etiquetasDocumentosService
+    EtiquetaDocumentoService $etiquetasDocumentosService,
+    DocumentoService $documentosService
   ) {
     $this->functionsService = $functionsService;
     $this->etiquetasDocumentosService = $etiquetasDocumentosService;
+    $this->documentosService = $documentosService;
 
     if (request()->segment(2)) {
       Log::info('Documentos61Controller - __construct');
@@ -264,16 +268,8 @@ class Documentos61Controller extends Controller
     return $tables_database;
   }
 
-  public function generarPdf($idRegister, $idDocumento)
+  public function generarPdf($idDocumento, $idRegister)
   {
-    $Documentos61 = Documentos61::find($idDocumento);
-    $html = $Documentos61->documento;
-    $html = $this->etiquetasDocumentosService->replaceVariables($html, $idRegister);
-    $pdf = App::make("dompdf.wrapper");
-    Log::info($html);
-    $pdf->loadHTML($html);
-    //$pdf->save(public_path() . "/docs/Documentos61_" . $Documentos61->iddocumento . ".pdf");
-
-    return $pdf->stream();
+    return $this->documentosService->generarPdf($idDocumento, $idRegister);
   }
 }

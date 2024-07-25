@@ -382,14 +382,13 @@ class GeneradorCrudService
                 $condition = '';
 
                 if (isset($column['select_id'])) {
-                    $condition = 'whereIn("'.$column_id_fk .'",['.$column['select_id'].'])';
-                }
-                else{
-                    $condition = 'whereRaw("1 = 1")';                      
+                    $condition = 'whereIn("' . $column_id_fk . '",[' . $column['select_id'] . '])';
+                } else {
+                    $condition = 'whereRaw("1 = 1")';
                 }
 
                 $tabla = '
-                "' . $model_name_fk . '" => ' . $model_name_fk . '::'.$condition.'->get(), 
+                "' . $model_name_fk . '" => ' . $model_name_fk . '::' . $condition . '->get(), 
                 ';
 
                 $use = '
@@ -407,7 +406,7 @@ class GeneradorCrudService
                 $filter_variable = str_replace('%OBJETO_VARIABLE%', $model_name_fk, $filter_variable);
                 $filters_variables .= $filter_variable;
 
-                $filter_variable_all = str_replace('%OBJETO_VARIABLE%', $model_name_fk, $filter_variable_all);                
+                $filter_variable_all = str_replace('%OBJETO_VARIABLE%', $model_name_fk, $filter_variable_all);
 
                 $filter_variable_all = str_replace('%VARIABLE_CONDITION%', $condition, $filter_variable_all);
                 $filters_variables .= $filter_variable_all;
@@ -446,16 +445,7 @@ class GeneradorCrudService
                 $field_file_storage .= $template_file;
             }
 
-            /*
             if ($column['type_html'] == 'html') {
-                $pdf = '
-                    $html = $' . $data['model_name'] . '->' . $column['name'] . ';
-                    $html = $this->etiquetasDocumentosService->replaceVariables($html, $' . $data['model_name'] . '->' . $data['table_column_id'] . ');
-                    $pdf = App::make("dompdf.wrapper");
-                    Log::info($html);
-                    $pdf->loadHTML($html);
-                    $pdf->save(public_path() . "/docs/' . $data['model_name'] . '_" . $' . $data['model_name'] . '->' . $data['table_column_id'] . ' . ".pdf");
-                ';
 
                 $tabla = '
                 "etiquetasDocumentos" => EtiquetasDocumentos104::orderBy("alias","ASC")->get(), 
@@ -467,8 +457,18 @@ class GeneradorCrudService
 
                 $tablas_asociadas .= $tabla;
                 $tablas_asociadas_uses .= $use;
+
+                /*
+                    $pdf = '
+                    $html = $' . $data['model_name'] . '->' . $column['name'] . ';
+                    $html = $this->etiquetasDocumentosService->replaceVariables($html, $' . $data['model_name'] . '->' . $data['table_column_id'] . ');
+                    $pdf = App::make("dompdf.wrapper");
+                    Log::info($html);
+                    $pdf->loadHTML($html);
+                    $pdf->save(public_path() . "/docs/' . $data['model_name'] . '_" . $' . $data['model_name'] . '->' . $data['table_column_id'] . ' . ".pdf");
+                ';
+                */
             }
-            */
         }
 
         $template_controller = str_replace('%FIELD_CHECKBOX%', $fields_checkobx, $template_controller);
@@ -640,6 +640,7 @@ class GeneradorCrudService
                 $template = str_replace('%FIELD_ID%', $data['table_column_id'], $template);
                 $template = str_replace('%OBJETO%', $data['crud_name'], $template);
 
+                /*
                 $action_documento = '
                 <!--begin::Menu item-->
                 <div class="menu-item px-3">
@@ -649,6 +650,7 @@ class GeneradorCrudService
                 </div>
                 <!--end::Menu item-->
                 ';
+                */
             } else {
                 $template = $template_fields;
 
@@ -672,7 +674,10 @@ class GeneradorCrudService
                 if ($column['type_html'] == 'file') {
                     $value_file = '
                     @if( isset($' . $data['crud_name'] . ') && $' . $data['crud_name'] . '->' . $column['name'] . ' )
-                    <br><img src="/images/{{ $' . $data['crud_name'] . '->' . $column['name'] . ' }}" style="width:100px;">
+                    <br>
+                    <a href="/images/{{ $' . $data['crud_name'] . '->' . $column['name'] . ' }}" target="_blank">
+                    <img src="/images/{{ $' . $data['crud_name'] . '->' . $column['name'] . ' }}" style="width:250px;">
+                    </a>
                     @endif
                     ';
 
@@ -765,14 +770,19 @@ class GeneradorCrudService
             } else {
                 $template_fields_replace = $template_fields;
                 $template_fields_replace = str_replace('%FIELD%', $datatable_column_name, $template_fields_replace);
+
                 if ($column['type_html'] == 'checkbox') {
                     $return = '($%OBJETO_VARIABLE%->' . $column['name'] . '?"ON":"OFF")';
                 } else if ($column['type_html'] == 'password') {
                     $return = '"---"';
                 } else if ($column['type_html'] == 'file') {
-                    $return = 'new HtmlString(\'<img src="/images/' . '\'.$' . $data['model_name'] . '->' . $column['name'] . '.\'" border="0" width="40" class="img-rounded" />\')';
+                    $return = 'new HtmlString(\'
+                    <a href="/images/' . '\'.$' . $data['model_name'] . '->' . $column['name'] . '.\'" target="_blank">
+                    <img src="/images/' . '\'.$' . $data['model_name'] . '->' . $column['name'] . '.\'" border="0" width="40" class="img-rounded" />
+                    </a>
+                    \')';
                 } else {
-                    $return = '$%OBJETO_VARIABLE%->' . $column['name'];
+                    $return = 'mb_convert_encoding( $%OBJETO_VARIABLE%->' . $column['name'].', "UTF-8", "UTF-8")';
                 }
             }
 

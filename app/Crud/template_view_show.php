@@ -1,11 +1,11 @@
 <x-default-layout>
     @section('title')
     <a href="{{ url('/'. (Session::has('%OBJETO_ROUTE%')?Session::get('%OBJETO_ROUTE%'):'crud/%OBJETO_ROUTE%') ) }}">
-    %OBJETO_LABEL_ALIAS%
+        %OBJETO_LABEL_ALIAS%
     </a>
     @endsection
 
-     <div class="card">
+    <div class="card">
         <!--begin::Card header-->
         <div class="card-header border-0 pt-6">
             <!--begin::Card title-->
@@ -23,7 +23,13 @@
                 <!--begin::Toolbar-->
                 <div class="d-flex justify-content-end" data-kt-%OBJETO_ROUTE%-table-toolbar="base">
                     <!--begin::Add %OBJETO_ROUTE%-->
-                    
+
+                    @foreach($documentos as $key=> $documento)
+                    <a href="{{ url($documento.$%OBJETO%->%FIELD_ID% ) }}" class="btn btn-secondary mx-5" target="_blank">
+                        Pdf: {{ $key }}
+                    </a>
+                    @endforeach
+
                     <a href="{{ url('/'.(Session::has('%OBJETO_ROUTE%')?Session::get('%OBJETO_ROUTE%'):'crud/%OBJETO_ROUTE%').'/create' ) }}" class="btn btn-primary">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
                         Agregar %OBJETO_LABEL_INDIVIDUAL%
@@ -32,7 +38,7 @@
                     <!--end::Add %OBJETO_ROUTE%-->
                 </div>
                 <!--end::Toolbar-->
-                
+
             </div>
             <!--end::Card toolbar-->
         </div>
@@ -75,7 +81,7 @@
     <!-- %RELATIONS_DATATABLE_SCRIPTS% -->
 
     <script>
- 
+
     </script>
     @endpush
 

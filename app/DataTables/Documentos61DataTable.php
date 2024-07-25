@@ -43,6 +43,9 @@ class Documentos61DataTable extends DataTable
             ->editColumn('nombre', function (Documentos61 $Documentos61) {
                 return mb_convert_encoding($Documentos61->nombre, 'UTF-8', 'UTF-8');
             })
+            ->editColumn('alias', function (Documentos61 $Documentos61) {
+                return mb_convert_encoding($Documentos61->alias, 'UTF-8', 'UTF-8');
+            })
 
             ->editColumn('tabla', function (Documentos61 $Documentos61) {
                 return mb_convert_encoding($Documentos61->tabla, 'UTF-8', 'UTF-8');
@@ -71,7 +74,7 @@ class Documentos61DataTable extends DataTable
 
         if ($this->filters && isset($this->filters["texto"])) {
             $this->filters["texto"] = strtolower($this->filters["texto"]);
-            $query->whereRaw("LOWER( CONCAT_WS(nombre,' ',tabla,' ') ) LIKE '%" . $this->filters["texto"] . "%' ");
+            $query->whereRaw("LOWER( CONCAT_WS(nombre,' ',alias,' ',tabla,' ') ) LIKE '%" . $this->filters["texto"] . "%' ");
         }
 
 
@@ -112,7 +115,7 @@ class Documentos61DataTable extends DataTable
         return [
             Column::make('iddocumento')->orderable(false),
             Column::make('nombre')->orderable(false),
-           
+            Column::make('alias')->orderable(false),
             Column::make('tabla')->orderable(false),
 
             Column::computed('action')

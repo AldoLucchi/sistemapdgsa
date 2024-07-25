@@ -1,10 +1,7 @@
 <div class="mb-10 col-12 ">
 <label for="%FIELD%" class="form-label">
     %FIELD_ALIAS%
-    |    
-    @if ( isset($%OBJETO_VARIABLE%) )    
-    <a href="/docs/%OBJETO%_{{ $%OBJETO%->%FIELD_ID% }}.pdf" target="_blank">link</a>     
-   @endif
+    
    </label>
 </label>
 <textarea id="%FIELD%" name="%FIELD%" class="tox-target">

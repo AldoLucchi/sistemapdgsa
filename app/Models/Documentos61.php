@@ -12,7 +12,7 @@ class Documentos61 extends Model
     protected $table = "adm_documentos";
 	
 	protected $fillable = [
-        'iddocumento','nombre','documento','tabla',
+        'iddocumento','nombre','alias','documento','tabla',
     ];	
 
         /**

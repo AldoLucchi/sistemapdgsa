@@ -6,15 +6,16 @@
 <div class="mb-10 col-12 col-lg-6">
     <label for="nombre" class="form-label">nombre</label>
 
-    <input type="text" name="nombre" id="nombre" class="form-control form-control-solid" placeholder="nombre" value="{{ ( isset($Documentos61)?$Documentos61->nombre:"") }}" />
+    <input type="text" name="nombre" id="nombre" class="form-control form-control-solid" placeholder="nombre" value="{{ ( isset($Documentos61)?$Documentos61->nombre:'') }}" />
+</div>
+<div class="mb-10 col-12 col-lg-6">
+    <label for="alias" class="form-label">alias</label>
+
+    <input type="text" name="alias" id="alias" class="form-control form-control-solid" placeholder="alias" value="{{ ( isset($Documentos61)?$Documentos61->alias:'') }}" />
 </div>
 <div class="mb-10 col-12 ">
     <label for="documento" class="form-label">
-        documento
-        |
-        @if ( isset($Documentos61) )
-        <a href="/docs/Documentos61_{{ $Documentos61->iddocumento }}.pdf" target="_blank">link</a>
-        @endif
+        documento        
     </label>
     </label>
     <textarea id="documento" name="documento" class="tox-target">
@@ -60,12 +61,12 @@
         tinymce.init(options);
     </script>
 </div>
-<div class="mb-10 col-12 col-lg-6">    
-    <label for="tabla" class="form-label">tabla</label>    
+<div class="mb-10 col-12 col-lg-6">
+    <label for="tabla" class="form-label">tabla</label>
     <select name="tabla" id="tabla" class="form-select mb-3 mb-lg-0" placeholder="tabla">
-    <option value="">-</option>
-    @foreach($tablesDatabase as $table)
-    <option value="{{ $table }}" {{ (isset($Documentos61) && $Documentos61->tabla == $table ?'selected':'' ) }}>{{ $table }}</option>
-    @endforeach
+        <option value="">-</option>
+        @foreach($tablesDatabase as $table)
+        <option value="{{ $table }}" {{ (isset($Documentos61) && $Documentos61->tabla == $table ?'selected':'' ) }}>{{ $table }}</option>
+        @endforeach
     </select>
 </div>

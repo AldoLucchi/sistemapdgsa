@@ -20,7 +20,7 @@
                 <!--begin::Toolbar-->
                 <div class="d-flex justify-content-end" data-kt-Documentos61-table-toolbar="base">
 
-                    <a href="{{ url('/generarPdf/idRegister/idDocumento' ) }}" class="btn btn-secondary mx-5">
+                    <a href="{{ url('/generarPdf/idDocumento/idRegister' ) }}" class="btn btn-secondary mx-5">
                         Test Link 
                     </a>
 
