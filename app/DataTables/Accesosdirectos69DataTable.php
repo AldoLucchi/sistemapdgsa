@@ -48,9 +48,15 @@ class Accesosdirectos69DataTable extends DataTable
         return (new EloquentDataTable($query))
             ->editColumn('titulo', function (Accesosdirectos69 $Accesosdirectos69) {
                 return mb_convert_encoding($Accesosdirectos69->titulo, "UTF-8", "UTF-8");
-            })->editColumn('icono', function (Accesosdirectos69 $Accesosdirectos69) {
-                return mb_convert_encoding($Accesosdirectos69->icono, "UTF-8", "UTF-8");
-            })->editColumn('url', function (Accesosdirectos69 $Accesosdirectos69) {
+            })
+            ->editColumn('icono', function (Accesosdirectos69 $Accesosdirectos69) {
+                return new HtmlString('
+                    <a href="/images/' . $Accesosdirectos69->icono . '" target="_blank">
+                    <img src="/images/' . $Accesosdirectos69->icono . '" border="0" width="40" class="img-rounded" />
+                    </a>
+                    ');
+            })
+            ->editColumn('url', function (Accesosdirectos69 $Accesosdirectos69) {
                 return mb_convert_encoding($Accesosdirectos69->url, "UTF-8", "UTF-8");
             })->editColumn('idcrud', function (Accesosdirectos69 $Accesosdirectos69) {
                 return $Accesosdirectos69->CrudsGenerados->first()?->nombre;
