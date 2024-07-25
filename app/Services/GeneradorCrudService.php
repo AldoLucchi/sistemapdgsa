@@ -782,7 +782,7 @@ class GeneradorCrudService
                     </a>
                     \')';
                 } else {
-                    $return = 'mb_convert_encoding( $%OBJETO_VARIABLE%->' . $column['name'].', "UTF-8", "UTF-8")';
+                    $return = 'mb_convert_encoding( $%OBJETO_VARIABLE%->' . $column['name'] . ', "UTF-8", "UTF-8")';
                 }
             }
 
@@ -807,8 +807,8 @@ class GeneradorCrudService
         $incluir_list = false;
         $template_columns_list = '';
 
-        $template_queries = file_get_contents('../app/Crud/template_datatable_queries.php');
-        $template_queries_all = '';
+        $template_datatable_queries = file_get_contents('../app/Crud/template_datatable_queries.php');
+        $template_datatable_queries_all = '';
         $datatables_fields_query = env('DATATABLES_FIELDS_QUERY', 'idcliente,idproyecto,idrol');
         $datatables_queries = explode(',', $datatables_fields_query);
 
@@ -849,9 +849,15 @@ class GeneradorCrudService
             }
 
             if (in_array($column['name'], $datatables_queries)) {
-                $template_queries_replace = $template_queries;
+                $template_queries_replace = $template_datatable_queries;
                 $template_queries_replace = str_replace('%FIELD%', $column['name'], $template_queries_replace);
-                $template_queries_all .=  $template_queries_replace;
+                $template_datatable_queries_all .=  $template_queries_replace;
+            }
+
+            if ($column['name'] == 'idusuario') {
+                $template_queries_replace = $template_datatable_queries;
+                $template_queries_replace = str_replace('%FIELD%', $column['name'], $template_queries_replace);
+                $template_datatable_queries_all .=  $template_queries_replace;
             }
 
             if (isset($column['select'])) {
@@ -912,7 +918,7 @@ class GeneradorCrudService
 
         $template = str_replace('%FIELDS_DATATABLES_DATATABLE%', $template_fields_all, $template);
         $template = str_replace('%FIELDS_DATATABLES_GETCOLUMNS%', $template_columns_all, $template);
-        $template = str_replace('%DATATABLE_QUERY_FILTERS%', $template_queries_all, $template);
+        $template = str_replace('%DATATABLE_QUERY_FILTERS%', $template_datatable_queries_all, $template);
         $template = str_replace('%DATATABLE_QUERY_FILTERS_DYNAMIC%', $filters, $template);
         $template_filters_texto = substr($template_filters_texto, 0, -1);
         $template = str_replace('%DATATABLE_QUERY_FILTERS_DYNAMIC_TEXTO%', $template_filters_texto, $template);

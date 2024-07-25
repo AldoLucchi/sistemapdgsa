@@ -130,16 +130,14 @@
                     <div class=".crud-table  table-responsive text-center" id="crud-table-{{ $key }}">
                         <h3 class="text-center mb-3"><b>Tabla: {{ $key }}</b></h3>
                         <p>Nota: si ningún campo esta marcado para incluir, automáticamente se incluyen todos</p>
-                        <fieldset id="crud-fieldset-{{ $key }}" >
+                        <fieldset id="crud-fieldset-{{ $key }}">
                             <table class="table table-bordered table-striped table-hover g-1 text-center">
                                 <thead class="text-uppercase">
                                     <tr>
                                         <td><b>Field</b></td>
-                                        <td><b>Type</b></td>
+                                        <td><b>Type/<br> Key</b></td>
                                         <td><b>Null</b></td>
-                                        <td><b>Key</b></td>
-                                        <td><b>Default</b></td>
-                                        <td><b>Extra</b></td>
+                                        <td><b>Default/<br> Extra</b></td>
                                         <td><b>Incluir <br>campo</b></td>
                                         <td><b>Incluir <br>list</b></td>
                                         <td><b>Alias</b></td>
@@ -156,7 +154,7 @@
                                     @endphp
 
                                     @foreach($crud_campos as $campo)
-                                    @php                                    
+                                    @php
                                     if($column->Field == $campo->field){
                                     $campoPreference = $campo;
                                     }
@@ -164,11 +162,17 @@
                                     @endforeach
                                     <tr>
                                         <td>{{ $column->Field }}</td>
-                                        <td>{{ $column->Type }}</td>
+                                        <td>
+                                            {{ $column->Type }}
+                                            <br>
+                                            {{ $column->Key }}
+                                        </td>
                                         <td>{{ $column->Null }}</td>
-                                        <td>{{ $column->Key }}</td>
-                                        <td>{{ $column->Default }}</td>
-                                        <td>{{ $column->Extra }}</td>
+                                        <td>
+                                            {{ $column->Default }}
+                                            <br>
+                                            {{ $column->Extra }}
+                                        </td>
                                         <td>
                                             <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field }}" id="{{ $key.'_'.$column->Field }}" {{ ($campoPreference && $campoPreference->incluir_campo)?'checked':'' }}>
                                         </td>
@@ -187,8 +191,8 @@
                                             </select>
                                         </td>
                                         <td>
-                                                <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_select_id' }}" id="{{ $key.'_'.$column->Field.'_select_id' }}" value="{{ ($campoPreference && isset($campoPreference->select_id))?$campoPreference->select_id:'' }}">
-                                            </td>
+                                            <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_select_id' }}" id="{{ $key.'_'.$column->Field.'_select_id' }}" value="{{ ($campoPreference && isset($campoPreference->select_id))?$campoPreference->select_id:'' }}">
+                                        </td>
                                         <td>
                                             <select name="{{ $key.'_'.$column->Field.'_show_fk' }}" id="{{ $key.'_'.$column->Field.'_show_fk' }}" class="form-select form-select-transparent" aria-label="Seleccione una opción">
                                                 <option value="">---</option>
