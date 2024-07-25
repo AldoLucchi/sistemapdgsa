@@ -25,8 +25,9 @@ use Illuminate\Support\Facades\Session;
 
 class %OBJETO_CONTROLLER% extends Controller
 {	
-  private $functionsService;
-  private $etiquetasDocumentosService;
+  protected $functionsService;
+  protected $etiquetasDocumentosService;
+  protected $documentosService;
 
   public function __construct(
       FunctionsService $functionsService,

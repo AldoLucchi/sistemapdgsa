@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Log;
 
 class %OBJETO_DATATABLE% extends DataTable
 {
-    private $filters;
+    protected $filters;
+    protected $documentos;
 
     public function __construct(
         $filters = null,
