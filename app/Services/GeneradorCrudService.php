@@ -327,7 +327,7 @@ class GeneradorCrudService
 
     public function generateCrudObserver($data)
     {
-        //create model  
+        Log::info('GeneradorCrudService - generateCrudObserver');
 
         $file = fopen("../app/Observers/" . $data['observer_name'] . ".php", "w") or die("Unable to open file - Observer " . $data['observer_name']);
         $template = file_get_contents('../app/Crud/template_observer.php');
@@ -337,6 +337,8 @@ class GeneradorCrudService
         fclose($file);
 
         $AppServiceProvider = file_get_contents('../app/Providers/AppServiceProvider_observer.php');
+        //Log::info($AppServiceProvider);
+        //Log::info($data['observer_name']);
 
         if (!str_contains($AppServiceProvider, $data['observer_name'])) {
             $data_observer = '
