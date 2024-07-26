@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
+use App\Services\BitacoraService;
 use Illuminate\Support\Facades\Log;
 
 class GoogleLoginController extends Controller
@@ -42,14 +43,47 @@ class GoogleLoginController extends Controller
         */
 
         //solo para users existentes en base de datos
-        
+
+        $bitacoraService = new BitacoraService();
+        $sysdate = date('Y-m-d H:i:s');
+
         if($user)
         {
-            Auth::login($user);
+            Auth::login($user);            
+
+            $data = [
+                'idaccion' => 6, //proyecto
+                'descripcion' => 'login exitoso '.$googleUser->email,
+                'ip' => $this->getIP(),
+                'fecha' => $sysdate,
+            ];
+            
+            $bitacoraService->insertBitacora($data);
+
             return redirect(RouteServiceProvider::HOME);
         }
+
+        $data = [
+            'idaccion' => 6, //proyecto
+            'descripcion' => 'Error Login '.$googleUser->email,
+            'ip' => $this->getIP(),
+            'fecha' => $sysdate,
+        ];
+        
+        $bitacoraService->insertBitacora($data);
         
         return redirect('/login')->withErrors(['msg' => 'Cuenta inexistente']);  
         
+    }
+
+    public function getIP(){
+        $ip = '';
+        if (isset($_SERVER['SERVER_ADDR'])) {
+            $ip = $_SERVER['SERVER_ADDR'];
+        } elseif (isset($_SERVER['LOCAL_ADDR'])) {
+            $ip = $_SERVER['SERVER_ADDR'];
+        }
+
+        return $ip;
     }
 }

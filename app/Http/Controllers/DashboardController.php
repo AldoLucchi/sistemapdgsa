@@ -9,18 +9,22 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Models\User;
 use App\Services\AccesoDirectoService;
+use App\Services\BitacoraService;
 
 class DashboardController extends Controller
 {
     protected $menuService;
     protected $accesoDirectoService;
+    protected $bitacoraService;
 
     public function __construct(
         MenuService $menuService,
-        AccesoDirectoService $accesoDirectoService
+        AccesoDirectoService $accesoDirectoService,
+        BitacoraService $bitacoraService
     ) {
         $this->menuService = $menuService;
         $this->accesoDirectoService = $accesoDirectoService;
+        $this->bitacoraService = $bitacoraService;
     }
 
     public function index()
@@ -43,6 +47,14 @@ class DashboardController extends Controller
 
         $menues = $this->menuService->getMenuDashboard();
         $accesodDirectos = $this->accesoDirectoService->getAccesoDirectos();
+
+        $ip = '';
+        if (isset($_SERVER['SERVER_ADDR'])) {
+            $ip = $_SERVER['SERVER_ADDR'];
+        } elseif (isset($_SERVER['LOCAL_ADDR'])) {
+            $ip = $_SERVER['SERVER_ADDR'];
+        }
+
 
         Session::put('idcliente', $user->idcliente);
         Session::put('idrol', $user->idrol);
@@ -82,8 +94,28 @@ class DashboardController extends Controller
             Session::put('idproyecto', null);
         }
 
+        $sysdate = date('Y-m-d H:i:s');
 
+        $data = [
+            'idaccion' => 6, //proyecto
+            'descripcion' => 'login exitoso '.Auth::user()->email,
+            'ip' => $this->getIP(),
+            'idproyecto' => $id,
+            'fecha' => $sysdate,
+        ];
+        $this->bitacoraService->insertBitacora($data);
 
         return view('pages/dashboards.dashboard-proyecto', $data);
+    }
+
+    public function getIP(){
+        $ip = '';
+        if (isset($_SERVER['SERVER_ADDR'])) {
+            $ip = $_SERVER['SERVER_ADDR'];
+        } elseif (isset($_SERVER['LOCAL_ADDR'])) {
+            $ip = $_SERVER['SERVER_ADDR'];
+        }
+
+        return $ip;
     }
 }
