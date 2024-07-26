@@ -8,7 +8,6 @@ use Illuminate\Database\Schema\Builder;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 
-
 //%NEW_OBSERVER_USE%
 
 class AppServiceProvider extends ServiceProvider
@@ -38,7 +37,7 @@ class AppServiceProvider extends ServiceProvider
         KTBootstrap::init();
 
 
-
+        require __DIR__ . '/AppServiceProvider_observer.php';
         //%NEW_OBSERVER%
     }
 }

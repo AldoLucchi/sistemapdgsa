@@ -336,19 +336,13 @@ class GeneradorCrudService
         fwrite($file, $template);
         fclose($file);
 
-        $AppServiceProvider = file_get_contents('../app/Providers/AppServiceProvider.php');
+        $AppServiceProvider = file_get_contents('../app/Providers/AppServiceProvider_observer.php');
 
-        if (!str_contains($template, $data['observer_name'])) {
-            $data_use = '
+        if (!str_contains($AppServiceProvider, $data['observer_name'])) {
+            $data_observer = '
             use App\Models\\' . $data['model_name'] . ';
             use App\Observers\\' . $data['observer_name'] . ';
-
-            //%NEW_OBSERVER_USE%
-            ';
-
-            $AppServiceProvider = str_replace("//%NEW_OBSERVER_USE%", $data_use, $AppServiceProvider);
-
-            $data_observer = '
+            
             ' . $data['model_name'] . '::observe(' . $data['observer_name'] . '::class);
 
             //%NEW_OBSERVER%
@@ -356,7 +350,7 @@ class GeneradorCrudService
 
             $AppServiceProvider = str_replace("//%NEW_OBSERVER%", $data_observer, $AppServiceProvider);
 
-            $fileAppServiceProvider = fopen("../app/Providers/AppServiceProvider.php", "w") or die("Unable to open file - AppServiceProvider ");
+            $fileAppServiceProvider = fopen("../app/Providers/AppServiceProvider_observer.php", "w") or die("Unable to open file - AppServiceProvider_observer ");
             fwrite($fileAppServiceProvider, $AppServiceProvider);
             fclose($fileAppServiceProvider);
         }
