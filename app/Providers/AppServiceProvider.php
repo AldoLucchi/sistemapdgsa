@@ -3,8 +3,7 @@
 namespace App\Providers;
 
 use App\Core\KTBootstrap;
-use App\Models\Clientes68;
-use App\Observers\Clientes68Observer;
+
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
@@ -38,7 +37,6 @@ class AppServiceProvider extends ServiceProvider
 
         KTBootstrap::init();
 
-        Clientes68::observe(Clientes68Observer::class);
 
 
         //%NEW_OBSERVER%
