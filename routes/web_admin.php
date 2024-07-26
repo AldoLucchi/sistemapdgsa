@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Apps\CrudController;
 use App\Http\Controllers\Crud\Accesosdirectos69Controller;
+use App\Http\Controllers\Crud\Bitacora71Controller;
 use App\Http\Controllers\Crud\BitacorasAcciones70Controller;
 use App\Http\Controllers\Crud\CrudsGeneradosMenues100Controller;
 use App\Http\Controllers\Crud\Documentos61Controller;
@@ -45,6 +46,9 @@ Route::name('admin.')->group(function () {
     Route::resource('/admin/accesoDirecto', Accesosdirectos69Controller::class);
 
     Route::resource('/admin/bitacoraAccion', BitacorasAcciones70Controller::class);
+
+    Route::resource('/admin/bitacora', Bitacora71Controller::class);
+
 
 
 });
