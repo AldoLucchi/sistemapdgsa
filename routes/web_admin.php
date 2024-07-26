@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Apps\CrudController;
 use App\Http\Controllers\Crud\Accesosdirectos69Controller;
+use App\Http\Controllers\Crud\BitacorasAcciones70Controller;
 use App\Http\Controllers\Crud\CrudsGeneradosMenues100Controller;
 use App\Http\Controllers\Crud\Documentos61Controller;
 use App\Http\Controllers\Crud\EtiquetasDocumentos104Controller;
@@ -42,5 +43,8 @@ Route::name('admin.')->group(function () {
     Route::post('/registrarFirmaGenerada', [FirmaController::class, 'registrarFirmaGenerada'])->name('admin.registrarFirmaGenerada');
 
     Route::resource('/admin/accesoDirecto', Accesosdirectos69Controller::class);
+
+    Route::resource('/admin/bitacoraAccion', BitacorasAcciones70Controller::class);
+
 
 });
