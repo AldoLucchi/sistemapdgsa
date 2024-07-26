@@ -30,4 +30,9 @@ class Accesosdirectos69 extends Model
     {
         return $this->hasMany(CrudsGenerados::class, "id", "idcrud");
     }
+
+    public function CrudDetalle()
+    {
+        return $this->belongsTo(CrudsGenerados::class, "idcrud", "id");
+    }
 }

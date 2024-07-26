@@ -42,6 +42,11 @@ class %OBJETO_CONTROLLER% extends Controller
         Log::info('%OBJETO_CONTROLLER% - __construct');
         Log::info('%OBJETO_CONTROLLER% - request()->segment(2) -- '.request()->segment(2).' | request()->path() -- '.request()->path());
         Session::put(request()->segment(2),  request()->path());
+
+        Session::put('crud_active', request()->segment(2));
+        Session::put('current_crud', request()->segment(2));
+        Session::put('crud_active_id', request()->segment(3));
+        Log::info('%OBJETO_CONTROLLER% - crud_active -- '.Session::get('crud_active').' | crud_active_id -- '. Session::get('crud_active_id'));
       }
   }
 

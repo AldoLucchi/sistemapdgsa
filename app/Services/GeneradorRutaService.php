@@ -38,9 +38,7 @@ class GeneradorRutaService
         $item_controller = $item_nombre . "Controller";
         $item_datatable = $item_nombre . "DataTable";
 
-        $new_route = "
-            <?php 
-
+        $new_route = "<?php 
 
         use App\Http\Controllers\Crud\\" . $item_controller . ";
         Route::name('" . $menu_ruta . ".')->group(function () {

@@ -59,7 +59,8 @@ class Accesosdirectos69DataTable extends DataTable
             ->editColumn('url', function (Accesosdirectos69 $Accesosdirectos69) {
                 return mb_convert_encoding($Accesosdirectos69->url, "UTF-8", "UTF-8");
             })->editColumn('idcrud', function (Accesosdirectos69 $Accesosdirectos69) {
-                return $Accesosdirectos69->CrudsGenerados->first()?->nombre;
+                $crudName = $Accesosdirectos69->CrudsGenerados->first()?->nombre_componente.' | '.$Accesosdirectos69->CrudsGenerados->first()?->alias_opcion.' | '.$Accesosdirectos69->CrudsGenerados->first()?->nombre;
+                return $crudName;
             })
 
             ->addColumn('action', function (Accesosdirectos69 $Accesosdirectos69) {

@@ -2,11 +2,18 @@
 <div class="app-navbar flex-shrink-0">
     
     <!--begin::My apps links-->
-	
     <div class="app-navbar-item ms-1 ms-md-4">
         <!--begin::Menu wrapper-->
 		<div class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
-            {!! getIcon('element-11', 'fs-2') !!}
+            {!! getIcon('element-9', 'fs-2') !!}
+        </div>
+        @include('partials/menus/_my-projects-menu')
+        <!--end::Menu wrapper-->
+    </div>	
+    <div class="app-navbar-item ms-1 ms-md-4">
+        <!--begin::Menu wrapper-->
+		<div class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
+            {!! getIcon('element-2', 'fs-2') !!}
         </div>
         @include('partials/menus/_my-apps-menu')
         <!--end::Menu wrapper-->

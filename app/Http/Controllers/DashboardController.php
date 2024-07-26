@@ -8,15 +8,19 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Models\User;
+use App\Services\AccesoDirectoService;
 
 class DashboardController extends Controller
 {
-    private $menuService;
+    protected $menuService;
+    protected $accesoDirectoService;
 
     public function __construct(
-        MenuService $menuService
+        MenuService $menuService,
+        AccesoDirectoService $accesoDirectoService
     ) {
         $this->menuService = $menuService;
+        $this->accesoDirectoService = $accesoDirectoService;
     }
 
     public function index()
@@ -38,6 +42,7 @@ class DashboardController extends Controller
         }
 
         $menues = $this->menuService->getMenuDashboard();
+        $accesodDirectos = $this->accesoDirectoService->getAccesoDirectos();
 
         Session::put('idcliente', $user->idcliente);
         Session::put('idrol', $user->idrol);
@@ -45,6 +50,8 @@ class DashboardController extends Controller
         Session::put('usuario_proyectos', $proyectos);
         Session::put('menues', $menues);
         Session::put('proyecto_seleccionado', null);
+        Session::put('current_crud', null);
+        Session::put('accesos_directos', $accesodDirectos);
 
         return view('pages/dashboards.index', $proyectos);
     }
