@@ -12,7 +12,7 @@ class Bitacora71 extends Model
     protected $table = "vtc_bitacora";
 	
 	protected $fillable = [
-        'idbitacora','idcrud','tabla','id','campoid','idaccion','descripcion','idproyecto','idcliente','ip','fecha',
+        'idbitacora','crud','tabla','id','campoid','idaccion','descripcion','idproyecto','idcliente','ip','fecha',
     ];	
 
         /**

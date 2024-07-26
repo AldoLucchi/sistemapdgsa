@@ -50,6 +50,7 @@ class DashboardController extends Controller
         Session::put('usuario_proyectos', $proyectos);
         Session::put('menues', $menues);
         Session::put('proyecto_seleccionado', null);
+        Session::put('idproyecto', null);
         Session::put('current_crud', null);
         Session::put('accesos_directos', $accesodDirectos);
 
@@ -72,11 +73,13 @@ class DashboardController extends Controller
         ];
 
         if ($proyecto) {
-            Session::put('proyecto_seleccionado', $proyecto->idproyecto);
+            Session::put('proyecto_seleccionado', $id);
+            Session::put('idproyecto', $id);
             $menues = $this->menuService->getMenuProyecto($proyecto->idproyecto);
             Session::put('menues', $menues);
         } else {
             Session::put('proyecto_seleccionado', null);
+            Session::put('idproyecto', null);
         }
 
 

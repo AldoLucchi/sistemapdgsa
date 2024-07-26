@@ -231,6 +231,7 @@ class GeneradorCrudService
                 'model_name' => $crud_name_format,
                 'controller_name' => $crud_name_format . 'Controller',
                 'datatable_name' => $crud_name_format . 'DataTable',
+                'observer_name' => $crud_name_format . 'Observer',
             ];
 
             Log::info($data);
@@ -250,6 +251,7 @@ class GeneradorCrudService
     {
         $this->generateCrudModelFK($data);
         $this->generateCrudModel($data);
+        $this->generateCrudObserver($data);
         $this->generateCrudController($data);
         $this->generateCrudViews($data);
         $this->generateCrudDatatable($data);
@@ -321,6 +323,43 @@ class GeneradorCrudService
 
         fwrite($file_model, $template_model);
         fclose($file_model);
+    }
+
+    public function generateCrudObserver($data)
+    {
+        //create model  
+
+        $file = fopen("../app/Observers/" . $data['observer_name'] . ".php", "w") or die("Unable to open file - Observer " . $data['observer_name']);
+        $template = file_get_contents('../app/Crud/template_observer.php');
+        $template = $this->generateCrudReplace($template, $data);
+
+        fwrite($file, $template);
+        fclose($file);
+
+        $AppServiceProvider = file_get_contents('../app/Providers/AppServiceProvider.php');
+
+        if (!str_contains($template, $data['observer_name'])) {
+            $data_use = '
+            use App\Models\\' . $data['model_name'] . ';
+            use App\Observers\\' . $data['observer_name'] . ';
+
+            //%NEW_OBSERVER_USE%
+            ';
+
+            $AppServiceProvider = str_replace("//%NEW_OBSERVER_USE%", $data_use, $AppServiceProvider);
+
+            $data_observer = '
+            ' . $data['model_name'] . '::observe(' . $data['observer_name'] . '::class);
+
+            //%NEW_OBSERVER%
+            ';
+
+            $AppServiceProvider = str_replace("//%NEW_OBSERVER%", $data_observer, $AppServiceProvider);
+
+            $fileAppServiceProvider = fopen("../app/Providers/AppServiceProvider.php", "w") or die("Unable to open file - AppServiceProvider ");
+            fwrite($fileAppServiceProvider, $AppServiceProvider);
+            fclose($fileAppServiceProvider);
+        }
     }
 
     public function generateCrudController($data)
@@ -1315,11 +1354,14 @@ class GeneradorCrudService
         $content = str_replace('%OBJETO_LABEL%', $data['table_name_label'], $content);
         $content = str_replace('%OBJETO_LABEL_ALIAS%', $data['table_name_label_alias'], $content);
         $content = str_replace('%OBJETO_LABEL_INDIVIDUAL%', $data['table_name_label_individual'], $content);
+
         $content = str_replace('%TABLA%', $data['table_fullname'], $content);
         $content = str_replace('%TABLA_CAMPOS%', $data['table_columns_string'], $content);
         $content = str_replace('%FIELD_ID%', $data['table_column_id'], $content);
 
+        $content = str_replace('%OBJETO_TABLE%', $data['table_fullname'], $content);
         $content = str_replace('%OBJETO_CONTROLLER%', $data['controller_name'], $content);
+        $content = str_replace('%OBJETO_OBSERVER%', $data['observer_name'], $content);
         $content = str_replace('%SELECT_USE%', '', $content);
         $content = str_replace('%OBJETO_VIEW%', $data['crud_name'], $content);
         $content = str_replace('%OBJETO_VARIABLE%', $data['crud_name'], $content);
@@ -1348,10 +1390,10 @@ class GeneradorCrudService
 
     public function limpiarCache()
     {
-        //Artisan::call('cache:clear');
-        //Artisan::call('config:clear');
-        //Artisan::call('view:clear');
-        //Artisan::call('route:clear');
+        Artisan::call('cache:clear');
+        Artisan::call('config:clear');
+        Artisan::call('view:clear');
+        Artisan::call('route:clear');
         //artisan optimize:clear
         Artisan::call('optimize:clear');
     }
