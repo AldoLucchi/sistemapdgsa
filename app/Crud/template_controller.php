@@ -9,6 +9,7 @@ use App\Models\%OBJETO%;
 use App\Services\EtiquetaDocumentoService;
 use App\Services\FunctionsService;
 use App\Services\DocumentoService;
+use App\Services\BitacoraService;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
@@ -28,15 +29,18 @@ class %OBJETO_CONTROLLER% extends Controller
   protected $functionsService;
   protected $etiquetasDocumentosService;
   protected $documentosService;
+  protected $bitacoraService;
 
   public function __construct(
       FunctionsService $functionsService,
       EtiquetaDocumentoService $etiquetasDocumentosService,
-      DocumentoService $documentosService
+      DocumentoService $documentosService,
+      BitacoraService $bitacoraService
   ) {
       $this->functionsService = $functionsService;
       $this->etiquetasDocumentosService = $etiquetasDocumentosService;
       $this->documentosService = $documentosService;
+      $this->bitacoraService = $bitacoraService;
 
       if( request()->segment(2)  ){
         Log::info('%OBJETO_CONTROLLER% - __construct');
@@ -77,6 +81,19 @@ class %OBJETO_CONTROLLER% extends Controller
         "texto" => $request["texto"],
         %FILTERS_VARIABLES%
       ];
+
+      $sysdate = date('Y-m-d H:i:s');
+
+      $data = [
+        'crud' => '%OBJETO%',
+        'tabla' => '%OBJETO_TABLE%',
+        'idaccion' => 5,
+        'descripcion' => 'Visita %OBJETO%',
+        'ip' =>  $this->getIP(),
+        'fecha' => $sysdate,
+      ];
+  
+      $this->bitacoraService->insertBitacora($data);      
 
         return $dataTable->render('cruds/%OBJETO_VIEW%.list', $details);
 

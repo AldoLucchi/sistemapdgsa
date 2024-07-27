@@ -10,4 +10,17 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+
+    public function getIP()
+    {
+        $ip = '';
+        if (isset($_SERVER['SERVER_ADDR'])) {
+            $ip = $_SERVER['SERVER_ADDR'];
+        } elseif (isset($_SERVER['LOCAL_ADDR'])) {
+            $ip = $_SERVER['SERVER_ADDR'];
+        }
+
+        return  $ip;
+    }
 }
