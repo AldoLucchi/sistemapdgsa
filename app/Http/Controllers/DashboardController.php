@@ -35,8 +35,10 @@ class DashboardController extends Controller
         $proyectos = [];
         $idusuario = null;
 
-        if ($user && $user->cliente && $user->cliente->proyectos) {
-            $proyectos = $user->cliente->proyectos;
+        //if ($user && $user->cliente && $user->cliente->proyectos) {
+          //  $proyectos = $user->cliente->proyectos;
+        if ($user && $user->proyectos) {
+                $proyectos = $user->proyectos;            
         }
 
         if ($user && $user->rol) {

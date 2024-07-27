@@ -85,9 +85,16 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->addresses?->first();
     }
 
+    /*
     public function proyectos()
     {
         return $this->hasMany(Proyectos::class, 'idusuario');
+    }
+    */
+
+    public function proyectos()
+    {
+        return $this->belongsToMany(Proyectos::class, 'vtc_usuarios_proyectos', 'idusuario', 'idproyecto');
     }
 
     public function cliente()
