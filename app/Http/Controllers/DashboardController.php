@@ -48,25 +48,22 @@ class DashboardController extends Controller
         }
 
         $menues = $this->menuService->getMenuDashboard();
-        $accesodDirectos = $this->accesoDirectoService->getAccesoDirectos();
-
-        $ip = '';
-        if (isset($_SERVER['SERVER_ADDR'])) {
-            $ip = $_SERVER['SERVER_ADDR'];
-        } elseif (isset($_SERVER['LOCAL_ADDR'])) {
-            $ip = $_SERVER['SERVER_ADDR'];
-        }
-
+        $accesodDirectos = $this->accesoDirectoService->getAccesoDirectos();         
 
         Session::put('idcliente', $user->idcliente);
         Session::put('idrol', $user->idrol);
         Session::put('idusuario', $idusuario);
         Session::put('usuario_proyectos', $proyectos);
-        Session::put('menues', $menues);
-        Session::put('proyecto_seleccionado', null);
-        Session::put('idproyecto', null);
+        Session::put('menues', $menues);       
         Session::put('current_crud', null);
         Session::put('accesos_directos', $accesodDirectos);
+
+        if( Session::has('idproyecto') && Session::get('idproyecto')){
+            return $this->dashboardProyecto(Session::get('idproyecto'));
+        }
+        else{
+            Session::put('idproyecto', null);
+        }
 
         return view('pages/dashboards.index', $proyectos);
     }
@@ -85,39 +82,33 @@ class DashboardController extends Controller
         $data = [
             'proyecto' => $proyecto
         ];
+        
 
         if ($proyecto) {
-            Session::put('proyecto_seleccionado', $id);
             Session::put('idproyecto', $id);
             $menues = $this->menuService->getMenuProyecto($proyecto->idproyecto);
             Session::put('menues', $menues);
         } else {
-            Session::put('proyecto_seleccionado', null);
             Session::put('idproyecto', null);
         }
 
         $sysdate = date('Y-m-d H:i:s');
 
-        $data = [
+        $dataBitacora = [
             'idaccion' => 6, //proyecto
-            'descripcion' => 'login exitoso '.Auth::user()->email,
+            'descripcion' => 'visita proyecto '.$id,
             'ip' => $this->getIP(),
             'idproyecto' => $id,
             'fecha' => $sysdate,
         ];
-        $this->bitacoraService->insertBitacora($data);
+        $this->bitacoraService->insertBitacora($dataBitacora);
 
         return view('pages/dashboards.dashboard-proyecto', $data);
     }
 
-    public function getIP(){
-        $ip = '';
-        if (isset($_SERVER['SERVER_ADDR'])) {
-            $ip = $_SERVER['SERVER_ADDR'];
-        } elseif (isset($_SERVER['LOCAL_ADDR'])) {
-            $ip = $_SERVER['SERVER_ADDR'];
-        }
-
-        return $ip;
+    public function dashboardProyectos()
+    {
+        Session::put('idproyecto', null);
+        return $this->index();
     }
 }

@@ -5,7 +5,7 @@
 		<!--begin::Card header-->
 		<div class="card-header">
 			<!--begin::Card title-->
-			<div class="card-title">Mis Proyectos</div>
+			<div class="card-title"><a href="{{ url('/dashboardProyectos') }}">Mis Proyectos</a></div>
 			<!--end::Card title-->
 			<!--begin::Card toolbar-->
 			<div class="card-toolbar">

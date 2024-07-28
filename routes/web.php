@@ -30,13 +30,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/accordion', [DashboardController::class, 'accordion'])->name('accordion');
     
     Route::get('/proyectoDetalle/{id}', [DashboardController::class, 'dashboardProyecto'])->name('dashboardProyecto');
-    /* Grupo de rutas para la gestión de usuarios, roles y permisos: */
-    Route::name('user-management.')->group(function () {
-        Route::resource('/user-management/users', UserManagementController::class);
-        Route::resource('/user-management/roles', RoleManagementController::class);
-        Route::resource('/user-management/permissions', PermissionManagementController::class);
-    });
-
+    Route::get('/dashboardProyectos', [DashboardController::class, 'dashboardProyectos'])->name('dashboardProyectos');    
 
     require __DIR__ . '/web_admin.php';
 
