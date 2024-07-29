@@ -10,36 +10,34 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
-                use App\Models\Menues;
-                use App\Models\Clientes;
-                use App\Models\UsuariosRoles;
-                use App\Models\Proyectos;
+use App\Models\Menues;
+use App\Models\Clientes;
+use App\Models\UsuariosRoles;
+use App\Models\Proyectos;
 
 class AddMenuesAsignados101Modal extends Component
 {
     use WithFileUploads;
- 
-    
-            public $idnmenuasignado;
-            
-            public $idmenu;
-            
-            public $idcliente;
-            
-            public $idrol;
-            
-            public bool $estatus;
-            
-            public $idproyecto;
-            
-            public $posicion;
-            
+
+
+    public $idnmenuasignado;
+
+    public $idmenu;
+
+    public $idcliente;
+
+    public $idrol;
+
+    public bool $estatus;
+
+    public $idproyecto;
+
+    public $posicion;
+
 
     public $edit_mode = false;
 
-    protected $rules = [
-        
-    ];
+    protected $rules = [];
 
     protected $listeners = [
         'delete_MenuesAsignados101' => 'deleteMenuesAsignados101',
@@ -50,16 +48,16 @@ class AddMenuesAsignados101Modal extends Component
     public function render()
     {
         //fk
-        $details = [        
-        
-                "Menues" => Menues::all(),
-                
-                "Clientes" => Clientes::all(),
-                
-                "UsuariosRoles" => UsuariosRoles::all(),
-                
-                "Proyectos" => Proyectos::all(),
-                
+        $details = [
+
+            "Menues" => Menues::all(),
+
+            "Clientes" => Clientes::all(),
+
+            "UsuariosRoles" => UsuariosRoles::all(),
+
+            "Proyectos" => Proyectos::all(),
+
         ];
 
         return view('livewire.MenuesAsignados101.add-MenuesAsignados101-modal', $details);
@@ -81,29 +79,29 @@ class AddMenuesAsignados101Modal extends Component
         DB::transaction(function () {
             // Prepare the data for creating a new 
             $data = [];
-                 
-            if(  isset( $this->idmenu) ){
-            $data [ "idmenu" ] = $this->idmenu;  
-            } 
-            if(  isset( $this->idcliente) ){
-            $data [ "idcliente" ] = $this->idcliente;  
-            } 
-            if(  isset( $this->idrol) ){
-            $data [ "idrol" ] = $this->idrol;  
-            } 
-            if(  isset( $this->estatus) ){
-            $data [ "estatus" ] = $this->estatus;  
-            } 
+
+            if (isset($this->idmenu)) {
+                $data["idmenu"] = $this->idmenu;
+            }
+            if (isset($this->idcliente)) {
+                $data["idcliente"] = $this->idcliente;
+            }
+            if (isset($this->idrol)) {
+                $data["idrol"] = $this->idrol;
+            }
+            if (isset($this->estatus)) {
+                $data["estatus"] = $this->estatus;
+            }
             /* else{
                 $data [ "estatus" ] = 0;  
                 }                 */
-            if(  isset( $this->idproyecto) ){
-            $data [ "idproyecto" ] = $this->idproyecto;  
-            } 
-            if(  isset( $this->posicion) ){
-            $data [ "posicion" ] = $this->posicion;  
+            if (isset($this->idproyecto)) {
+                $data["idproyecto"] = $this->idproyecto;
             }
-            
+            if (isset($this->posicion)) {
+                $data["posicion"] = $this->posicion;
+            }
+
             $MenuesAsignados101 = MenuesAsignados101::where('idnmenuasignado', $this->idnmenuasignado)->first() ?? MenuesAsignados101::create($data);
 
             if ($this->edit_mode) {
@@ -116,7 +114,7 @@ class AddMenuesAsignados101Modal extends Component
             if ($this->edit_mode) {
                 // Emit a success event with a message
                 $this->dispatch('success', __('Actualizado correctamente!'));
-            } else {                
+            } else {
 
                 // Emit a success event with a message
                 $this->dispatch('success', __('Creado correctamente!'));
@@ -150,23 +148,22 @@ class AddMenuesAsignados101Modal extends Component
 
         $MenuesAsignados101 = MenuesAsignados101::find($id);
 
-        Log::info($MenuesAsignados101 );
+        Log::info($MenuesAsignados101);
 
-        
-            $this->idnmenuasignado = $MenuesAsignados101->idnmenuasignado;
-            
-            $this->idmenu = $MenuesAsignados101->idmenu;
-            
-            $this->idcliente = $MenuesAsignados101->idcliente;
-            
-            $this->idrol = $MenuesAsignados101->idrol;
-            
-            $this->estatus = $MenuesAsignados101->estatus;
-            
-            $this->idproyecto = $MenuesAsignados101->idproyecto;
-            
-            $this->posicion = $MenuesAsignados101->posicion;
-            
+
+        $this->idnmenuasignado = $MenuesAsignados101->idnmenuasignado;
+
+        $this->idmenu = $MenuesAsignados101->idmenu;
+
+        $this->idcliente = $MenuesAsignados101->idcliente;
+
+        $this->idrol = $MenuesAsignados101->idrol;
+
+        $this->estatus = $MenuesAsignados101->estatus;
+
+        $this->idproyecto = $MenuesAsignados101->idproyecto;
+
+        $this->posicion = $MenuesAsignados101->posicion;
     }
 
     public function hydrate()
