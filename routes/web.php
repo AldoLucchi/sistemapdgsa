@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/google/redirect', [GoogleLoginController::class, 'redirectToGoogle'])->name('google.redirect');
 Route::get('/google/callback', [GoogleLoginController::class, 'handleGoogleCallback'])->name('google.callback');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () { //, 'verified'])->group(function () {
 
     Route::get('/', [DashboardController::class, 'index']);
     /* Rutas protegidas */

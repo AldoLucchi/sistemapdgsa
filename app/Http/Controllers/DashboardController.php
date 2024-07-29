@@ -86,7 +86,7 @@ class DashboardController extends Controller
 
         if ($proyecto) {
             Session::put('idproyecto', $id);
-            $menues = $this->menuService->getMenuProyecto($proyecto->idproyecto);
+            $menues = $this->menuService->getMenuProyecto();
             Session::put('menues', $menues);
         } else {
             Session::put('idproyecto', null);
