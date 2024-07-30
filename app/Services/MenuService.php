@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\MenuesAsignados101;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class MenuService
 {
@@ -22,11 +23,15 @@ class MenuService
 
     public function getMenu()
     {
+        Log::info('MenuService - getMenu');
+
         $menues = [];
 
         $menu_asignados_all = MenuesAsignados101::all();
         $user = Auth::user();
         $id_proyecto_seleccionado = session()->get('idproyecto');
+
+        Log::info('MenuService - getMenu -- idcliente:'.$user->idcliente.' -- idrol:'.$user->idrol.' -- id_proyecto_seleccionado:'.$id_proyecto_seleccionado);
 
         //if ($user && $user->cliente) {
         // if ($user->cliente->menues_asignados) {
