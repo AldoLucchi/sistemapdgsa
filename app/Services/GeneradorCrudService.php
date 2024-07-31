@@ -1144,6 +1144,7 @@ class GeneradorCrudService
         $template_show_datatable = file_get_contents('../app/Crud/template_view_show_datatable.php');
         $crudName = $data['crud_name'];
         $tableNameLabel = $data['table_name_label'];
+        $tableNameLabelAlias = $data['table_name_label_alias'];
         $tableNameDatatable = $data['crud_name'] . 'DataTable';
         $tableVariableDatatable = 'datatable' . $data['crud_name'];
 
@@ -1231,7 +1232,7 @@ class GeneradorCrudService
                 //show
                 $template_datatable =  $template_show_datatable;
                 $template_datatable = str_replace("%OBJETO%", $crudName, $template_datatable);
-                $template_datatable = str_replace("%OBJETO_ALIAS%", $tableNameLabel, $template_datatable);
+                $template_datatable = str_replace("%OBJETO_ALIAS%", $tableNameLabelAlias, $template_datatable);
                 $template_datatable = str_replace("%OBJETO_DATATABLE%", $tableNameDatatable, $template_datatable);
 
                 if ($create) {

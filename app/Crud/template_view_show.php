@@ -53,10 +53,10 @@
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="panelDatos">
                         <button class="accordion-button bg-primary text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelDatosCollapse" aria-expanded="true" aria-controls="panelDatosCollapse">
-                            Datos
+                            Datos Generales
                         </button>
                     </h2>
-                    <div id="panelDatosCollapse" class="accordion-collapse collapse show" aria-labelledby="panelDatos">
+                    <div id="panelDatosCollapse" class="accordion-collapse collapse" aria-labelledby="panelDatos">
                         <div class="accordion-body">
                             <fieldset id="show-fieldset-%OBJETO_LABEL_INDIVIDUAL%" disabled>
                                 <div class="row">
