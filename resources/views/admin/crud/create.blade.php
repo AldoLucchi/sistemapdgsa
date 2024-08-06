@@ -118,7 +118,7 @@
                                         <td><b>Incluir <br>list</b></td>
                                         <td><b>Alias</b></td>
                                         <td><b>Seleccionar FK</b></td>
-                                        <td><b>Filtrar Id FK</b></td>
+                                        <td><b>Reglas FK</b></td>
                                         <td><b>Incluir <br>Acorddion en:</b></td>
                                         <td><b>Permisos <br>Acorddion</b></td>
                                     </tr>
@@ -148,7 +148,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_select_id' }}" id="{{ $key.'_'.$column->Field.'_select_id' }}">
+                                            <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_select_rules' }}" id="{{ $key.'_'.$column->Field.'_select_rules' }}">
                                         </td>
                                         <td>
                                             <select name="{{ $key.'_'.$column->Field.'_show_fk' }}" id="{{ $key.'_'.$column->Field.'_show_fk' }}" class="form-select form-select-transparent" aria-label="Seleccione una opción">

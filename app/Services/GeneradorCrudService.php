@@ -58,7 +58,7 @@ class GeneradorCrudService
             foreach ($table_crud_columns as $colum) {
                 $column_request = $table_crud . '_' . $colum->Field;
                 $column_select_request = $table_crud . '_' . $colum->Field . '_select';
-                $column_select_id = $table_crud . '_' . $colum->Field . '_select_id';
+                $column_select_rules = $table_crud . '_' . $colum->Field . '_select_rules';
                 $column_select_alias = $table_crud . '_' . $colum->Field . '_alias';
                 $column_select_list = $table_crud . '_' . $colum->Field . '_list';
                 $column_show_fk = $table_crud . '_' . $colum->Field . '_show_fk';
@@ -114,8 +114,8 @@ class GeneradorCrudService
                     $table_column_detail['select'] = $request[$column_select_request];
                     $tables_fk[$colum->Field] = $request[$column_select_request];
 
-                    if (isset($request[$column_select_id]) && !empty($request[$column_select_id]) &&  $column_select_id && $column_select_id != 'NULL' && $column_select_id != NULL) {
-                        $table_column_detail['select_id'] = $request[$column_select_id];
+                    if (isset($request[$column_select_rules]) && !empty($request[$column_select_rules]) &&  $column_select_rules && $column_select_rules != 'NULL' && $column_select_rules != NULL) {
+                        $table_column_detail['select_rules'] = $request[$column_select_rules];
                     }
 
                     //
@@ -414,13 +414,19 @@ class GeneradorCrudService
                 $column_name_fk = $data['tables_fk'][$column['name']]['table_column_fk_name'];
                 $column_id_fk = $data['tables_fk'][$column['name']]['table_column_fk_id'];
 
-                $condition = '';
+                $condition = 'select("*")';
 
-                if (isset($column['select_id'])) {
-                    $condition = 'whereIn("' . $column_id_fk . '",[' . $column['select_id'] . '])';
-                } else {
-                    $condition = 'whereRaw("1 = 1")';
-                }
+                if (isset($column['select_rules'])) {
+                    $select_rules_array = explode(';', $column['select_rules']);
+                    foreach($select_rules_array as $rule){
+                        $rule_array = explode(',', $rule);
+                        $condition .= 'where("' . $rule_array[0] . '", "'.$rule_array[1].'","' . $rule_array[2] . '")';
+                    }
+                    //$condition = 'whereIn("' . $column_id_fk . '",[' . $column['select_rules'] . '])';
+                } 
+                /*else {
+                    $condition = '->whereRaw("1 = 1")';
+                }*/
 
                 $tabla = '
                 "' . $model_name_fk . '" => ' . $model_name_fk . '::' . $condition . '->get(), 
