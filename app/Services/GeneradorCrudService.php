@@ -420,7 +420,7 @@ class GeneradorCrudService
                     $select_rules_array = explode(';', $column['select_rules']);
                     foreach($select_rules_array as $rule){
                         $rule_array = explode(',', $rule);
-                        $condition .= 'where("' . $rule_array[0] . '", "'.$rule_array[1].'","' . $rule_array[2] . '")';
+                        $condition .= '->where("' . $rule_array[0] . '", "'.$rule_array[1].'","' . $rule_array[2] . '")';
                     }
                     //$condition = 'whereIn("' . $column_id_fk . '",[' . $column['select_rules'] . '])';
                 } 
