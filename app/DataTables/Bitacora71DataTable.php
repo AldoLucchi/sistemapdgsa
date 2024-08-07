@@ -46,7 +46,9 @@ class Bitacora71DataTable extends DataTable
         Log::info($this->documentos);
 
         return (new EloquentDataTable($query))
-            ->editColumn('crud', function (Bitacora71 $Bitacora71) {
+            ->editColumn('idbitacora', function (Bitacora71 $Bitacora71) {
+                return mb_convert_encoding($Bitacora71->idbitacora, "UTF-8", "UTF-8");
+            })->editColumn('crud', function (Bitacora71 $Bitacora71) {
                 return mb_convert_encoding($Bitacora71->crud, "UTF-8", "UTF-8");
             })->editColumn('tabla', function (Bitacora71 $Bitacora71) {
                 return mb_convert_encoding($Bitacora71->tabla, "UTF-8", "UTF-8");
@@ -79,12 +81,14 @@ class Bitacora71DataTable extends DataTable
     {
         $query = $model->newQuery();
 
+        /*
         if (Session::has('idproyecto') && Session::get('idproyecto')) {
             $query->where('idproyecto', Session::get('idproyecto'));
         }
         if (Session::has('idcliente') && Session::get('idcliente')) {
             $query->where('idcliente', Session::get('idcliente'));
         }
+        */
 
 
         if ($this->filters && isset($this->filters["texto"])) {
@@ -158,7 +162,7 @@ class Bitacora71DataTable extends DataTable
             ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
-            ->orderBy(5, 'desc')
+            ->orderBy(6, 'desc')
             ->drawCallback("function() {" . file_get_contents(resource_path('views/cruds/Bitacora71/columns/_draw-scripts.js')) . "}");
     }
 
@@ -168,11 +172,12 @@ class Bitacora71DataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('crud')->orderable(false),
-            Column::make('tabla')->orderable(false),
-            Column::make('id')->orderable(false),
-            Column::make('idaccion')->orderable(false),
-            Column::make('ip')->orderable(false),
+            Column::make('idbitacora')->orderable(true),
+            Column::make('crud')->orderable(true),
+            Column::make('tabla')->orderable(true),
+            Column::make('id')->orderable(true),
+            Column::make('idaccion')->orderable(true),
+            Column::make('ip')->orderable(true),
             Column::make('fecha')->orderable(true),
 
             Column::computed('action')

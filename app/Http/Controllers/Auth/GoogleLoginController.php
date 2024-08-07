@@ -52,7 +52,7 @@ class GoogleLoginController extends Controller
             Auth::login($user);            
 
             $data = [
-                'idaccion' => 6, //proyecto
+                'idaccion' => 4, //login
                 'descripcion' => 'login exitoso '.$googleUser->email,
                 'ip' => $this->getIP(),
                 'fecha' => $sysdate,
@@ -64,7 +64,7 @@ class GoogleLoginController extends Controller
         }
 
         $data = [
-            'idaccion' => 6, //proyecto
+            'idaccion' => 4, //login
             'descripcion' => 'Error Login '.$googleUser->email,
             'ip' => $this->getIP(),
             'fecha' => $sysdate,

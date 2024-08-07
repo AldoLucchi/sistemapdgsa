@@ -49,6 +49,7 @@ class DashboardController extends Controller
 
         $menues = $this->menuService->getMenuDashboard();
         $accesodDirectos = $this->accesoDirectoService->getAccesoDirectos();         
+        Log::info($accesodDirectos);
 
         Session::put('idcliente', $user->idcliente);
         Session::put('idrol', $user->idrol);
