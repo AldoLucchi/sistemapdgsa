@@ -874,7 +874,7 @@ class GeneradorCrudService
         }
         ';
 
-        $template_filters_texto = '';
+        $template_filters_texto = $data['table_column_id'] . ",' ',";
 
         foreach ($data['table_columns'] as $column) {
             $datatable_column_field_name = $column['name'];
