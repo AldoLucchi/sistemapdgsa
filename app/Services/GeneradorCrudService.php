@@ -173,6 +173,8 @@ class GeneradorCrudService
                 $table_columns_all_string = '';
                 $table_column_fk_id = '';
                 $table_column_fk_name = '-';
+                $table_column_fk_idcliente = false;
+                $table_column_fk_idproyecto = false;
                 $i = 1;
 
                 //column id and name fk
@@ -183,6 +185,12 @@ class GeneradorCrudService
                     }
                     if ($i == 2) {
                         $table_column_fk_name = $colum->Field;
+                    }
+                    if ($colum->Field == 'idproyecto') {
+                        $table_column_fk_idproyecto = true;
+                    }
+                    if ($colum->Field == 'idcliente') {
+                        $table_column_fk_idcliente = true;
                     }
                     $i++;
                 }
@@ -210,6 +218,8 @@ class GeneradorCrudService
                     'table_columns_string_fk' => $table_columns_all_string,
                     'table_column_fk_id' => $table_column_fk_id,
                     'table_column_fk_name' => $table_column_fk_name,
+                    'table_column_fk_idcliente' => $table_column_fk_idcliente,
+                    'table_column_fk_idproyecto' => $table_column_fk_idproyecto,
                     'model_name' => $table_name_fk_format,
                 ];
 
@@ -413,23 +423,32 @@ class GeneradorCrudService
                 $model_name_fk = $data['tables_fk'][$column['name']]['table_name_fk'];
                 $column_name_fk = $data['tables_fk'][$column['name']]['table_column_fk_name'];
                 $column_id_fk = $data['tables_fk'][$column['name']]['table_column_fk_id'];
+                $column_idcliente_fk = $data['tables_fk'][$column['name']]['table_column_fk_idcliente'];
+                $column_idproyecto_fk = $data['tables_fk'][$column['name']]['table_column_fk_idproyecto'];
 
                 $condition = 'select("*")';
 
                 if (isset($column['select_rules'])) {
                     $select_rules_array = explode(';', $column['select_rules']);
-                    foreach($select_rules_array as $rule){
+                    foreach ($select_rules_array as $rule) {
                         $rule_array = explode(',', $rule);
-                        $condition .= '->where("' . $rule_array[0] . '", "'.$rule_array[1].'","' . $rule_array[2] . '")';
+                        $condition .= '->where("' . $rule_array[0] . '", "' . $rule_array[1] . '","' . $rule_array[2] . '")';
                     }
                     //$condition = 'whereIn("' . $column_id_fk . '",[' . $column['select_rules'] . '])';
-                } 
+                }
 
                 /*else {
                     $condition = '->whereRaw("1 = 1")';
                 }*/
 
-                $condition .= '->orderBy("'.$column_name_fk.'","ASC")';
+                if ($column_idcliente_fk) {
+                    $condition .= '->where("idcliente", session()->get("idcliente") )';
+                }
+                if ($column_idproyecto_fk) {
+                    $condition .= '->where("idproyecto", session()->get("idproyecto") )';
+                }
+
+                $condition .= '->orderBy("' . $column_name_fk . '","ASC")';
 
                 $tabla = '
                 "' . $model_name_fk . '" => ' . $model_name_fk . '::' . $condition . '->get(), 
@@ -733,7 +752,7 @@ class GeneradorCrudService
 
                     $show_column_name = $show_column_name . '_file';
                 }
-                
+
 
                 $template = str_replace('%FIELD_VALUE_SHOW%', $value, $template);
                 $template = str_replace('%FIELD_FILE%', $value_file, $template);
@@ -813,7 +832,7 @@ class GeneradorCrudService
                 $template_fields_replace = str_replace('%FIELD%', $datatable_column_name, $template_fields_replace);
                 $model_name = $data['tables_fk'][$column['name']]['table_name_fk'];
                 $column_name = $data['tables_fk'][$column['name']]['table_column_fk_name'];
-                $return = 'return $%OBJETO_VARIABLE%->' . $model_name . '->first()?->' . $column_name.';'; //ucwords($user->roles->first()?->name);
+                $return = 'return $%OBJETO_VARIABLE%->' . $model_name . '->first()?->' . $column_name . ';'; //ucwords($user->roles->first()?->name);
 
             } else {
                 $template_fields_replace = $template_fields;
@@ -826,7 +845,7 @@ class GeneradorCrudService
                 } else if ($column['type_html'] == 'file') {
                     $return = 'return new HtmlString(\'
                     <a href="/images/' . '\'.$' . $data['model_name'] . '->' . $column['name'] . '.\'" target="_blank">
-                    <img src="/images/' . '\'.$auxiliarService->getImageFile($' . $data['model_name'] . '->' . $column['name'] . ').\'"  title="\'.$'.$data['model_name'] . '->' . $column['name'].'.\'" alt="\'.$'.$data['model_name'] . '->' . $column['name'].'.\'" border="0" width="40" class="img-rounded" />
+                    <img src="/images/' . '\'.$auxiliarService->getImageFile($' . $data['model_name'] . '->' . $column['name'] . ').\'"  title="\'.$' . $data['model_name'] . '->' . $column['name'] . '.\'" alt="\'.$' . $data['model_name'] . '->' . $column['name'] . '.\'" border="0" width="40" class="img-rounded" />
                     </a>
                     \');';
                 } else {
