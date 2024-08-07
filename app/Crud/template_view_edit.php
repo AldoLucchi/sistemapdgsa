@@ -1,4 +1,6 @@
 <x-default-layout>
+    @inject('auxiliarService', 'App\Services\AuxiliarService')
+
     @section('title')
     <a href="{{ url('/'. (Session::has('%OBJETO_ROUTE%')?Session::get('%OBJETO_ROUTE%'):'crud/%OBJETO_ROUTE%') ) }}">
         %OBJETO_LABEL_ALIAS%

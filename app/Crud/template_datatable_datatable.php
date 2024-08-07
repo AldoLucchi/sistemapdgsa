@@ -1,3 +1,3 @@
-->editColumn('%FIELD%', function (%OBJETO% $%OBJETO_VARIABLE%) {
-return %DATATABLE_RETURN% ;
+->editColumn('%FIELD%', function (%OBJETO% $%OBJETO_VARIABLE%) use ($auxiliarService) {
+ %DATATABLE_RETURN% 
 })

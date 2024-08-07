@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\%OBJETO%;
+use App\Services\AuxiliarService;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
@@ -44,6 +45,8 @@ class %OBJETO_DATATABLE% extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         Log::info($this->documentos);
+
+        $auxiliarService = new AuxiliarService();
 
         return (new EloquentDataTable($query))
             %FIELDS_DATATABLES_DATATABLE%
@@ -126,4 +129,6 @@ class %OBJETO_DATATABLE% extends DataTable
     {
         return '%OBJETO%_' . date('YmdHis');
     }
+
+
 }

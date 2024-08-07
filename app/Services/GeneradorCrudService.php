@@ -686,8 +686,7 @@ class GeneradorCrudService
                 $template = str_replace('%FIELD_ID%', $data['table_column_id'], $template);
                 $template = str_replace('%OBJETO%', $data['crud_name'], $template);
 
-                /*
-                $action_documento = '
+                /* $action_documento = '
                 <!--begin::Menu item-->
                 <div class="menu-item px-3">
                     <a href="{{ url("/docs/' . $data['crud_name'] . '_". $' . $data['crud_name'] . '->' . $data['table_column_id'] . '.".pdf" ) }}" class="menu-link px-3" target="_blank">
@@ -695,8 +694,7 @@ class GeneradorCrudService
                     </a>
                 </div>
                 <!--end::Menu item-->
-                ';
-                */
+                '; */
             } else {
                 $template = $template_fields;
 
@@ -728,7 +726,7 @@ class GeneradorCrudService
                     @if( isset($' . $data['crud_name'] . ') && $' . $data['crud_name'] . '->' . $column['name'] . ' )
                     <br>
                     <a href="/images/{{ $' . $data['crud_name'] . '->' . $column['name'] . ' }}" target="_blank">
-                    <img src="/images/{{ $' . $data['crud_name'] . '->' . $column['name'] . ' }}" style="width:250px;">
+                    <img src="/images/{{ $auxiliarService->getImageFile($' . $data['crud_name'] . '->' . $column['name'] . ') }}" style="width:250px;">
                     </a>
                     @endif
                     ';
@@ -815,24 +813,24 @@ class GeneradorCrudService
                 $template_fields_replace = str_replace('%FIELD%', $datatable_column_name, $template_fields_replace);
                 $model_name = $data['tables_fk'][$column['name']]['table_name_fk'];
                 $column_name = $data['tables_fk'][$column['name']]['table_column_fk_name'];
-                $return = '$%OBJETO_VARIABLE%->' . $model_name . '->first()?->' . $column_name; //ucwords($user->roles->first()?->name);
+                $return = 'return $%OBJETO_VARIABLE%->' . $model_name . '->first()?->' . $column_name.';'; //ucwords($user->roles->first()?->name);
 
             } else {
                 $template_fields_replace = $template_fields;
                 $template_fields_replace = str_replace('%FIELD%', $datatable_column_name, $template_fields_replace);
 
                 if ($column['type_html'] == 'checkbox') {
-                    $return = '($%OBJETO_VARIABLE%->' . $column['name'] . '?"ON":"OFF")';
+                    $return = 'return ($%OBJETO_VARIABLE%->' . $column['name'] . '?"ON":"OFF");';
                 } else if ($column['type_html'] == 'password') {
-                    $return = '"---"';
+                    $return = 'return "---";';
                 } else if ($column['type_html'] == 'file') {
-                    $return = 'new HtmlString(\'
+                    $return = 'return new HtmlString(\'
                     <a href="/images/' . '\'.$' . $data['model_name'] . '->' . $column['name'] . '.\'" target="_blank">
-                    <img src="/images/' . '\'.$' . $data['model_name'] . '->' . $column['name'] . '.\'" border="0" width="40" class="img-rounded" />
+                    <img src="/images/' . '\'.$auxiliarService->getImageFile($' . $data['model_name'] . '->' . $column['name'] . ').\'"  title="\'.$'.$data['model_name'] . '->' . $column['name'].'.\'" alt="\'.$'.$data['model_name'] . '->' . $column['name'].'.\'" border="0" width="40" class="img-rounded" />
                     </a>
-                    \')';
+                    \');';
                 } else {
-                    $return = 'mb_convert_encoding( $%OBJETO_VARIABLE%->' . $column['name'] . ', "UTF-8", "UTF-8")';
+                    $return = 'return mb_convert_encoding( $%OBJETO_VARIABLE%->' . $column['name'] . ', "UTF-8", "UTF-8");';
                 }
             }
 
