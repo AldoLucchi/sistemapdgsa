@@ -424,9 +424,12 @@ class GeneradorCrudService
                     }
                     //$condition = 'whereIn("' . $column_id_fk . '",[' . $column['select_rules'] . '])';
                 } 
+
                 /*else {
                     $condition = '->whereRaw("1 = 1")';
                 }*/
+
+                $condition .= '->orderBy("'.$column_name_fk.'","ASC")';
 
                 $tabla = '
                 "' . $model_name_fk . '" => ' . $model_name_fk . '::' . $condition . '->get(), 
@@ -642,9 +645,9 @@ class GeneradorCrudService
 
         // field------------------
         $file_fields = fopen("../resources/views/cruds/" . $data['crud_name'] . "/fields.blade.php", "w") or die("Unable to open file - view fields.blade.php");
-        $template_fields = file_get_contents('../app/Crud/template_view_show_field.php');
-        $template_fields_select = file_get_contents('../app/Crud/template_view_show_field_select.php');
-        $template_fields_html = file_get_contents('../app/Crud/template_view_show_field_html.php');
+        $template_fields = file_get_contents('../app/Crud/template_view_field.php');
+        $template_fields_select = file_get_contents('../app/Crud/template_view_field_select.php');
+        $template_fields_html = file_get_contents('../app/Crud/template_view_field_html.php');
 
         $fields_all = '';
         $action_documento = '';
@@ -697,6 +700,12 @@ class GeneradorCrudService
             } else {
                 $template = $template_fields;
 
+                if ($data['table_column_id'] == $column['name']) {
+                    //$value_readonly = "readonly";
+                    //$column['type_html'] = 'hidden';
+                    $template = '';
+                }
+
                 $template = str_replace('%FIELD_TYPE%', $column['type_html'], $template);
 
                 $value = '( isset($' . $data['crud_name'] . ')?$' . $data['crud_name'] . '->' . $column['name'] . ':"")';
@@ -726,9 +735,7 @@ class GeneradorCrudService
 
                     $show_column_name = $show_column_name . '_file';
                 }
-                if ($data['table_column_id'] == $column['name']) {
-                    $value_readonly = "readonly";
-                }
+                
 
                 $template = str_replace('%FIELD_VALUE_SHOW%', $value, $template);
                 $template = str_replace('%FIELD_FILE%', $value_file, $template);

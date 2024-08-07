@@ -64,6 +64,7 @@ class DashboardController extends Controller
         }
         else{
             Session::put('idproyecto', null);
+            Session::put('nombreproyecto', null);
         }
 
         return view('pages/dashboards.index', $proyectos);
@@ -87,10 +88,12 @@ class DashboardController extends Controller
 
         if ($proyecto) {
             Session::put('idproyecto', $id);
+            Session::put('nombreproyecto', $proyecto->nombre);
             $menues = $this->menuService->getMenuProyecto();
             Session::put('menues', $menues);
         } else {
             Session::put('idproyecto', null);
+            Session::put('nombreproyecto', null);
         }
 
         $sysdate = date('Y-m-d H:i:s');
