@@ -567,19 +567,40 @@ class GeneradorCrudService
         $template_list_view = file_get_contents('../app/Crud/template_view_list.php');
         $template_list_view = $this->generateCrudReplace($template_list_view, $data);
 
+        fwrite($file_list_view, $template_list_view);
+        fclose($file_list_view);
+
+        //list filters -------------------------------
+        $file_list_filters = fopen("../resources/views/cruds/" . $data['crud_name'] . "/filters.blade.php", "w") or die("Unable to open file - view filters.blade.php");
         $template_list_filters = file_get_contents('../app/Crud/template_view_list_filters.php');
-        $template_list_filters_date = file_get_contents('../app/Crud/template_view_list_filters_date.php');
-        $template_list_filters_javascript = '
-        const %OBJETO_LABEL% = document.getElementById("%OBJETO_LABEL%").value;            
-            urlFilter = urlFilter+ "%OBJETO_LABEL%="+%OBJETO_LABEL%+"&";
+
+        $file_list_filters_script = fopen("../resources/views/cruds/" . $data['crud_name'] . "/filters_script.blade.php", "w") or die("Unable to open file - view filters_script.blade.php");
+        $template_list_filters_scripts = file_get_contents('../app/Crud/template_view_list_filters_scripts.php');
+
+        $template_list_filters_field = file_get_contents('../app/Crud/template_view_list_filters_field.php');
+        $template_list_filters_field_date = file_get_contents('../app/Crud/template_view_list_filters_field_date.php');
+        
+        $template_list_filters_javascript_enter = '
+        const %OBJETO_LABEL% = document.getElementById("%OBJETO_LABEL%");
+        %OBJETO_LABEL%.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                redirectFiltros();
+            }
+        });
+        ';
+        $template_list_filters_javascript = '        
+            urlFilter = urlFilter+ "%OBJETO_LABEL%="+%OBJETO_LABEL%.value+"&";
             ';
 
         $template_filters = '';
+        $template_filters_javascript_enter = '';
         $template_filters_javascript = '';
 
         foreach ($data['table_columns'] as $column) {
             if (isset($column['select'])) {
-                $list_filters = $template_list_filters;
+                $list_filters = $template_list_filters_field;
+                $list_filters_javascript_enter = $template_list_filters_javascript_enter;
                 $list_filters_javascript = $template_list_filters_javascript;
 
                 $model_name = $data['tables_fk'][$column['name']]['table_name_fk'];
@@ -594,13 +615,17 @@ class GeneradorCrudService
                 $template_filters .= $list_filters;
 
                 //-------
+                $list_filters_javascript_enter = str_replace('%OBJETO_LABEL%', $model_name, $list_filters_javascript_enter);
                 $list_filters_javascript = str_replace('%OBJETO_LABEL%', $model_name, $list_filters_javascript);
 
+                $template_filters_javascript_enter .= $list_filters_javascript_enter;
                 $template_filters_javascript .= $list_filters_javascript;
             }
 
             if (in_array($column['type_html'], ['date', 'datetime-local'])) {
-                $list_filters_date = $template_list_filters_date;
+                $list_filters_date = $template_list_filters_field_date;
+                $list_filters_javascript_enter_from = $template_list_filters_javascript_enter;
+                $list_filters_javascript_enter_to = $template_list_filters_javascript_enter;
                 $list_filters_javascript_from = $template_list_filters_javascript;
                 $list_filters_javascript_to = $template_list_filters_javascript;
 
@@ -615,20 +640,33 @@ class GeneradorCrudService
 
                 //-------
                 $date_from = $column['name'] . '_from';
+                $list_filters_javascript_enter_from = str_replace('%OBJETO_LABEL%', $date_from, $list_filters_javascript_enter_from);
+                $template_filters_javascript_enter .= $list_filters_javascript_enter_from;
                 $list_filters_javascript_from = str_replace('%OBJETO_LABEL%', $date_from, $list_filters_javascript_from);
                 $template_filters_javascript .= $list_filters_javascript_from;
+                
 
                 $date_to = $column['name'] . '_to';
+                $list_filters_javascript_enter_to = str_replace('%OBJETO_LABEL%', $date_to, $list_filters_javascript_enter_to);
+                $template_filters_javascript_enter .= $list_filters_javascript_enter_to;
                 $list_filters_javascript_to = str_replace('%OBJETO_LABEL%', $date_to, $list_filters_javascript_to);
                 $template_filters_javascript .= $list_filters_javascript_to;
+                
             }
         }
 
-        $template_list_view = str_replace('%VIEW_LIST_FILTROS%', $template_filters, $template_list_view);
-        $template_list_view = str_replace('%VIEW_LIST_FILTROS_JAVASCRIPT%', $template_filters_javascript, $template_list_view);
+        $template_list_filters = str_replace('%VIEW_LIST_FILTROS%', $template_filters, $template_list_filters);
+        $template_list_filters = $this->generateCrudReplace($template_list_filters, $data);
 
-        fwrite($file_list_view, $template_list_view);
-        fclose($file_list_view);
+        fwrite($file_list_filters, $template_list_filters);
+        fclose($file_list_filters);
+        
+        $template_list_filters_scripts = str_replace('%VIEW_LIST_FILTROS_JAVASCRIPT_ENTER%', $template_filters_javascript_enter, $template_list_filters_scripts);
+        $template_list_filters_scripts = str_replace('%VIEW_LIST_FILTROS_JAVASCRIPT%', $template_filters_javascript, $template_list_filters_scripts);
+        $template_list_filters_scripts = $this->generateCrudReplace($template_list_filters_scripts, $data);
+
+        fwrite($file_list_filters_script, $template_list_filters_scripts);
+        fclose($file_list_filters_script);
 
         //show-------------------
         $file_show_view = fopen("../resources/views/cruds/" . $data['crud_name'] . "/show.blade.php", "w") or die("Unable to open file - view show.blade.php");

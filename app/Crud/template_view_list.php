@@ -41,23 +41,7 @@
         </div>
         <!--end::Card header-->
 
-        <div class="row border-0 pt-6 collapse  card-filtros " id="filtros">
-            
-            <div class="col-12 col-lg-4">
-                <label for="texto" class=" form-label">Buscar</label>
-                <input type="text" class="form-control form-control-transparent" id="texto" name="texto" value="{{ (isset($texto))?$texto:'' }}" />
-            </div>
-
-            %VIEW_LIST_FILTROS%
-
-            <div class="col-12">
-                <button type="button" class="btn btn-primary float-end" onclick="redirectFiltros()">
-                    {!! getIcon('search-list', 'fs-2', '', 'i') !!}
-                    Filtrar
-                </button>
-            </div>
-
-        </div>
+        @include('cruds.%OBJETO_VIEW%.filters')
 
         <!--begin::Card body-->
         <div class="card-body py-4">
@@ -72,20 +56,8 @@
 
     @push('scripts')
     {{ $dataTable->scripts() }}
-    <script>      
 
-        //filtros
-        function redirectFiltros() {
-            var urlFilter = "{{ url('/'.(Session::has('%OBJETO_ROUTE%')?Session::get('%OBJETO_ROUTE%'):'crud/%OBJETO_ROUTE%') ) }}"+"?";
-
-            const texto = document.getElementById("texto").value;            
-            urlFilter = urlFilter+ "texto="+texto+"&";
-            
-            %VIEW_LIST_FILTROS_JAVASCRIPT%
-
-            window.location.href = urlFilter;
-        }
-    </script>
+    @include('cruds.%OBJETO_VIEW%.filters_script')
     @endpush
 
 </x-default-layout>

@@ -1,9 +1,17 @@
-<div class="col-12 col-lg-4">
-    <label for="%OBJETO_LABEL_INDIVIDUAL%" class=" form-label">%OBJETO_LABEL%</label>
-    <select class="form-control form-select form-select-transparent" aria-label="Select example" id="%OBJETO_LABEL_INDIVIDUAL%" name="%OBJETO_LABEL_INDIVIDUAL%">
-        <option value="">---</option>
-        @foreach($%OBJETO_LABEL%List as $%OBJETO_LABEL_INDIVIDUAL%Option)
-        <option value="{{ $%OBJETO_LABEL_INDIVIDUAL%Option->%FIELD_ID% }}" {{ (isset($%OBJETO_LABEL%) && $%OBJETO_LABEL% == $%OBJETO_LABEL_INDIVIDUAL%Option->%FIELD_ID% )?'selected':'' }}>{{ $%OBJETO_LABEL_INDIVIDUAL%Option->%FIELD_NAME% }}</option>
-        @endforeach
-    </select>
-</div>
+<div class="row border-0 pt-6 collapse  card-filtros " id="filtros">
+            
+            <div class="col-12 col-lg-4">
+                <label for="texto" class=" form-label">Buscar</label>
+                <input type="text" class="form-control form-control-transparent" id="texto" name="texto" value="{{ (isset($texto))?$texto:'' }}" />
+            </div>
+
+            %VIEW_LIST_FILTROS%
+
+            <div class="col-12">
+                <button type="button" class="btn btn-primary float-end" onclick="redirectFiltros()">
+                    {!! getIcon('search-list', 'fs-2', '', 'i') !!}
+                    Filtrar
+                </button>
+            </div>
+
+        </div>
