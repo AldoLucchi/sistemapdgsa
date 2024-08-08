@@ -8,7 +8,7 @@ use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-
+use Illuminate\Support\HtmlString;
 class CrudDataTable extends DataTable
 {
     /**
@@ -29,7 +29,7 @@ class CrudDataTable extends DataTable
                 return mb_convert_encoding($crud->alias_opcion, 'UTF-8', 'UTF-8');
             })
             ->editColumn('nombre_componente', function (Crud $crud) {
-                return mb_convert_encoding($crud->nombre_componente, 'UTF-8', 'UTF-8');
+                return new HtmlString('<a href="/crud/' . $crud->nombre_componente . '" target="_blank">'.$crud->nombre_componente.' </a>');
             })
             ->editColumn('estatus', function (Crud $crud) {
                 return   mb_convert_encoding(($crud->estatus ? 'ON' : 'OFF'), 'UTF-8', 'UTF-8');

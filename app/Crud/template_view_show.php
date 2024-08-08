@@ -32,7 +32,7 @@
                     </a>
                     @endforeach
 
-                    <a href="{{ url('/'.(Session::has('%OBJETO_ROUTE%')?Session::get('%OBJETO_ROUTE%'):'crud/%OBJETO_ROUTE%').'/create' ) }}" class="btn btn-primary">
+                    <a href="{{ url('/'.(Session::has('%OBJETO_ROUTE%')?Session::get('%OBJETO_ROUTE%'):'crud/%OBJETO_ROUTE%').'/create' ) }}" class="btn btn-primary %OBJETO_CREATE%">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
                         Agregar %OBJETO_LABEL_INDIVIDUAL%
                     </a>
@@ -49,7 +49,6 @@
         <!--begin::Card body-->
         <div class="card-body py-4">
             <!--begin::Table-->
-
 
             <div class="accordion" id="accordion%OBJETO_LABEL_INDIVIDUAL%">
                 <div class="accordion-item">

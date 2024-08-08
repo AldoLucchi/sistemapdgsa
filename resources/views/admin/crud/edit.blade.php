@@ -45,10 +45,9 @@
 
                 <input type="hidden" name="crud_id" id="crud_id" value="{{ (isset($crud)?$crud->id:'') }}">
 
-
                 <div class="row">
                     <!--begin::Input group-->
-                    <div class="mb-7 col-12 col-lg-4">
+                    <div class="mb-7 col-12 col-lg-6">
                         <!--begin::Label-->
                         <label class="required fw-semibold fs-6 mb-5">Tabla</label>
                         <!--end::Label-->
@@ -62,7 +61,7 @@
                     <!--end::Input group-->
 
                     <!--begin::Input group-->
-                    <div class="mb-7 col-12 col-lg-4">
+                    <div class="mb-7 col-12 col-lg-6">
                         <!--begin::Label-->
                         <label class="required fw-semibold fs-6 mb-5">Nombre componente</label>
                         <!--end::Label-->
@@ -74,7 +73,6 @@
                         <!--end::Crud-->
                     </div>
                     <!--end::Input group-->
-
 
                     <!--begin::Input group-->
                     <div class="mb-7 col-12 col-lg-4">
@@ -105,7 +103,26 @@
                     <!--end::Input group-->
 
                     <!--begin::Input group-->
-                    <div class="mb-7 col-12 col-lg-6">
+                    <div class="mb-7 col-12 col-lg-4">
+                        <!--begin::Label-->
+                        <label class="required fw-semibold fs-6 mb-5">CRUD permisos</label>
+                        <!--end::Label-->
+                        @error('crud_permisos')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                        <!--begin::Crud-->
+                        <select name="crud_permisos[]" id="crud_permisos" class="form-select form-select-transparent py-5 select2" aria-label="Seleccione una opción" data-control="select2" multiple="multiple">
+                            <option value="">---</option>
+                            @foreach($options_crud as $option)
+                            <option value="{{ $option }}" {{ ($crud && in_array($option, explode(',', $crud->crud_permisos)  ))?'selected':'' }}>{{ $option }}</option>
+                            @endforeach
+                        </select>
+                        <!--end::Crud-->
+                    </div>
+                    <!--end::Input group-->
+
+                    <!--begin::Input group-->
+                    <div class="mb-7  col-12 col-lg-4">
                         <!--begin::Label-->
                         <label class="required fw-semibold fs-6 mb-5">Estatus</label>
                         <!--end::Label-->
@@ -117,14 +134,9 @@
                         <!--end::Crud-->
                     </div>
                     <!--end::Input group-->
-
-
                 </div>
 
-
-
                 <div class="row">
-
                     @foreach($cruds_filtered_columns as $key => $crud_table)
                     @if(isset($crud) && $key == $crud->nombre)
                     <div class=".crud-table  table-responsive text-center" id="crud-table-{{ $key }}">
@@ -218,9 +230,6 @@
                     @endif
                     @endforeach
                 </div>
-
-
-
 
                 <div class="row">
                     <div class="d-flex justify-content-end">

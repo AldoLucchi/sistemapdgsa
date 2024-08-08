@@ -40,12 +40,6 @@
             <!--begin::Table-->
             <form id="add_CRUD_form" name="add_CRUD_form" class="form" action="{{ route('admin.crud.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-
-
-
-
-
-
                 <div class="row">
                     <!--begin::Input group-->
                     <div class="mb-7 col-12 col-lg-4">
@@ -65,7 +59,6 @@
                         <!--end::Crud-->
                     </div>
                     <!--end::Input group-->
-
 
                     <!--begin::Input group-->
                     <div class="mb-7 col-12 col-lg-4">
@@ -95,6 +88,24 @@
                     </div>
                     <!--end::Input group-->
 
+                    <!--begin::Input group-->
+                    <div class="mb-7 col-12 col-lg-4">
+                        <!--begin::Label-->
+                        <label class="required fw-semibold fs-6 mb-5">CRUD permisos</label>
+                        <!--end::Label-->
+                        @error('crud_permisos')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                        <!--begin::Crud-->
+                        <select name="crud_permisos[]" id="crud_permisos" class="form-select form-select-transparent py-5 select2" aria-label="Seleccione una opción" data-control="select2" multiple="multiple">
+                            <option value="">---</option>
+                            @foreach($options_crud as $option)
+                            <option value="{{ $option }}">{{ $option }}</option>
+                            @endforeach
+                        </select>
+                        <!--end::Crud-->
+                    </div>
+                    <!--end::Input group-->
 
                 </div>
 

@@ -41,6 +41,26 @@ class GeneradorCrudService
             $table_crud = $request['nombre'];
             $alias_opcion = $request['alias_opcion'];
             $alias_opcion_individual = $request['alias_opcion_individual'];
+            $crud_permisos = $request['crud_permisos'];
+
+            $crud_permisos_create = true;
+            $crud_permisos_read = true;
+            $crud_permisos_update = true;
+            $crud_permisos_delete = true;
+            if ($request['crud_permisos']) {
+                if (!in_array('create', $request['crud_permisos'])) {
+                    $crud_permisos_create = false;
+                }
+                if (!in_array('read', $request['crud_permisos'])) {
+                    $crud_permisos_read = false;
+                }
+                if (!in_array('update', $request['crud_permisos'])) {
+                    $crud_permisos_update = false;
+                }
+                if (!in_array('delete', $request['crud_permisos'])) {
+                    $crud_permisos_delete = false;
+                }
+            }
 
             $table_crud_columns = DB::select("SHOW COLUMNS FROM " . $table_crud);
             $table_columns_string = "";
@@ -232,6 +252,11 @@ class GeneradorCrudService
                 'table_name_label' => $table_name_label,
                 'table_name_label_alias' => $alias_opcion,
                 'table_name_label_individual' => $alias_opcion_individual,
+                'crud_permisos' => $crud_permisos,
+                'crud_permisos_create' => $crud_permisos_create,
+                'crud_permisos_read' => $crud_permisos_read,
+                'crud_permisos_update' => $crud_permisos_update,
+                'crud_permisos_delete' => $crud_permisos_delete,
                 'table_columns' =>  $table_columns,
                 'table_columns_string' =>  $table_columns_string,
                 'table_column_id' => $table_column_id,
@@ -579,7 +604,7 @@ class GeneradorCrudService
 
         $template_list_filters_field = file_get_contents('../app/Crud/template_view_list_filters_field.php');
         $template_list_filters_field_date = file_get_contents('../app/Crud/template_view_list_filters_field_date.php');
-        
+
         $template_list_filters_javascript_enter = '
         const %OBJETO_LABEL% = document.getElementById("%OBJETO_LABEL%");
         %OBJETO_LABEL%.addEventListener("keypress", function(event) {
@@ -644,14 +669,13 @@ class GeneradorCrudService
                 $template_filters_javascript_enter .= $list_filters_javascript_enter_from;
                 $list_filters_javascript_from = str_replace('%OBJETO_LABEL%', $date_from, $list_filters_javascript_from);
                 $template_filters_javascript .= $list_filters_javascript_from;
-                
+
 
                 $date_to = $column['name'] . '_to';
                 $list_filters_javascript_enter_to = str_replace('%OBJETO_LABEL%', $date_to, $list_filters_javascript_enter_to);
                 $template_filters_javascript_enter .= $list_filters_javascript_enter_to;
                 $list_filters_javascript_to = str_replace('%OBJETO_LABEL%', $date_to, $list_filters_javascript_to);
                 $template_filters_javascript .= $list_filters_javascript_to;
-                
             }
         }
 
@@ -660,7 +684,7 @@ class GeneradorCrudService
 
         fwrite($file_list_filters, $template_list_filters);
         fclose($file_list_filters);
-        
+
         $template_list_filters_scripts = str_replace('%VIEW_LIST_FILTROS_JAVASCRIPT_ENTER%', $template_filters_javascript_enter, $template_list_filters_scripts);
         $template_list_filters_scripts = str_replace('%VIEW_LIST_FILTROS_JAVASCRIPT%', $template_filters_javascript, $template_list_filters_scripts);
         $template_list_filters_scripts = $this->generateCrudReplace($template_list_filters_scripts, $data);
@@ -1435,6 +1459,35 @@ class GeneradorCrudService
         $content = str_replace('%OBJETO_DATATABLE%', $data['datatable_name'], $content);
 
         $content = str_replace('%OBJETO_ROUTE%', $data['crud_name'], $content);
+
+        if (!$data['crud_permisos_create']) {
+            $content = str_replace('%OBJETO_CREATE%', 'd-none', $content);
+            $content = str_replace('%OBJETO_CONTROLLER_CREATE%', 'return redirect($rutaCrud)->with("message-error","Acción no disponible");', $content);
+        } else {
+            $content = str_replace('%OBJETO_CREATE%', '', $content);
+            $content = str_replace('%OBJETO_CONTROLLER_CREATE%', '', $content);
+        }
+        if (!$data['crud_permisos_read']) {
+            $content = str_replace('%OBJETO_READ%', 'd-none', $content);
+            $content = str_replace('%OBJETO_CONTROLLER_READ%', 'return redirect($rutaCrud)->with("message-error","Acción no disponible");', $content);
+        } else {
+            $content = str_replace('%OBJETO_READ%', '', $content);
+            $content = str_replace('%OBJETO_CONTROLLER_READ%', '', $content);
+        }
+        if (!$data['crud_permisos_update']) {
+            $content = str_replace('%OBJETO_UPDATE%', 'd-none', $content);
+            $content = str_replace('%OBJETO_CONTROLLER_UPDATE%', 'return redirect($rutaCrud)->with("message-error","Acción no disponible");', $content);
+        } else {
+            $content = str_replace('%OBJETO_UPDATE%', '', $content);
+            $content = str_replace('%OBJETO_CONTROLLER_UPDATE%', '', $content);
+        }
+        if (!$data['crud_permisos_delete']) {
+            $content = str_replace('%OBJETO_DELETE%', 'd-none', $content);
+            $content = str_replace('%OBJETO_CONTROLLER_DELETE%', 'return redirect($rutaCrud)->with("message-error","Acción no disponible");', $content);
+        } else {
+            $content = str_replace('%OBJETO_DELETE%', '', $content);
+            $content = str_replace('%OBJETO_CONTROLLER_DELETE%', '', $content);
+        }
 
         if (isset($data['objeto_fk'])) {
             $content = str_replace('%OBJETO_FK%', $data['objeto_fk'], $content);

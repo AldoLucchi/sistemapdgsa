@@ -28,6 +28,7 @@ class Crud extends Model
         'estatus',
         'alias_opcion_individual',
         'campos',
+        'crud_permisos',
     ];
 
     //relations

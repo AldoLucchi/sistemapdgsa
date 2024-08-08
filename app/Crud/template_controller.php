@@ -106,6 +106,14 @@ class %OBJETO_CONTROLLER% extends Controller
      */
     public function create()
     {
+      $rutaCrud = '/crud/%OBJETO_ROUTE%';
+
+      if( Session::has('%OBJETO_ROUTE%')){
+        $rutaCrud = '/'.Session::get('%OBJETO_ROUTE%');
+      }
+
+      %OBJETO_CONTROLLER_CREATE%
+
       $data = [
         %TABLAS_ASOCIADAS%
       ];
@@ -124,6 +132,14 @@ class %OBJETO_CONTROLLER% extends Controller
       Log::info('%OBJETO_CONTROLLER% - store');
       Log::info($request);
 
+      $rutaCrud = '/crud/%OBJETO_ROUTE%';
+
+      if( Session::has('%OBJETO_ROUTE%')){
+        $rutaCrud = '/'.Session::get('%OBJETO_ROUTE%');
+      }  
+
+      %OBJETO_CONTROLLER_CREATE%
+
       $validated = $request->validate([
           //'name' => 'required',
       ]);
@@ -139,12 +155,6 @@ class %OBJETO_CONTROLLER% extends Controller
         %FIELD_PDF%
 
         $message =  ' %OBJETO_LABEL_INDIVIDUAL%: registro creado correctamente: ';
-
-        $rutaCrud = '/crud/%OBJETO_ROUTE%';
-
-        if( Session::has('%OBJETO_ROUTE%')){
-          $rutaCrud = '/'.Session::get('%OBJETO_ROUTE%');
-        }  
 
         return redirect( $rutaCrud)->with('message',$message);
       } catch (Exception $e) {
@@ -168,6 +178,13 @@ class %OBJETO_CONTROLLER% extends Controller
      */
     public function show( $%OBJETO_VARIABLE%)
     {
+      $rutaCrud = '/crud/%OBJETO_ROUTE%';
+
+      if( Session::has('%OBJETO_ROUTE%')){
+        $rutaCrud = '/'.Session::get('%OBJETO_ROUTE%');
+      }
+
+      %OBJETO_CONTROLLER_READ%
 
       $idRegister = $%OBJETO_VARIABLE%;
       $documentos = $this->documentosService->getDocumentosByCrud('%OBJETO%');
@@ -193,6 +210,14 @@ class %OBJETO_CONTROLLER% extends Controller
      */
     public function edit($%OBJETO_VARIABLE%)
     {
+      $rutaCrud = '/crud/%OBJETO_ROUTE%';
+
+      if( Session::has('%OBJETO_ROUTE%')){
+        $rutaCrud = '/'.Session::get('%OBJETO_ROUTE%');
+      }
+      
+      %OBJETO_CONTROLLER_UPDATE%
+
       $idRegister = $%OBJETO_VARIABLE%;
       $documentos = $this->documentosService->getDocumentosByCrud('%OBJETO%');
 
@@ -216,11 +241,17 @@ class %OBJETO_CONTROLLER% extends Controller
      */
     public function update(Request $request, $%OBJETO_VARIABLE%)
     {
-		//
+      $rutaCrud = '/crud/%OBJETO_ROUTE%';
 
-    %FIELD_CHECKBOX%
+      if( Session::has('%OBJETO_ROUTE%')){
+        $rutaCrud = '/'.Session::get('%OBJETO_ROUTE%');
+      }  
 
-    Log::info('%OBJETO_CONTROLLER% - update');      
+      %OBJETO_CONTROLLER_UPDATE%
+
+      %FIELD_CHECKBOX%
+
+      Log::info('%OBJETO_CONTROLLER% - update');      
 
       Log::info($request);
 
@@ -229,19 +260,13 @@ class %OBJETO_CONTROLLER% extends Controller
       
         %FIELD_FILE_STORAGE%
 
-      $%OBJETO_VARIABLE%_updated = $%OBJETO_VARIABLE%->update($request->all());
+        $%OBJETO_VARIABLE%_updated = $%OBJETO_VARIABLE%->update($request->all());
       
-      %FIELD_PDF%
+        %FIELD_PDF%
 
-      $message =  ' %OBJETO_LABEL_INDIVIDUAL%: registro actualizado correctamente: ';
+        $message =  ' %OBJETO_LABEL_INDIVIDUAL%: registro actualizado correctamente: ';       
 
-      $rutaCrud = '/crud/%OBJETO_ROUTE%';
-
-      if( Session::has('%OBJETO_ROUTE%')){
-        $rutaCrud = '/'.Session::get('%OBJETO_ROUTE%');
-      }  
-
-      return redirect($rutaCrud)->with('message',$message);
+        return redirect($rutaCrud)->with('message',$message);
       
     } catch (Exception $e) {
         Log::info('%OBJETO_CONTROLLER% - store - Exception ' . $e->getMessage());
@@ -267,16 +292,19 @@ class %OBJETO_CONTROLLER% extends Controller
     {
       Log::info('%OBJETO_CONTROLLER% - destroy');
       Log::info($%OBJETO_VARIABLE%);
-       $%OBJETO_VARIABLE%_delete = %OBJETO_VARIABLE%::find($%OBJETO_VARIABLE%);
-      $%OBJETO_VARIABLE%_delete = $%OBJETO_VARIABLE%_delete->delete();       
-
-      $message =  ' %OBJETO_LABEL_INDIVIDUAL%: registro eliminado correctamente: ';
 
       $rutaCrud = '/crud/%OBJETO_ROUTE%';
 
       if( Session::has('%OBJETO_ROUTE%')){
         $rutaCrud = '/'.Session::get('%OBJETO_ROUTE%');
-      }  
+      }
+
+      %OBJETO_CONTROLLER_DELETE%
+
+       $%OBJETO_VARIABLE%_delete = %OBJETO_VARIABLE%::find($%OBJETO_VARIABLE%);
+      $%OBJETO_VARIABLE%_delete = $%OBJETO_VARIABLE%_delete->delete();       
+
+      $message =  ' %OBJETO_LABEL_INDIVIDUAL%: registro eliminado correctamente: ';        
 
       return redirect($rutaCrud)->with('message',$message);	
     }
