@@ -77,6 +77,8 @@ class %OBJETO_CONTROLLER% extends Controller
       
       $dataTable = new %OBJETO_DATATABLE%($filters, $documentos);
 
+      %FILTERS_VARIABLES_GET%
+
       $details = [  
         "texto" => $request["texto"],
         %FILTERS_VARIABLES%
@@ -113,6 +115,8 @@ class %OBJETO_CONTROLLER% extends Controller
       }
 
       %OBJETO_CONTROLLER_CREATE%
+
+      %TABLAS_ASOCIADAS_GET%
 
       $data = [
         %TABLAS_ASOCIADAS%
@@ -189,6 +193,8 @@ class %OBJETO_CONTROLLER% extends Controller
       $idRegister = $%OBJETO_VARIABLE%;
       $documentos = $this->documentosService->getDocumentosByCrud('%OBJETO%');
 
+      %TABLAS_ASOCIADAS_GET%
+
       //%RELATION_DATATABLE_VARIABLES%
 
         $data = [
@@ -221,6 +227,7 @@ class %OBJETO_CONTROLLER% extends Controller
       $idRegister = $%OBJETO_VARIABLE%;
       $documentos = $this->documentosService->getDocumentosByCrud('%OBJETO%');
 
+      %TABLAS_ASOCIADAS_GET%
 
       $data = [
         'documentos' => $documentos,

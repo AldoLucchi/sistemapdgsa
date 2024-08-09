@@ -70,6 +70,8 @@ class %OBJETO_DATATABLE% extends DataTable
     {
         $query = $model->newQuery();
 
+        %DATATABLE_QUERY_FILTERS_RULES%
+
         %DATATABLE_QUERY_FILTERS%
 
         if ($this->filters && isset($this->filters["texto"])) {

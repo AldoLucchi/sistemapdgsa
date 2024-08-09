@@ -42,9 +42,10 @@ class CrudService
         //dd($campos);
 
         $crud = null;
+        $crud_permisos = '';
 
-        if ($request['crud_permisos']) {
-            $request['crud_permisos'] = implode(',', $request['crud_permisos']);
+        if (isset($request['crud_permisos']) && $request['crud_permisos']) {
+            $crud_permisos = implode(',', $request['crud_permisos']);
         }
 
         $data = [
@@ -52,7 +53,8 @@ class CrudService
             'alias_opcion' => $request['alias_opcion'],
             'alias_opcion_individual' => $request['alias_opcion_individual'],
             'status' => $request['estatus'],
-            'crud_permisos' => $request['crud_permisos'],
+            'crud_permisos' => $crud_permisos,
+            'reglas' => $request['reglas'],
             'campos' => $campos,
         ];
 

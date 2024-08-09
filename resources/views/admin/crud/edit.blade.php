@@ -74,52 +74,7 @@
                     </div>
                     <!--end::Input group-->
 
-                    <!--begin::Input group-->
-                    <div class="mb-7 col-12 col-lg-4">
-                        <!--begin::Label-->
-                        <label class="required fw-semibold fs-6 mb-5">Alias opción</label>
-                        <!--end::Label-->
-                        @error('alias_opcion')
-                        <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                        <!--begin::Crud-->
-                        <input type="text" class="form-control" name="alias_opcion" id="alias_opcion" placeholder="" value="{{ (isset($crud)?$crud->alias_opcion:'--') }}" />
-                        <!--end::Crud-->
-                    </div>
-                    <!--end::Input group-->
-
-                    <!--begin::Input group-->
-                    <div class="mb-7 col-12 col-lg-4">
-                        <!--begin::Label-->
-                        <label class="required fw-semibold fs-6 mb-5">Alias individual</label>
-                        <!--end::Label-->
-                        @error('alias_opcion_individual')
-                        <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                        <!--begin::Crud-->
-                        <input type="text" class="form-control" name="alias_opcion_individual" id="alias_opcion_individual" placeholder="" value="{{ (isset($crud)?$crud->alias_opcion_individual:'--') }}" />
-                        <!--end::Crud-->
-                    </div>
-                    <!--end::Input group-->
-
-                    <!--begin::Input group-->
-                    <div class="mb-7 col-12 col-lg-4">
-                        <!--begin::Label-->
-                        <label class="required fw-semibold fs-6 mb-5">CRUD permisos</label>
-                        <!--end::Label-->
-                        @error('crud_permisos')
-                        <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                        <!--begin::Crud-->
-                        <select name="crud_permisos[]" id="crud_permisos" class="form-select form-select-transparent py-5 select2" aria-label="Seleccione una opción" data-control="select2" multiple="multiple">
-                            <option value="">---</option>
-                            @foreach($options_crud as $option)
-                            <option value="{{ $option }}" {{ ($crud && in_array($option, explode(',', $crud->crud_permisos)  ))?'selected':'' }}>{{ $option }}</option>
-                            @endforeach
-                        </select>
-                        <!--end::Crud-->
-                    </div>
-                    <!--end::Input group-->
+                    @include('admin.crud.fields')
 
                     <!--begin::Input group-->
                     <div class="mb-7  col-12 col-lg-4">
@@ -142,6 +97,7 @@
                     <div class=".crud-table  table-responsive text-center" id="crud-table-{{ $key }}">
                         <h3 class="text-center mb-3"><b>Tabla: {{ $key }}</b></h3>
                         <p>Nota: si ningún campo esta marcado para incluir, automáticamente se incluyen todos</p>
+                        <p>Rules: para setear una o más reglas, el formato es el siguiente: campo,operador,valor;campo,operador,valor</p>
                         <fieldset id="crud-fieldset-{{ $key }}">
                             <table class="table table-bordered table-striped table-hover g-1 text-center">
                                 <thead class="text-uppercase">

@@ -29,6 +29,7 @@ class Crud extends Model
         'alias_opcion_individual',
         'campos',
         'crud_permisos',
+        'reglas',
     ];
 
     //relations

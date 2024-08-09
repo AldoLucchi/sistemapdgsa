@@ -36,9 +36,9 @@ class DashboardController extends Controller
         $idusuario = null;
 
         //if ($user && $user->cliente && $user->cliente->proyectos) {
-          //  $proyectos = $user->cliente->proyectos;
+        //  $proyectos = $user->cliente->proyectos;
         if ($user && $user->proyectos) {
-                $proyectos = $user->proyectos;            
+            $proyectos = $user->proyectos;
         }
 
         if ($user && $user->rol) {
@@ -48,23 +48,23 @@ class DashboardController extends Controller
         }
 
         $menues = $this->menuService->getMenuDashboard();
-        $accesodDirectos = $this->accesoDirectoService->getAccesoDirectos();         
+        $accesodDirectos = $this->accesoDirectoService->getAccesoDirectos();
         Log::info($accesodDirectos);
 
         Session::put('idcliente', $user->idcliente);
         Session::put('idrol', $user->idrol);
         Session::put('idusuario', $idusuario);
         Session::put('usuario_proyectos', $proyectos);
-        Session::put('menues', $menues);       
+        Session::put('menues', $menues);
         Session::put('current_crud', null);
         Session::put('accesos_directos', $accesodDirectos);
 
-        if( Session::has('idproyecto') && Session::get('idproyecto')){
+        if (Session::has('idproyecto') && Session::get('idproyecto')) {
             return $this->dashboardProyecto(Session::get('idproyecto'));
-        }
-        else{
+        } else {
             Session::put('idproyecto', null);
             Session::put('nombreproyecto', null);
+            Session::put('nombreproyectocuenta', null);
         }
 
         return view('pages/dashboards.index', $proyectos);
@@ -84,23 +84,25 @@ class DashboardController extends Controller
         $data = [
             'proyecto' => $proyecto
         ];
-        
+
 
         if ($proyecto) {
             Session::put('idproyecto', $id);
             Session::put('nombreproyecto', $proyecto->nombre);
+            Session::put('nombreproyectocuenta', ($proyecto->cliente ? ('Cuenta: ' . $proyecto->cliente->nombre) : $proyecto->nombre));
             $menues = $this->menuService->getMenuProyecto();
             Session::put('menues', $menues);
         } else {
             Session::put('idproyecto', null);
             Session::put('nombreproyecto', null);
+            Session::put('nombreproyectocuenta', null);
         }
 
         $sysdate = date('Y-m-d H:i:s');
 
         $dataBitacora = [
             'idaccion' => 6, //proyecto
-            'descripcion' => 'visita proyecto '.$id,
+            'descripcion' => 'visita proyecto ' . $id,
             'ip' => $this->getIP(),
             'idproyecto' => $id,
             'fecha' => $sysdate,

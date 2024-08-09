@@ -6,11 +6,11 @@ class AuxiliarService
 {
     public function getImageFile($file)
     {
-        $image = 'not-image.png';
+        $image = '';
         if ($file) {
             $exploded = explode('.', $file);
             $fileExtension = end($exploded);
-            if (in_array($fileExtension, [IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG])) {
+            if (in_array($fileExtension, ['gif', 'jpeg', 'jpg', 'png'])) {
                 $image =   $file;
             } elseif (in_array($fileExtension, ['pdf'])) {
                 $image = 'pdf.png';
@@ -18,6 +18,8 @@ class AuxiliarService
                 $image = 'word.png';
             } elseif (in_array($fileExtension, ['xls', 'xlsx'])) {
                 $image = 'excel.png';
+            } else {
+                $image = 'not-image.png';
             }
         }
 

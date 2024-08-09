@@ -41,13 +41,14 @@ class GeneradorCrudService
             $table_crud = $request['nombre'];
             $alias_opcion = $request['alias_opcion'];
             $alias_opcion_individual = $request['alias_opcion_individual'];
-            $crud_permisos = $request['crud_permisos'];
+            $rules = $request['reglas'];
+            $crud_permisos = isset($request['crud_permisos'])?$request['crud_permisos']:'';
 
             $crud_permisos_create = true;
             $crud_permisos_read = true;
             $crud_permisos_update = true;
             $crud_permisos_delete = true;
-            if ($request['crud_permisos']) {
+            if (isset($request['crud_permisos']) && $request['crud_permisos']) {
                 if (!in_array('create', $request['crud_permisos'])) {
                     $crud_permisos_create = false;
                 }
@@ -252,6 +253,7 @@ class GeneradorCrudService
                 'table_name_label' => $table_name_label,
                 'table_name_label_alias' => $alias_opcion,
                 'table_name_label_individual' => $alias_opcion_individual,
+                'rules' => $rules,
                 'crud_permisos' => $crud_permisos,
                 'crud_permisos_create' => $crud_permisos_create,
                 'crud_permisos_read' => $crud_permisos_read,
@@ -409,8 +411,9 @@ class GeneradorCrudService
         $template_controller_file = file_get_contents('../app/Crud/template_controller_file.php');
 
         $fields_checkobx = '';
-        $tablas_asociadas = '';
         $tablas_asociadas_uses = '';
+        $tablas_asociadas_get = '';
+        $tablas_asociadas = '';
         $field_file_storage = '';
         $pdf = '';
         $filtersControllerIndex = '';
@@ -426,7 +429,7 @@ class GeneradorCrudService
 
         $filters_variables = '';
         $template_filters_variables_all = '
-            "%OBJETO_VARIABLE%List" => %OBJETO_VARIABLE%::%VARIABLE_CONDITION%->get(),
+            "%OBJETO_VARIABLE%List" => $%OBJETO_VARIABLE%,
         ';
 
         $template_filters_variables = '
@@ -451,13 +454,21 @@ class GeneradorCrudService
                 $column_idcliente_fk = $data['tables_fk'][$column['name']]['table_column_fk_idcliente'];
                 $column_idproyecto_fk = $data['tables_fk'][$column['name']]['table_column_fk_idproyecto'];
 
-                $condition = 'select("*")';
+                $use = '
+                use App\Models\\' . $model_name_fk . ';
+                ';
+
+                $tabla_get = '
+                $' . $model_name_fk . ' = ' . $model_name_fk . '::select("*"); 
+                ';                
 
                 if (isset($column['select_rules'])) {
                     $select_rules_array = explode(';', $column['select_rules']);
                     foreach ($select_rules_array as $rule) {
                         $rule_array = explode(',', $rule);
-                        $condition .= '->where("' . $rule_array[0] . '", "' . $rule_array[1] . '","' . $rule_array[2] . '")';
+                        $tabla_get  .= '
+                            $' . $model_name_fk . ' = $' . $model_name_fk . '->where("' . $rule_array[0] . '", "' . $rule_array[1] . '","' . $rule_array[2] . '");
+                        ';
                     }
                     //$condition = 'whereIn("' . $column_id_fk . '",[' . $column['select_rules'] . '])';
                 }
@@ -467,25 +478,34 @@ class GeneradorCrudService
                 }*/
 
                 if ($column_idcliente_fk) {
-                    $condition .= '->where("idcliente", session()->get("idcliente") )';
+                    $tabla_get  .= '
+                    if(session()->get("idcliente")){
+                        $' . $model_name_fk . ' = $' . $model_name_fk . '->where("idcliente", session()->get("idcliente") );
+                    }
+                    ';
                 }
+
                 if ($column_idproyecto_fk) {
-                    $condition .= '->where("idproyecto", session()->get("idproyecto") )';
+                    $tabla_get  .= '
+                    if(session()->get("idproyecto")){
+                        $' . $model_name_fk . ' = $' . $model_name_fk . '->where("idproyecto", session()->get("idproyecto") );
+                    }
+                    ';
                 }
 
-                $condition .= '->orderBy("' . $column_name_fk . '","ASC")';
+                $tabla_get  .= '
+                $' . $model_name_fk . ' = $' . $model_name_fk . '->orderBy("' . $column_name_fk . '","ASC")
+                ->get();
+                ';              
 
-                $tabla = '
-                "' . $model_name_fk . '" => ' . $model_name_fk . '::' . $condition . '->get(), 
+
+                $tabla_add = '
+                "' . $model_name_fk . '" => $' . $model_name_fk . ', 
                 ';
-
-                $use = '
-                use App\Models\\' . $model_name_fk . ';
-                ';
-
-                $tablas_asociadas .= $tabla;
-
+                
                 $tablas_asociadas_uses .= $use;
+                $tablas_asociadas_get .= $tabla_get;
+                $tablas_asociadas .= $tabla_add;                
 
                 //filter
                 $filter = str_replace('%OBJETO_VARIABLE%', $model_name_fk, $filter);
@@ -495,8 +515,7 @@ class GeneradorCrudService
                 $filters_variables .= $filter_variable;
 
                 $filter_variable_all = str_replace('%OBJETO_VARIABLE%', $model_name_fk, $filter_variable_all);
-
-                $filter_variable_all = str_replace('%VARIABLE_CONDITION%', $condition, $filter_variable_all);
+                //$filter_variable_all = str_replace('%VARIABLE_CONDITION%', $condition, $filter_variable_all);
                 $filters_variables .= $filter_variable_all;
             }
             if (in_array($column['type_html'], ['date', 'datetime-local'])) {
@@ -534,36 +553,35 @@ class GeneradorCrudService
             }
 
             if ($column['type_html'] == 'html') {
-
-                $tabla = '
-                "etiquetasDocumentos" => EtiquetasDocumentos104::orderBy("alias","ASC")->get(), 
-                ';
-
                 $use = '
                 use App\Models\EtiquetasDocumentos104;
                 ';
+                $tabla_add = '
+                "etiquetasDocumentos" => EtiquetasDocumentos104::orderBy("alias","ASC")->get(), 
+                ';                
 
-                $tablas_asociadas .= $tabla;
                 $tablas_asociadas_uses .= $use;
+                $tablas_asociadas .= $tabla_add;
 
-                /*
-                    $pdf = '
+                /*  $pdf = '
                     $html = $' . $data['model_name'] . '->' . $column['name'] . ';
                     $html = $this->etiquetasDocumentosService->replaceVariables($html, $' . $data['model_name'] . '->' . $data['table_column_id'] . ');
                     $pdf = App::make("dompdf.wrapper");
                     Log::info($html);
                     $pdf->loadHTML($html);
                     $pdf->save(public_path() . "/docs/' . $data['model_name'] . '_" . $' . $data['model_name'] . '->' . $data['table_column_id'] . ' . ".pdf");
-                ';
-                */
+                ';  */
             }
         }
 
         $template_controller = str_replace('%FIELD_CHECKBOX%', $fields_checkobx, $template_controller);
-        $template_controller = str_replace('%TABLAS_ASOCIADAS%', $tablas_asociadas, $template_controller);
         $template_controller = str_replace('%TABLAS_ASOCIADAS_USE%', $tablas_asociadas_uses, $template_controller);
+        $template_controller = str_replace('%TABLAS_ASOCIADAS_GET%', $tablas_asociadas_get, $template_controller);
+        $template_controller = str_replace('%TABLAS_ASOCIADAS%', $tablas_asociadas, $template_controller);
+       
         $template_controller = str_replace('%FIELD_FILE_STORAGE%', $field_file_storage, $template_controller);
         $template_controller = str_replace('%FILTERS_CONTROLLER_INDEX%', $filtersControllerIndex, $template_controller);
+        $template_controller = str_replace('%FILTERS_VARIABLES_GET%', $tablas_asociadas_get, $template_controller);
         $template_controller = str_replace('%FILTERS_VARIABLES%', $filters_variables, $template_controller);
         $template_controller = str_replace('%FIELD_PDF%', $pdf, $template_controller);
 
@@ -750,10 +768,12 @@ class GeneradorCrudService
                 $model_name = $data['tables_fk'][$column['name']]['table_name_fk'];
                 $column_name = $data['tables_fk'][$column['name']]['table_column_fk_name'];
                 $column_id = $data['tables_fk'][$column['name']]['table_column_fk_id'];
+                $column_idproyecto_fk = $data['tables_fk'][$column['name']]['table_column_fk_idproyecto'];
+                $column_idcliente_fk = $data['tables_fk'][$column['name']]['table_column_fk_idcliente'];
 
                 $value = '
                     @foreach($' . $model_name . ' as $item)
-                    <option value="{{ $item->' . $column_id . ' }}"  {{ (isset($' . $data['crud_name'] . ') && $item->' . $column_id . ' == $' . $data['crud_name'] . '->' . $show_column_name . ')?"selected":"" }} {{ (request()->has("' . $column_id . '") && $item->' . $column_id . ' == request()->get("' . $column_id . '")) ? "selected" : "" }} >
+                    <option value="{{ $item->' . $column_id . ' }}"  {{ (isset($' . $data['crud_name'] . ') && $item->' . $column_id . ' == $' . $data['crud_name'] . '->' . $show_column_name . ')?"selected":"" }} {{ (session()->has("' . $column_id . '") && $item->' . $column_id . ' == session()->get("' . $column_id . '")) ? "selected" : "" }} >
                     {{ $item->' . $column_name . ' }}
                     </option>
                     @endforeach';
@@ -871,8 +891,9 @@ class GeneradorCrudService
 
     public function generateCrudDatatable($data)
     {
+        Log::info('GeneradorCrudService - generateCrudDatatable');
+        
         //create datatable
-
         $file = fopen("../app/DataTables/" . $data['datatable_name'] . ".php", "w") or die("Unable to open file - datatable " . $data['datatable_name']);
 
         //fields
@@ -905,11 +926,11 @@ class GeneradorCrudService
                 } else if ($column['type_html'] == 'password') {
                     $return = 'return "---";';
                 } else if ($column['type_html'] == 'file') {
-                    $return = 'return new HtmlString(\'
+                    $return = 'return ($' . $data['model_name'] . '->' . $column['name'] . ' ?(new HtmlString(\'
                     <a href="/images/' . '\'.$' . $data['model_name'] . '->' . $column['name'] . '.\'" target="_blank">
                     <img src="/images/' . '\'.$auxiliarService->getImageFile($' . $data['model_name'] . '->' . $column['name'] . ').\'"  title="\'.$' . $data['model_name'] . '->' . $column['name'] . '.\'" alt="\'.$' . $data['model_name'] . '->' . $column['name'] . '.\'" border="0" width="40" class="img-rounded" />
                     </a>
-                    \');';
+                    \') ):"");';
                 } else {
                     $return = 'return mb_convert_encoding( $%OBJETO_VARIABLE%->' . $column['name'] . ', "UTF-8", "UTF-8");';
                 }
@@ -940,6 +961,18 @@ class GeneradorCrudService
         $template_datatable_queries_all = '';
         $datatables_fields_query = env('DATATABLES_FIELDS_QUERY', 'idcliente,idproyecto,idrol');
         $datatables_queries = explode(',', $datatables_fields_query);
+
+        $filters_rules = '';
+
+        if (isset($data['rules']) && $data['rules']) {
+            $rules_array = explode(';', $data['rules']);
+            foreach ($rules_array as $rule) {
+                $rule_array = explode(',', $rule);
+                $filters_rules .= '
+                $query->where("' . $rule_array[0] . '", "' . $rule_array[1] . '","' . $rule_array[2] . '");
+                ';
+            }
+        }
 
         $filters = '';
         $template_filters = '
@@ -1047,6 +1080,7 @@ class GeneradorCrudService
 
         $template = str_replace('%FIELDS_DATATABLES_DATATABLE%', $template_fields_all, $template);
         $template = str_replace('%FIELDS_DATATABLES_GETCOLUMNS%', $template_columns_all, $template);
+        $template = str_replace('%DATATABLE_QUERY_FILTERS_RULES%', $filters_rules, $template);
         $template = str_replace('%DATATABLE_QUERY_FILTERS%', $template_datatable_queries_all, $template);
         $template = str_replace('%DATATABLE_QUERY_FILTERS_DYNAMIC%', $filters, $template);
         $template_filters_texto = substr($template_filters_texto, 0, -1);

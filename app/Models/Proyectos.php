@@ -24,5 +24,10 @@ class Proyectos extends Model
 
     public $timestamps = false; 
 
-		
+	//relation
+
+    public function cliente() { 
+        return $this->belongsTo(Clientes::class,"idcliente","idcliente"); 
+    }
+
 }
