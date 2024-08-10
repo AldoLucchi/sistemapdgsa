@@ -79,6 +79,7 @@
                                         <td><b>Default/</b><br><b>Extra</b></td>
                                         <td><b>Incluir <br>campo</b></td>
                                         <td><b>Incluir <br>list</b></td>
+                                        <td><b>Readonly</b></td>
                                         <td><b>Alias</b></td>
                                         <td><b>Seleccionar FK</b></td>
                                         <td><b>Reglas FK</b></td>
@@ -98,6 +99,9 @@
                                         </td>
                                         <td>
                                             <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field.'_list' }}" id="{{ $key.'_'.$column->Field.'_list' }}">
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field.'_readonly' }}" id="{{ $key.'_'.$column->Field.'_readonly' }}">
                                         </td>
                                         <td>
                                             <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_alias' }}" id="{{ $key.'_'.$column->Field.'_alias' }}">

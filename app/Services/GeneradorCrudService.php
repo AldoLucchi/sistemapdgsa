@@ -42,7 +42,7 @@ class GeneradorCrudService
             $alias_opcion = $request['alias_opcion'];
             $alias_opcion_individual = $request['alias_opcion_individual'];
             $rules = $request['reglas'];
-            $crud_permisos = isset($request['crud_permisos'])?$request['crud_permisos']:'';
+            $crud_permisos = isset($request['crud_permisos']) ? $request['crud_permisos'] : '';
 
             $crud_permisos_create = true;
             $crud_permisos_read = true;
@@ -82,6 +82,7 @@ class GeneradorCrudService
                 $column_select_rules = $table_crud . '_' . $colum->Field . '_select_rules';
                 $column_select_alias = $table_crud . '_' . $colum->Field . '_alias';
                 $column_select_list = $table_crud . '_' . $colum->Field . '_list';
+                $column_select_readonly = $table_crud . '_' . $colum->Field . '_readonly';
                 $column_show_fk = $table_crud . '_' . $colum->Field . '_show_fk';
                 $column_show_fk_permisos = $table_crud . '_' . $colum->Field . '_show_fk_permisos';
 
@@ -153,6 +154,10 @@ class GeneradorCrudService
                 //in list
                 if (isset($request[$column_select_list]) && !empty($request[$column_select_list]) &&  $column_select_list && $column_select_list != 'NULL' && $column_select_list != NULL) {
                     $table_column_detail['incluir_list'] = $request[$column_select_list];
+                }
+
+                if (isset($request[$column_select_readonly]) && !empty($request[$column_select_readonly]) &&  $column_select_readonly && $column_select_readonly != 'NULL' && $column_select_readonly != NULL) {
+                    $table_column_detail['readonly'] = $request[$column_select_readonly];
                 }
 
                 //incude field
@@ -460,7 +465,7 @@ class GeneradorCrudService
 
                 $tabla_get = '
                 $' . $model_name_fk . ' = ' . $model_name_fk . '::select("*"); 
-                ';                
+                ';
 
                 if (isset($column['select_rules'])) {
                     $select_rules_array = explode(';', $column['select_rules']);
@@ -496,16 +501,16 @@ class GeneradorCrudService
                 $tabla_get  .= '
                 $' . $model_name_fk . ' = $' . $model_name_fk . '->orderBy("' . $column_name_fk . '","ASC")
                 ->get();
-                ';              
+                ';
 
 
                 $tabla_add = '
                 "' . $model_name_fk . '" => $' . $model_name_fk . ', 
                 ';
-                
+
                 $tablas_asociadas_uses .= $use;
                 $tablas_asociadas_get .= $tabla_get;
-                $tablas_asociadas .= $tabla_add;                
+                $tablas_asociadas .= $tabla_add;
 
                 //filter
                 $filter = str_replace('%OBJETO_VARIABLE%', $model_name_fk, $filter);
@@ -558,7 +563,7 @@ class GeneradorCrudService
                 ';
                 $tabla_add = '
                 "etiquetasDocumentos" => EtiquetasDocumentos104::orderBy("alias","ASC")->get(), 
-                ';                
+                ';
 
                 $tablas_asociadas_uses .= $use;
                 $tablas_asociadas .= $tabla_add;
@@ -578,7 +583,7 @@ class GeneradorCrudService
         $template_controller = str_replace('%TABLAS_ASOCIADAS_USE%', $tablas_asociadas_uses, $template_controller);
         $template_controller = str_replace('%TABLAS_ASOCIADAS_GET%', $tablas_asociadas_get, $template_controller);
         $template_controller = str_replace('%TABLAS_ASOCIADAS%', $tablas_asociadas, $template_controller);
-       
+
         $template_controller = str_replace('%FIELD_FILE_STORAGE%', $field_file_storage, $template_controller);
         $template_controller = str_replace('%FILTERS_CONTROLLER_INDEX%', $filtersControllerIndex, $template_controller);
         $template_controller = str_replace('%FILTERS_VARIABLES_GET%', $tablas_asociadas_get, $template_controller);
@@ -748,7 +753,7 @@ class GeneradorCrudService
         $template_fields_select = file_get_contents('../app/Crud/template_view_field_select.php');
         $template_fields_html = file_get_contents('../app/Crud/template_view_field_html.php');
 
-        $fields_all = '';
+        $fields_all = '<input type="hidden" name="redirect_url" id="redirect_url" value="{{ (request()->has("redirect_url")) ? request()->get("redirect_url") : "" }}">';
         $action_documento = '';
 
         foreach ($data['table_columns'] as $column) {
@@ -756,9 +761,13 @@ class GeneradorCrudService
 
             $show_column_name = $column['name'];
             $show_column_name_alias = $column['name'];
+            $show_column_readonly = '';
 
             if (isset($column['alias'])) {
                 $show_column_name_alias = $column['alias'];
+            }
+            if (isset($column['readonly']) && $column['readonly']) {
+                $show_column_readonly = "readonly";
             }
 
             $value = '';
@@ -773,10 +782,14 @@ class GeneradorCrudService
 
                 $value = '
                     @foreach($' . $model_name . ' as $item)
-                    <option value="{{ $item->' . $column_id . ' }}"  {{ (isset($' . $data['crud_name'] . ') && $item->' . $column_id . ' == $' . $data['crud_name'] . '->' . $show_column_name . ')?"selected":"" }} {{ (session()->has("' . $column_id . '") && $item->' . $column_id . ' == session()->get("' . $column_id . '")) ? "selected" : "" }} >
+                    <option value="{{ $item->' . $column_id . ' }}"  {{ (isset($' . $data['crud_name'] . ') && $item->' . $column_id . ' == $' . $data['crud_name'] . '->' . $show_column_name . ')?"selected":"" }} {{ (session()->has("' . $column_id . '") && $item->' . $column_id . ' == session()->get("' . $column_id . '")) ? "selected" : "" }} {{ (request()->has("' . $column_id . '") && $item->' . $column_id . ' == request()->get("' . $column_id . '")) ? "selected" : "" }} >
                     {{ $item->' . $column_name . ' }}
                     </option>
                     @endforeach';
+
+                if (isset($column['readonly']) && $column['readonly']) {
+                    $show_column_readonly = '{!! !in_array("create",request()->segments())?"aria-readonly=\'true\' style=\'pointer-events: none;\'":"" !!}';
+                }
 
                 $template = str_replace('%FIELD_SELECT_OPTIONS%', $value, $template);
             } elseif ($column['type_html'] == 'html') {
@@ -800,8 +813,6 @@ class GeneradorCrudService
                 $template = $template_fields;
 
                 if ($data['table_column_id'] == $column['name']) {
-                    //$value_readonly = "readonly";
-                    //$column['type_html'] = 'hidden';
                     $template = '';
                 }
 
@@ -809,7 +820,6 @@ class GeneradorCrudService
 
                 $value = '( isset($' . $data['crud_name'] . ')?$' . $data['crud_name'] . '->' . $column['name'] . ':"")';
                 $value_file = '';
-                $value_readonly = "";
 
                 $field_style = "form-control form-control-solid";
                 $field_checked = '';
@@ -835,14 +845,14 @@ class GeneradorCrudService
                     $show_column_name = $show_column_name . '_file';
                 }
 
-
                 $template = str_replace('%FIELD_VALUE_SHOW%', $value, $template);
                 $template = str_replace('%FIELD_FILE%', $value_file, $template);
-                $template = str_replace('%FIELD_READONLY%', $value_readonly, $template);
+
                 $template = str_replace('%FIELD_STYLE%', $field_style, $template);
                 $template = str_replace('%FIELD_CHECKED%', $field_checked, $template);
             }
 
+            $template = str_replace('%FIELD_READONLY%', $show_column_readonly, $template);
             $template = str_replace('%FIELD%', $show_column_name, $template);
             $template = str_replace('%FIELD_ALIAS%', $show_column_name_alias, $template);
 
@@ -892,7 +902,7 @@ class GeneradorCrudService
     public function generateCrudDatatable($data)
     {
         Log::info('GeneradorCrudService - generateCrudDatatable');
-        
+
         //create datatable
         $file = fopen("../app/DataTables/" . $data['datatable_name'] . ".php", "w") or die("Unable to open file - datatable " . $data['datatable_name']);
 
@@ -1364,10 +1374,13 @@ class GeneradorCrudService
                 $template_datatable = str_replace("%OBJETO_DATATABLE%", $tableNameDatatable, $template_datatable);
 
                 if ($create) {
-                    $link = '<a href="{{ route("' . $tableNameDatatable . '.create") }}?' . $keyCrud . '={{ $' . $componentName . '->' . $keyCrud . ' }}" class="btn btn-primary float-end"> Agregar</a> ';
-                    $template_datatable = str_replace("%CREATE%", $link, $template_datatable);
+                    $link = '
+                    <a href="{{ route("' . $tableNameDatatable . '.create") }}?' . $keyCrud . '={{ $' . $componentName . '->' . $keyCrud . ' }}&&redirect_url={{ url()->current() }}" class="btn btn-primary float-end"> 
+                    Agregar
+                    </a> ';
+                    $template_datatable = str_replace("%ACCORDION_CREATE%", $link, $template_datatable);
                 } else {
-                    $template_datatable = str_replace("%CREATE%", '', $template_datatable);
+                    $template_datatable = str_replace("%ACCORDION_CREATE%", '', $template_datatable);
                 }
 
                 $file_datatable_show = fopen('../resources/views/cruds/' . $componentName . '/datatable_' . $crudName . '.blade.php', "w") or die("Unable to open file - view datatable_'.$crudName.'.blade.php");

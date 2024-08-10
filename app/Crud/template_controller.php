@@ -160,6 +160,10 @@ class %OBJETO_CONTROLLER% extends Controller
 
         $message =  ' %OBJETO_LABEL_INDIVIDUAL%: registro creado correctamente: ';
 
+        if(isset($request['redirect_url']) && $request['redirect_url']){
+          $rutaCrud = $request['redirect_url'];
+        }
+
         return redirect( $rutaCrud)->with('message',$message);
       } catch (Exception $e) {
           Log::info('%OBJETO_CONTROLLER% - store - Exception ' . $e->getMessage());

@@ -108,6 +108,7 @@
                                         <td><b>Default/<br> Extra</b></td>
                                         <td><b>Incluir <br>campo</b></td>
                                         <td><b>Incluir <br>list</b></td>
+                                        <td><b>Readonly</b></td>
                                         <td><b>Alias</b></td>
                                         <td><b>Seleccionar FK</b></td>
                                         <td><b>Reglas FK</b></td>
@@ -146,6 +147,9 @@
                                         </td>
                                         <td>
                                             <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field.'_list' }}" id="{{ $key.'_'.$column->Field.'_list' }}" {{ ($campoPreference && $campoPreference->incluir_list)?'checked':'' }}>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field.'_readonly' }}" id="{{ $key.'_'.$column->Field.'_readonly' }}" {{ ($campoPreference && isset($campoPreference->incluir_readonly) && $campoPreference->incluir_readonly)?'checked':'' }}>
                                         </td>
                                         <td>
                                             <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_alias' }}" id="{{ $key.'_'.$column->Field.'_alias' }}" value="{{ ($campoPreference)?$campoPreference->alias:'' }}">

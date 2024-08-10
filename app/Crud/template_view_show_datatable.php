@@ -5,7 +5,7 @@
         </button>        
     </h2>
     <div id="panel%OBJETO%Collapse" class="accordion-collapse collapse " aria-labelledby="panel%OBJETO%">
-        %CREATE%
+        %ACCORDION_CREATE%
         <div class="accordion-body">
             <!--begin::Card body-->
             <div class="card-body py-4">

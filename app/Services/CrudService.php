@@ -24,6 +24,7 @@ class CrudService
         foreach ($table_fk_columns as $colum) {
             $incluir_campo = (isset($request[$table_name . '_' . $colum->Field]) ? 1 : 0);
             $incluir_list = (isset($request[$table_name . '_' . $colum->Field . '_list']) ? 1 : 0);
+            $incluir_readonly = (isset($request[$table_name . '_' . $colum->Field . '_readonly']) ? 1 : 0);
             $alias = (isset($request[$table_name . '_' . $colum->Field . '_alias']) ? $request[$table_name . '_' . $colum->Field . '_alias'] : null);
             $select = (isset($request[$table_name . '_' . $colum->Field . '_select']) ? $request[$table_name . '_' . $colum->Field . '_select'] : null);
             $select_rules = (isset($request[$table_name . '_' . $colum->Field . '_select_rules']) ? $request[$table_name . '_' . $colum->Field . '_select_rules'] : null);
@@ -34,7 +35,8 @@ class CrudService
             }
 
             $campos .=  '{"field": "' . $colum->Field . '", "type": "' . $colum->Type . '", "null": "' . $colum->Null . '", "key": "' . $colum->Key . '", "default": "' . $colum->Default . '", "extra": "' . $colum->Extra . '", ';
-            $campos .=  '"incluir_campo": ' . $incluir_campo . ', "incluir_list": ' . $incluir_list . ', "alias": "' . $alias . '",  "select": "' . $select . '",  "select_rules": "' . $select_rules . '",  "show_fk": "' . $show_fk . '",  "show_fk_permisos": "' . $show_fk_permisos . '" },';
+            $campos .=  '"incluir_campo": ' . $incluir_campo . ', "incluir_list": ' . $incluir_list . ', "incluir_readonly": ' . $incluir_readonly  . ', "alias": "' . $alias . '",';
+            $campos .=  '"select": "' . $select . '",  "select_rules": "' . $select_rules . '",  "show_fk": "' . $show_fk . '",  "show_fk_permisos": "' . $show_fk_permisos . '" },';
         }
         $campos = substr($campos, 0, -1);
         $campos .= ']';
