@@ -4,7 +4,7 @@
 
     </label>
     </label>
-    <textarea id="%FIELD%" name="%FIELD%" class="tox-target" %FIELD_READONLY%>
+    <textarea id="%FIELD%" name="%FIELD%" class="tox-target" %FIELD_READONLY% %FIELD_REQUIRED%>
     {{ %FIELD_VALUE_SHOW% }}
     </textarea>
 

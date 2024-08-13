@@ -56,6 +56,9 @@ class GoogleLoginController extends Controller
                 'descripcion' => 'login exitoso '.$googleUser->email,
                 'ip' => $this->getIP(),
                 'fecha' => $sysdate,
+                'tabla' => 'users',
+                'id' => $user->id,
+                'campoid' => 'id',
             ];
             
             $bitacoraService->insertBitacora($data);
@@ -68,6 +71,7 @@ class GoogleLoginController extends Controller
             'descripcion' => 'Error Login '.$googleUser->email,
             'ip' => $this->getIP(),
             'fecha' => $sysdate,
+            'tabla' => 'users',
         ];
         
         $bitacoraService->insertBitacora($data);

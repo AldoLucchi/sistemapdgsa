@@ -75,14 +75,16 @@ class GeneradorCrudService
 
             $tables_fk = [];
             $tables_crud_relation_fk = [];
-
             foreach ($table_crud_columns as $colum) {
-                $column_request = $table_crud . '_' . $colum->Field;
+                $column_select_indice = $table_crud . '_' . $colum->Field . '_indice';
+                $column_request_include = $table_crud . '_' . $colum->Field;
+                $column_select_list = $table_crud . '_' . $colum->Field . '_list';  
+                $column_select_readonly = $table_crud . '_' . $colum->Field . '_readonly';
+                $column_select_required = $table_crud . '_' . $colum->Field . '_required';              
+                $column_select_alias = $table_crud . '_' . $colum->Field . '_alias';
+                $column_select_regex = $table_crud . '_' . $colum->Field . '_regex';               
                 $column_select_request = $table_crud . '_' . $colum->Field . '_select';
                 $column_select_rules = $table_crud . '_' . $colum->Field . '_select_rules';
-                $column_select_alias = $table_crud . '_' . $colum->Field . '_alias';
-                $column_select_list = $table_crud . '_' . $colum->Field . '_list';
-                $column_select_readonly = $table_crud . '_' . $colum->Field . '_readonly';
                 $column_show_fk = $table_crud . '_' . $colum->Field . '_show_fk';
                 $column_show_fk_permisos = $table_crud . '_' . $colum->Field . '_show_fk_permisos';
 
@@ -126,9 +128,36 @@ class GeneradorCrudService
                     'type_html' => $type_html
                 ];
 
+                 
+
+                //indice
+                 if (isset($request[$column_select_indice]) && !empty($request[$column_select_indice]) &&  $column_select_indice && $column_select_indice != 'NULL' && $column_select_indice != NULL) {
+                    $table_column_detail['indice'] = $request[$column_select_indice];
+                }               
+
+                //in list
+                if (isset($request[$column_select_list]) && !empty($request[$column_select_list]) &&  $column_select_list && $column_select_list != 'NULL' && $column_select_list != NULL) {
+                    $table_column_detail['incluir_list'] = $request[$column_select_list];
+                }
+
+                //readonly
+                if (isset($request[$column_select_readonly]) && !empty($request[$column_select_readonly]) &&  $column_select_readonly && $column_select_readonly != 'NULL' && $column_select_readonly != NULL) {
+                    $table_column_detail['readonly'] = $request[$column_select_readonly];
+                }
+
+                //required
+                if (isset($request[$column_select_required]) && !empty($request[$column_select_required]) &&  $column_select_required && $column_select_required != 'NULL' && $column_select_required != NULL) {
+                    $table_column_detail['required'] = $request[$column_select_required];
+                }
+
                 //alias
                 if (isset($request[$column_select_alias]) && !empty($request[$column_select_alias]) &&  $column_select_alias && $column_select_alias != 'NULL' && $column_select_alias != NULL) {
                     $table_column_detail['alias'] = $request[$column_select_alias];
+                }
+
+                 //regex
+                 if (isset($request[$column_select_regex]) && !empty($request[$column_select_regex]) &&  $column_select_regex && $column_select_regex != 'NULL' && $column_select_regex != NULL) {
+                    $table_column_detail['regex'] = $request[$column_select_regex];
                 }
 
                 //fk
@@ -149,23 +178,18 @@ class GeneradorCrudService
                             $tables_crud_relation_fk[$colum->Field]['permisos'] = $request[$column_show_fk_permisos];
                         }
                     }
-                }
-
-                //in list
-                if (isset($request[$column_select_list]) && !empty($request[$column_select_list]) &&  $column_select_list && $column_select_list != 'NULL' && $column_select_list != NULL) {
-                    $table_column_detail['incluir_list'] = $request[$column_select_list];
-                }
-
-                if (isset($request[$column_select_readonly]) && !empty($request[$column_select_readonly]) &&  $column_select_readonly && $column_select_readonly != 'NULL' && $column_select_readonly != NULL) {
-                    $table_column_detail['readonly'] = $request[$column_select_readonly];
-                }
-
+                }   
+                
                 //incude field
-                if (isset($request[$column_request])) {
+                if (isset($request[$column_request_include])) {
                     $all_columns_null = false;
 
                     $table_columns[] =  $table_column_detail;
                     $table_columns_string .= "'" . $colum->Field . "',";
+                }
+
+                if (!isset($request[$column_request_include])) {
+                    $all_columns_null = false;
                 }
 
                 //pk
@@ -184,7 +208,6 @@ class GeneradorCrudService
                 $table_columns_all_null[] = $table_column_detail;
                 $table_columns_all_null_string .= "'" . $colum->Field . "',";
             }
-
             // all columns o selected columns
             if ($all_columns_null) {
                 $table_columns =  $table_columns_all_null;
@@ -304,7 +327,6 @@ class GeneradorCrudService
         //$this->generateCrudMenu($data);
         //$this->generateCrudBreadcrumb($data);
 
-        //dd($table_columns);
 
         $this->limpiarCache();
     }
@@ -756,18 +778,29 @@ class GeneradorCrudService
         $fields_all = '<input type="hidden" name="redirect_url" id="redirect_url" value="{{ (request()->has("redirect_url")) ? request()->get("redirect_url") : "" }}">';
         $action_documento = '';
 
-        foreach ($data['table_columns'] as $column) {
+        $table_columns = $data['table_columns'];
+        //array_multisort(array_column($table_columns, 'indice'), SORT_ASC, $table_columns);
+
+         usort($table_columns, function($a, $b) {
+            return $a['indice'] <=> $b['indice'];
+        });
+        foreach ($table_columns as $column) {
             $template = '';
 
             $show_column_name = $column['name'];
             $show_column_name_alias = $column['name'];
-            $show_column_readonly = '';
+            $column_readonly = '';
+            $column_required = '';
+            $column_regex = '';
 
             if (isset($column['alias'])) {
                 $show_column_name_alias = $column['alias'];
             }
             if (isset($column['readonly']) && $column['readonly']) {
-                $show_column_readonly = "readonly";
+                $column_readonly = "readonly";
+            }
+            if (isset($column['required']) && $column['required']) {
+                $column_required = "required";
             }
 
             $value = '';
@@ -788,7 +821,7 @@ class GeneradorCrudService
                     @endforeach';
 
                 if (isset($column['readonly']) && $column['readonly']) {
-                    $show_column_readonly = '{!! !in_array("create",request()->segments())?"aria-readonly=\'true\' style=\'pointer-events: none;\'":"" !!}';
+                    $column_readonly = '{!! !in_array("create",request()->segments())?"aria-readonly=\'true\' style=\'pointer-events: none;\'":"" !!}';
                 }
 
                 $template = str_replace('%FIELD_SELECT_OPTIONS%', $value, $template);
@@ -810,6 +843,10 @@ class GeneradorCrudService
                 <!--end::Menu item-->
                 '; */
             } else {
+                if (isset($column['regex']) && $column['regex']) {
+                    $column_regex = $column['regex'];
+                }
+
                 $template = $template_fields;
 
                 if ($data['table_column_id'] == $column['name']) {
@@ -850,9 +887,11 @@ class GeneradorCrudService
 
                 $template = str_replace('%FIELD_STYLE%', $field_style, $template);
                 $template = str_replace('%FIELD_CHECKED%', $field_checked, $template);
+                $template = str_replace('%FIELD_PATTERN%', $column_regex, $template);
             }
 
-            $template = str_replace('%FIELD_READONLY%', $show_column_readonly, $template);
+            $template = str_replace('%FIELD_READONLY%', $column_readonly, $template);
+            $template = str_replace('%FIELD_REQUIRED%', $column_required, $template);
             $template = str_replace('%FIELD%', $show_column_name, $template);
             $template = str_replace('%FIELD_ALIAS%', $show_column_name_alias, $template);
 
