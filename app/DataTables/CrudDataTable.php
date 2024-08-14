@@ -45,7 +45,7 @@ class CrudDataTable extends DataTable
                     if ($campos_array) {
                         foreach ($campos_array as $campo) {
                             if ($campo->show_fk && $campo->show_fk == $crud->id) {
-                                $accordions = $crud_generado->nombre_componente.', ';
+                                $accordions .= $crud_generado->nombre_componente.', ';
                             }
                         }
                     }

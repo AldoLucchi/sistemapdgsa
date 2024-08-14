@@ -132,6 +132,9 @@ class GeneradorCrudService
                 if (isset($request[$column_select_indice]) && !empty($request[$column_select_indice]) &&  $column_select_indice && $column_select_indice != 'NULL' && $column_select_indice != NULL) {
                     $table_column_detail['indice'] = $request[$column_select_indice];
                 }
+                else{
+                    $table_column_detail['indice'] = 99;
+                }
 
                 //in list
                 if (isset($request[$column_select_list]) && !empty($request[$column_select_list]) &&  $column_select_list && $column_select_list != 'NULL' && $column_select_list != NULL) {
@@ -415,6 +418,8 @@ class GeneradorCrudService
 
     public function generateCrudController($data)
     {
+        Log::info('GeneradorCrudService - generateCrudController');
+
         //create controller
 
         //create dir 
@@ -609,6 +614,7 @@ class GeneradorCrudService
 
     public function generateCrudViews($data)
     {
+        Log::info('GeneradorCrudService - generateCrudViews');
 
         //create dir views
         if (!is_dir("../resources/views/cruds")) {
@@ -1133,6 +1139,8 @@ class GeneradorCrudService
 
     public function generateCrudLivewire($data)
     {
+        Log::info('GeneradorCrudService - generateCrudLivewire');
+
         //create livewire
 
         //create dir 
@@ -1309,6 +1317,7 @@ class GeneradorCrudService
     public function generateCrudRelations($data)
     {
         Log::info('GeneradorCrudService - generateCrudRelations ----');
+
         $template_show_datatable = file_get_contents('../app/Crud/template_view_show_datatable.php');
         $crudName = $data['crud_name'];
         $tableNameLabel = $data['table_name_label'];
@@ -1321,6 +1330,10 @@ class GeneradorCrudService
             $permisos = (isset($crud_relation['permisos']) ? $crud_relation['permisos'] : null);
             Log::info($keyCrud);
             Log::info($crud_relation);
+
+            if($permisos){
+                $permisos = explode(',', $permisos);
+            }
 
             if ($crud) {
                 //controller---
@@ -1346,7 +1359,6 @@ class GeneradorCrudService
                     $filters' . $crudName . ' = [];
                     $filters' . $crudName . ' = ["rutaDatatable" => true];
                     ';
-
 
                 foreach ($permisos as $key => $permiso) {
                     if ($permiso == 'read') {
@@ -1444,9 +1456,6 @@ class GeneradorCrudService
             }
         }
     }
-
-
-
 
     public function generateCrudMenu($data)
     {
