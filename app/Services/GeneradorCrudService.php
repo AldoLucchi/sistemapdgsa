@@ -83,6 +83,7 @@ class GeneradorCrudService
                 $column_select_required = $table_crud . '_' . $colum->Field . '_required';
                 $column_select_alias = $table_crud . '_' . $colum->Field . '_alias';
                 $column_select_regex = $table_crud . '_' . $colum->Field . '_regex';
+                $column_select_maxlength = $table_crud . '_' . $colum->Field . '_maxlength';
                 $column_select_request = $table_crud . '_' . $colum->Field . '_select';
                 $column_select_rules = $table_crud . '_' . $colum->Field . '_select_rules';
                 $column_show_fk = $table_crud . '_' . $colum->Field . '_show_fk';
@@ -158,6 +159,11 @@ class GeneradorCrudService
                 //regex
                 if (isset($request[$column_select_regex]) && !empty($request[$column_select_regex]) &&  $column_select_regex && $column_select_regex != 'NULL' && $column_select_regex != NULL) {
                     $table_column_detail['regex'] = $request[$column_select_regex];
+                }
+
+                //maxlength
+                if (isset($request[$column_select_maxlength]) && !empty($request[$column_select_maxlength]) &&  $column_select_maxlength && $column_select_maxlength != 'NULL' && $column_select_maxlength != NULL) {
+                    $table_column_detail['maxlength'] = $request[$column_select_maxlength];
                 }
 
                 //fk
@@ -788,6 +794,7 @@ class GeneradorCrudService
             $column_readonly = '';
             $column_required = '';
             $column_regex = '';
+            $column_maxlength = '';
 
             if (isset($column['alias'])) {
                 $show_column_name_alias = $column['alias'];
@@ -843,6 +850,10 @@ class GeneradorCrudService
                     $column_regex = $column['regex'];
                 }
 
+                if (isset($column['maxlength']) && $column['maxlength']) {
+                    $column_maxlength = 'maxlength="' . $column['maxlength'] . '"';
+                }
+
                 $template = $template_fields;
 
                 if ($data['table_column_id'] == $column['name']) {
@@ -884,6 +895,7 @@ class GeneradorCrudService
                 $template = str_replace('%FIELD_STYLE%', $field_style, $template);
                 $template = str_replace('%FIELD_CHECKED%', $field_checked, $template);
                 $template = str_replace('%FIELD_PATTERN%', $column_regex, $template);
+                $template = str_replace('%FIELD_MAXLENGTH%', $column_maxlength, $template);
             }
 
             $template = str_replace('%FIELD_READONLY%', $column_readonly, $template);

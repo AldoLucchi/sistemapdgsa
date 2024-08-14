@@ -100,10 +100,11 @@
                                             <table class="my-5 table table-bordered   border border-secondary bg-primary">
                                                 <tr>
                                                     <td><b>Indice</td>
-                                                    <td><b>Incluir campo</b></td>
-                                                    <td><b>Incluir list</b></td>
+                                                    <td><b>Incluir <br>campo</b></td>
+                                                    <td><b>Incluir <br>list</b></td>
                                                     <td><b>Alias</b></td>
-                                                    <td><b>Validación Regex</b></td>
+                                                    <td><b>Validación <br>Regex</b></td>
+                                                    <td><b>Validación <br>maxlength</b></td>
                                                     <td><b>Requerido</b></td>
                                                     <td><b>Readonly</b></td>                                                    
                                                 </tr>
@@ -124,6 +125,9 @@
                                                         <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_regex' }}" id="{{ $key.'_'.$column->Field.'_regex' }}" >
                                                     </td>
                                                     <td>
+                                                        <input type="number" class="form-input" name="{{ $key.'_'.$column->Field.'_maxlength' }}" id="{{ $key.'_'.$column->Field.'_maxlength' }}" size="2" >
+                                                    </td>
+                                                    <td>
                                                         <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field.'_required' }}" id="{{ $key.'_'.$column->Field.'_required' }}">
                                                     </td>
                                                     <td>
@@ -132,10 +136,10 @@
                                                 </tr>
                                                 <tr>
 
-                                                    <td colspan=2><b>Seleccionar FK</b></td>
-                                                    <td><b>Reglas FK</b></td>
-                                                    <td colspan=2><b>Incluir Acorddion en:</b></td>
-                                                    <td colspan=2><b>Permisos Acorddion</b></td>
+                                                    <td colspan=2><b>Seleccionar <br>FK</b></td>
+                                                    <td><b>Reglas <br>FK</b></td>
+                                                    <td colspan=2><b>Incluir <br>Acorddion en:</b></td>
+                                                    <td colspan=2><b>Permisos <br>Acorddion</b></td>
 
                                                 </tr>
                                                 <tr>

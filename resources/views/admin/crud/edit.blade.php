@@ -149,6 +149,7 @@
                                                     <td><b>Incluir <br>list</b></td>
                                                     <td><b>Alias</b></td>
                                                     <td><b>Validación <br> Regex</b></td>
+                                                    <td><b>Validación <br> maxlength</b></td>
                                                     <td><b>Requerido</b></td>
                                                     <td><b>Readonly</b></td>                                                   
                                                 </tr>
@@ -167,6 +168,9 @@
                                                     </td>
                                                     <td>
                                                         <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_regex' }}" id="{{ $key.'_'.$column->Field.'_regex' }}"  value="{{ ($campoPreference && isset($campoPreference->regex) && $campoPreference->regex)?$campoPreference->regex:'' }}">
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" class="form-input" name="{{ $key.'_'.$column->Field.'_maxlength' }}" id="{{ $key.'_'.$column->Field.'_maxlength' }}" size="2" value="{{ ($campoPreference && isset($campoPreference->maxlength))?$campoPreference->maxlength:'' }}">
                                                     </td>
                                                     <td>
                                                         <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field.'_required' }}" id="{{ $key.'_'.$column->Field.'_required' }}" {{ ($campoPreference && isset($campoPreference->required) && $campoPreference->required)?'checked':'' }}>
