@@ -202,12 +202,29 @@ class CrudController extends Controller
 
     public function crudRefresh($crud_id)
     {
-        Log::info('CrudController - update');
+        Log::info('CrudController - crudRefresh');
         try {
             $crud = $this->generadorCrudService->crudRefresh($crud_id);
 
             if ($crud) {
                 $message = 'Proceso completado. CRUD refrescado correctamente';
+
+                return redirect('/admin/crud')->with('message', $message);
+            }
+            return redirect('/admin/crud')->with('message-error', 'Error');
+        } catch (Exception $e) {
+            return redirect('/admin/crud')->with('message-error', $e->getMessage());
+        }
+    }
+
+    public function crudRefreshAll()
+    {
+        Log::info('CrudController - crudRefreshAll');
+        try {
+            $crud = $this->generadorCrudService->crudRefreshAll();
+
+            if ($crud) {
+                $message = 'Proceso completado. CRUDs refrescados correctamente';
 
                 return redirect('/admin/crud')->with('message', $message);
             }

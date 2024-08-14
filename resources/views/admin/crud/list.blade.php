@@ -26,6 +26,16 @@
             <div class="card-toolbar">
                 <!--begin::Toolbar-->
                 <div class="d-flex justify-content-end" data-kt-crud-table-toolbar="base">
+
+                    <!--begin::Add crud-->
+                    <!--
+                    <a href="{{ url('/admin/crudRefreshAll' ) }}" class="btn btn-primary me-5">
+                        {!! getIcon('arrows-circle', 'fs-2', '', 'i') !!}
+                        Refresh All
+                    </a>
+                    -->
+                    <!--end::Add crud-->
+
                     <!--begin::Add crud-->
                     <a href="{{ url('/admin/crud/create' ) }}" class="btn btn-primary">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
@@ -61,7 +71,6 @@
         document.getElementById('mySearchInput').addEventListener('keyup', function() {
             window.LaravelDataTables['crud-table'].search(this.value).draw();
         });
-       
     </script>
     @endpush
 

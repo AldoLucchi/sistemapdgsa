@@ -131,8 +131,7 @@ class GeneradorCrudService
                 //indice
                 if (isset($request[$column_select_indice]) && !empty($request[$column_select_indice]) &&  $column_select_indice && $column_select_indice != 'NULL' && $column_select_indice != NULL) {
                     $table_column_detail['indice'] = $request[$column_select_indice];
-                }
-                else{
+                } else {
                     $table_column_detail['indice'] = 99;
                 }
 
@@ -1331,7 +1330,7 @@ class GeneradorCrudService
             Log::info($keyCrud);
             Log::info($crud_relation);
 
-            if($permisos){
+            if ($permisos) {
                 $permisos = explode(',', $permisos);
             }
 
@@ -1623,7 +1622,7 @@ class GeneradorCrudService
                 }
             }
 
-            foreach ( $accordions as $accordion_id){
+            foreach ($accordions as $accordion_id) {
                 $this->crudRefreshProcess($accordion_id);
             }
 
@@ -1661,6 +1660,35 @@ class GeneradorCrudService
 
             return $result;
         }
+        return false;
+    }
+
+    public function crudRefreshAll()
+    {
+        $crudsRefresh = [];
+        $cruds = Crud::where('estatus', 1)->get();
+
+        if ($cruds) {
+            foreach ($cruds as $crud_generado) {
+                $campos_array = json_decode($crud_generado->campos);
+                if ($campos_array) {
+                    foreach ($campos_array as $campo) {
+                        if (isset($campo->show_fk) && $campo->show_fk) {
+                            //
+                        } else {
+                            $crudsRefresh[] = $crud_generado->id;
+                        }
+                    }
+                }
+            }
+
+            foreach ($crudsRefresh as $crud) {
+                $this->crudRefreshProcess($crud);
+            }
+
+            return true;
+        }
+
         return false;
     }
 }
