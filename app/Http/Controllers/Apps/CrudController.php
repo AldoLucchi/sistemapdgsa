@@ -122,7 +122,7 @@ class CrudController extends Controller
     public function edit($crud_id)
     {
         $crud = Crud::find($crud_id);
-        $crud_campos = json_decode($crud->campos);
+        $crud_campos = (isset($crud->campos)?json_decode($crud->campos):[]);
         $cruds_created = []; //Crud::pluck('name')->toArray();
         $cruds_availables = $cruds_filtered =  $cruds_filtered_columns = [];
         $tables = DB::select('SHOW TABLES'); // returns an array of stdObjects  

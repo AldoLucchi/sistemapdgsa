@@ -1630,6 +1630,7 @@ class GeneradorCrudService
 
         if ($crud) {
             $crud_campos = $crud->toArray();
+            $crud_campos['crud_id'] = $crud_id;
             $campos_array = json_decode($crud->campos, true);
             foreach ($campos_array as $campo) {
                 $tablaCampo = $crud->nombre . '_' . $campo['field'];
