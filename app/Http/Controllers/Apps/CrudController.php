@@ -53,10 +53,10 @@ class CrudController extends Controller
         ];
 
         $cruds_generated = Crud::all();
-        $tables_in = 'Tables_in_'.env('DB_DATABASE');
+        $tables_in = 'Tables_in_' . env('DB_DATABASE');
 
         foreach ($tables as $i => $crud_table) {
-            
+
             $table_name = $crud_table->$tables_in;
 
             if (!in_array($table_name, $tables_excluded)) {
@@ -99,7 +99,7 @@ class CrudController extends Controller
             if ($crud) {
                 $request['crud_id'] = $crud->id;
 
-                
+
                 $crudGenerado = $this->generadorCrudService->store($request->all());
 
                 if ($crudGenerado) {
@@ -138,7 +138,7 @@ class CrudController extends Controller
 
         $cruds_generated = Crud::all();
 
-        $tables_in = 'Tables_in_'.env('DB_DATABASE');
+        $tables_in = 'Tables_in_' . env('DB_DATABASE');
 
         foreach ($tables as $i => $crud_table) {
             $table_name = $crud_table->$tables_in;
@@ -185,7 +185,7 @@ class CrudController extends Controller
         try {
             $crud = $this->crudService->store($request->all());
 
-            if ($crud) {                
+            if ($crud) {
 
                 $crudGenerado = $this->generadorCrudService->store($request->all());
 
@@ -198,7 +198,22 @@ class CrudController extends Controller
         } catch (Exception $e) {
             return redirect('/admin/crud')->with('message-error', $e->getMessage());
         }
+    }
 
-        
+    public function crudRefresh($crud_id)
+    {
+        Log::info('CrudController - update');
+        try {
+            $crud = $this->generadorCrudService->crudRefresh($crud_id);
+
+            if ($crud) {
+                $message = 'Proceso completado. CRUD refrescado correctamente';
+
+                return redirect('/admin/crud')->with('message', $message);
+            }
+            return redirect('/admin/crud')->with('message-error', 'Error');
+        } catch (Exception $e) {
+            return redirect('/admin/crud')->with('message-error', $e->getMessage());
+        }
     }
 }

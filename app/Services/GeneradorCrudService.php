@@ -78,11 +78,11 @@ class GeneradorCrudService
             foreach ($table_crud_columns as $colum) {
                 $column_select_indice = $table_crud . '_' . $colum->Field . '_indice';
                 $column_request_include = $table_crud . '_' . $colum->Field;
-                $column_select_list = $table_crud . '_' . $colum->Field . '_list';  
+                $column_select_list = $table_crud . '_' . $colum->Field . '_list';
                 $column_select_readonly = $table_crud . '_' . $colum->Field . '_readonly';
-                $column_select_required = $table_crud . '_' . $colum->Field . '_required';              
+                $column_select_required = $table_crud . '_' . $colum->Field . '_required';
                 $column_select_alias = $table_crud . '_' . $colum->Field . '_alias';
-                $column_select_regex = $table_crud . '_' . $colum->Field . '_regex';               
+                $column_select_regex = $table_crud . '_' . $colum->Field . '_regex';
                 $column_select_request = $table_crud . '_' . $colum->Field . '_select';
                 $column_select_rules = $table_crud . '_' . $colum->Field . '_select_rules';
                 $column_show_fk = $table_crud . '_' . $colum->Field . '_show_fk';
@@ -128,12 +128,10 @@ class GeneradorCrudService
                     'type_html' => $type_html
                 ];
 
-                 
-
                 //indice
-                 if (isset($request[$column_select_indice]) && !empty($request[$column_select_indice]) &&  $column_select_indice && $column_select_indice != 'NULL' && $column_select_indice != NULL) {
+                if (isset($request[$column_select_indice]) && !empty($request[$column_select_indice]) &&  $column_select_indice && $column_select_indice != 'NULL' && $column_select_indice != NULL) {
                     $table_column_detail['indice'] = $request[$column_select_indice];
-                }               
+                }
 
                 //in list
                 if (isset($request[$column_select_list]) && !empty($request[$column_select_list]) &&  $column_select_list && $column_select_list != 'NULL' && $column_select_list != NULL) {
@@ -155,8 +153,8 @@ class GeneradorCrudService
                     $table_column_detail['alias'] = $request[$column_select_alias];
                 }
 
-                 //regex
-                 if (isset($request[$column_select_regex]) && !empty($request[$column_select_regex]) &&  $column_select_regex && $column_select_regex != 'NULL' && $column_select_regex != NULL) {
+                //regex
+                if (isset($request[$column_select_regex]) && !empty($request[$column_select_regex]) &&  $column_select_regex && $column_select_regex != 'NULL' && $column_select_regex != NULL) {
                     $table_column_detail['regex'] = $request[$column_select_regex];
                 }
 
@@ -178,8 +176,8 @@ class GeneradorCrudService
                             $tables_crud_relation_fk[$colum->Field]['permisos'] = $request[$column_show_fk_permisos];
                         }
                     }
-                }   
-                
+                }
+
                 //incude field
                 if (isset($request[$column_request_include])) {
                     $all_columns_null = false;
@@ -311,7 +309,6 @@ class GeneradorCrudService
         }
     }
 
-
     public function generateCrud($data)
     {
         $this->generateCrudModelFK($data);
@@ -327,14 +324,8 @@ class GeneradorCrudService
         //$this->generateCrudMenu($data);
         //$this->generateCrudBreadcrumb($data);
 
-
         $this->limpiarCache();
     }
-
-
-
-
-
 
     public function generateCrudModelFK($data)
     {
@@ -781,7 +772,7 @@ class GeneradorCrudService
         $table_columns = $data['table_columns'];
         //array_multisort(array_column($table_columns, 'indice'), SORT_ASC, $table_columns);
 
-         usort($table_columns, function($a, $b) {
+        usort($table_columns, function ($a, $b) {
             return $a['indice'] <=> $b['indice'];
         });
         foreach ($table_columns as $column) {
@@ -1602,5 +1593,64 @@ class GeneradorCrudService
         Artisan::call('route:clear');
         //artisan optimize:clear
         Artisan::call('optimize:clear');
+    }
+
+    public function crudRefresh($crud_id)
+    {
+        $result = $this->crudRefreshProcess($crud_id);
+
+        if ($result) {
+            $accordions = [];
+            $cruds = Crud::where('estatus', 1)->get();
+
+            foreach ($cruds as $crud_generado) {
+                $campos_array = json_decode($crud_generado->campos);
+                if ($campos_array) {
+                    foreach ($campos_array as $campo) {
+                        if ($campo->show_fk && $campo->show_fk == $crud_id) {
+                            $accordions[] = $crud_generado->id;
+                        }
+                    }
+                }
+            }
+
+            foreach ( $accordions as $accordion_id){
+                $this->crudRefreshProcess($accordion_id);
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public function crudRefreshProcess($crud_id)
+    {
+        $crud = Crud::find($crud_id);
+
+        if ($crud) {
+            $crud_campos = $crud->toArray();
+            $campos_array = json_decode($crud->campos, true);
+            foreach ($campos_array as $campo) {
+                $tablaCampo = $crud->nombre . '_' . $campo['field'];
+
+                $crud_campos[$tablaCampo] = $campo['incluir_campo'];
+                $crud_campos[$tablaCampo . '_indice'] = (isset($campo['indice']) ? $campo['indice'] : null);
+                $crud_campos[$tablaCampo . '_list'] = $campo['incluir_list'];
+                $crud_campos[$tablaCampo . '_alias'] = $campo['alias'];
+                $crud_campos[$tablaCampo . '_regex'] = (isset($campo['regex']) ? $campo['regex'] : null);
+                $crud_campos[$tablaCampo . '_required'] = (isset($campo['required']) ? $campo['required'] : null);
+                $crud_campos[$tablaCampo . '_readonly'] = (isset($campo['readonly']) ? $campo['readonly'] : null);
+                $crud_campos[$tablaCampo . '_select'] = $campo['select'];
+                $crud_campos[$tablaCampo . '_select_rules'] = (isset($campo['select_rules']) ? $campo['select_rules'] : null);
+                $crud_campos[$tablaCampo . '_show_fk'] = (isset($campo['show_fk']) ? $campo['show_fk'] : null);
+                $crud_campos[$tablaCampo . '_show_fk_permisos'] = (isset($campo['show_fk_permisos']) ? $campo['show_fk_permisos'] : null);
+            }
+
+            $result = $this->store($crud_campos);
+
+            return $result;
+        }
+        return false;
     }
 }

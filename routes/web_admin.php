@@ -19,6 +19,7 @@ Route::name('admin.')->group(function () {
     Route::post('/admin/crud', [CrudController::class, 'store'])->name('crud.store');
     Route::get('/admin/crud/{id}/edit', [CrudController::class, 'edit'])->name('crud.edit');
     Route::put('/admin/crud', [CrudController::class, 'update'])->name('crud.update');
+    Route::get('/admin/crudRefresh/{id}', [CrudController::class, 'crudRefresh'])->name('crud.crudRefresh');
 
     /*
     Route::get('/admin/menu', [Menues97Controller::class, 'index'])->name('menu.index');

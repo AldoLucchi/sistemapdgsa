@@ -8,7 +8,9 @@ use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\HtmlString;
+
 class CrudDataTable extends DataTable
 {
     /**
@@ -18,6 +20,8 @@ class CrudDataTable extends DataTable
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
+        $cruds = Crud::where('estatus', 1)->get();
+
         return (new EloquentDataTable($query))
             ->editColumn('id', function (Crud $crud) {
                 return  mb_convert_encoding($crud->id, 'UTF-8', 'UTF-8');
@@ -29,10 +33,25 @@ class CrudDataTable extends DataTable
                 return mb_convert_encoding($crud->alias_opcion, 'UTF-8', 'UTF-8');
             })
             ->editColumn('nombre_componente', function (Crud $crud) {
-                return new HtmlString('<a href="/crud/' . $crud->nombre_componente . '" target="_blank">'.$crud->nombre_componente.' </a>');
+                return new HtmlString('<a href="/crud/' . $crud->nombre_componente . '" target="_blank">' . $crud->nombre_componente . ' </a>');
             })
             ->editColumn('estatus', function (Crud $crud) {
                 return   mb_convert_encoding(($crud->estatus ? 'ON' : 'OFF'), 'UTF-8', 'UTF-8');
+            })
+            ->editColumn('accordions', function (Crud $crud) use ($cruds) {
+                $accordions = '';
+                foreach ($cruds as $crud_generado) {
+                    $campos_array = json_decode($crud_generado->campos);
+                    if ($campos_array) {
+                        foreach ($campos_array as $campo) {
+                            if ($campo->show_fk && $campo->show_fk == $crud->id) {
+                                $accordions = $crud_generado->nombre_componente.', ';
+                            }
+                        }
+                    }
+                }
+
+                return mb_convert_encoding($accordions, 'UTF-8', 'UTF-8');
             })
             ->editColumn('created_at', function (Crud $crud) {
                 return mb_convert_encoding($crud->created_at, 'UTF-8', 'UTF-8');
@@ -79,6 +98,7 @@ class CrudDataTable extends DataTable
             Column::make('alias_opcion')->name('alias_opcion'),
             Column::make('nombre_componente')->name('nombre_componente'),
             Column::make('estatus')->name('estatus'),
+            Column::make('accordions')->name('accordions'),
             Column::make('created_at')->title('Created Date')->addClass('text-nowrap'),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')
