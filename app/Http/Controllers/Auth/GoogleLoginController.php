@@ -63,6 +63,12 @@ class GoogleLoginController extends Controller
             
             $bitacoraService->insertBitacora($data);
 
+            $trigger_crud = env('TRIGGER_LOGIN', '');
+            if($trigger_crud){
+                require public_path().'/'.$trigger_crud;
+                //require $_SERVER['DOCUMENT_ROOT'].'/'.$trigger_crud;
+            }
+
             return redirect(RouteServiceProvider::HOME);
         }
 

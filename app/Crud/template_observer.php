@@ -42,6 +42,12 @@ class %OBJETO_OBSERVER%
         ];
 
         $this->bitacoraService->insertBitacora($data);
+
+        $trigger_crud = env('TRIGGER_CRUD', '');
+        if($trigger_crud){
+            require public_path().'/'.$trigger_crud;
+            //require $_SERVER['DOCUMENT_ROOT'].'/'.$trigger_crud;        
+        }
     }
 
     /**
@@ -72,6 +78,12 @@ class %OBJETO_OBSERVER%
         ];
 
         $this->bitacoraService->insertBitacora($data);
+
+        $trigger_crud = env('TRIGGER_CRUD', '');
+        if($trigger_crud){
+            require public_path().'/'.$trigger_crud;
+            //require $_SERVER['DOCUMENT_ROOT'].'/'.$trigger_crud;       
+        }
     }
 
     /**
@@ -102,6 +114,12 @@ class %OBJETO_OBSERVER%
         ];
 
         $this->bitacoraService->insertBitacora($data);
+
+        $trigger_crud = env('TRIGGER_CRUD', '');
+        if($trigger_crud){
+            require public_path().'/'.$trigger_crud;
+            //require $_SERVER['DOCUMENT_ROOT'].'/'.$trigger_crud;        
+        }
     }
 
     /**
