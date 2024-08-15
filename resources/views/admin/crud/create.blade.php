@@ -181,7 +181,12 @@
 
                         <p>Nota: si ningún campo esta marcado para incluir, automáticamente se incluyen todos</p>
                         <p>Rules: para setear una o más reglas, el formato es el siguiente: campo,operador,valor;campo,operador,valor</p>
-                        <p>Regex: solo para campos de tipo: text, date, search, url, tel, email, and password. Ejemplo /^[a-z]+$/g</p>
+                        <p>Regex: solo para campos de tipo: text, date, search, url, tel, email, and password. Ejemplos: 
+                            <br>-validación de todos los caracteres en minúsuculas: ^[a-z][a-z0-9_.]*$
+                            <br>-validación solo letras: ^[a-zA-Z]*$
+                            <br>-validación para emails: ^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$
+                            <br>-validación para teléfono (9 dígitos): ^(\d{7})$
+                        </p>
                     </div>
                     @endforeach
                 </div>
