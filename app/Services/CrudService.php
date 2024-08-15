@@ -39,7 +39,7 @@ class CrudService
             }
 
             $campos .=  '{"field": "' . $colum->Field . '", "type": "' . $colum->Type . '", "null": "' . $colum->Null . '", "key": "' . $colum->Key . '", "default": "' . $colum->Default . '", "extra": "' . $colum->Extra . '", ';
-            $campos .=  '"incluir_campo": ' . $incluir_campo . ', "incluir_list": ' . $incluir_list . ', "required": ' . $required  .', "readonly": ' . $readonly  . ', "indice": ' . $indice .', "alias": "' . $maxlength.', "maxlength": "' . $alias  .'", "regex": "' . $regex . '",';
+            $campos .=  '"incluir_campo": ' . $incluir_campo . ', "incluir_list": ' . $incluir_list . ', "required": ' . $required  .', "readonly": ' . $readonly  . ', "indice": ' . $indice .', "alias": "' . $alias .'", "maxlength": "' . $maxlength .'", "regex": "' . $regex . '",';
             $campos .=  '"select": "' . $select . '",  "select_rules": "' . $select_rules . '",  "show_fk": "' . $show_fk . '",  "show_fk_permisos": "' . $show_fk_permisos . '" },';
         }
         $campos = substr($campos, 0, -1);
