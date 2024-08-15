@@ -23,14 +23,18 @@ class CrudService
         $table_fk_columns = DB::select("SHOW COLUMNS FROM " . $table_name);
         foreach ($table_fk_columns as $colum) {
             $incluir_campo = (isset($request[$table_name . '_' . $colum->Field]) ? 1 : 0);
-            $incluir_list = (isset($request[$table_name . '_' . $colum->Field . '_list']) ? 1 : 0);
+            $incluir_list = (isset($request[$table_name . '_' . $colum->Field . '_list']) ? 1 : 0);            
+            $indice = (isset($request[$table_name . '_' . $colum->Field . '_indice']) ? $request[$table_name . '_' . $colum->Field . '_indice'] : 99);
+            $alias = (isset($request[$table_name . '_' . $colum->Field . '_alias']) ? $request[$table_name . '_' . $colum->Field . '_alias'] : '');
+            $help = (isset($request[$table_name . '_' . $colum->Field . '_help']) ? $request[$table_name . '_' . $colum->Field . '_help'] : '');
+
+            $regex = (isset($request[$table_name . '_' . $colum->Field . '_regex']) ? $request[$table_name . '_' . $colum->Field . '_regex'] : '');
+            $maxlength = (isset($request[$table_name . '_' . $colum->Field . '_maxlength']) ? $request[$table_name . '_' . $colum->Field . '_maxlength'] : null);
             $required = (isset($request[$table_name . '_' . $colum->Field . '_required']) ? 1 : 0);
             $readonly = (isset($request[$table_name . '_' . $colum->Field . '_readonly']) ? 1 : 0);
-            $indice = (isset($request[$table_name . '_' . $colum->Field . '_indice']) ? $request[$table_name . '_' . $colum->Field . '_indice'] : null);
-            $alias = (isset($request[$table_name . '_' . $colum->Field . '_alias']) ? $request[$table_name . '_' . $colum->Field . '_alias'] : null);
-            $regex = (isset($request[$table_name . '_' . $colum->Field . '_regex']) ? $request[$table_name . '_' . $colum->Field . '_regex'] : null);
-            $maxlength = (isset($request[$table_name . '_' . $colum->Field . '_maxlength']) ? $request[$table_name . '_' . $colum->Field . '_maxlength'] : null);
+
             $select = (isset($request[$table_name . '_' . $colum->Field . '_select']) ? $request[$table_name . '_' . $colum->Field . '_select'] : null);
+            $anidado = (isset($request[$table_name . '_' . $colum->Field . '_anidado']) ? $request[$table_name . '_' . $colum->Field . '_anidado'] : null);
             $select_rules = (isset($request[$table_name . '_' . $colum->Field . '_select_rules']) ? $request[$table_name . '_' . $colum->Field . '_select_rules'] : null);
             $show_fk = (isset($request[$table_name . '_' . $colum->Field . '_show_fk']) ? $request[$table_name . '_' . $colum->Field . '_show_fk'] : null);
             $show_fk_permisos = (isset($request[$table_name . '_' . $colum->Field . '_show_fk_permisos']) ? $request[$table_name . '_' . $colum->Field . '_show_fk_permisos'] : null);
@@ -39,8 +43,9 @@ class CrudService
             }
 
             $campos .=  '{"field": "' . $colum->Field . '", "type": "' . $colum->Type . '", "null": "' . $colum->Null . '", "key": "' . $colum->Key . '", "default": "' . $colum->Default . '", "extra": "' . $colum->Extra . '", ';
-            $campos .=  '"incluir_campo": ' . $incluir_campo . ', "incluir_list": ' . $incluir_list . ', "required": ' . $required  .', "readonly": ' . $readonly  . ', "indice": ' . $indice .', "alias": "' . $alias .'", "maxlength": "' . $maxlength .'", "regex": "' . $regex . '",';
-            $campos .=  '"select": "' . $select . '",  "select_rules": "' . $select_rules . '",  "show_fk": "' . $show_fk . '",  "show_fk_permisos": "' . $show_fk_permisos . '" },';
+            $campos .=  '"incluir_campo": ' . $incluir_campo . ', "incluir_list": ' . $incluir_list . ', "indice": ' . $indice .', "alias": "' . $alias .'", "help": "' . $help .'", ';
+            $campos .= '"required": ' . $required  .', "readonly": ' . $readonly  . ', "maxlength": "' . $maxlength .'", "regex": "' . $regex . '",';
+            $campos .=  '"select": "' . $select . '",  "anidado": "' . $anidado .'",  "select_rules": "' . $select_rules . '",  "show_fk": "' . $show_fk . '",  "show_fk_permisos": "' . $show_fk_permisos . '" },';
         }
         $campos = substr($campos, 0, -1);
         $campos .= ']';

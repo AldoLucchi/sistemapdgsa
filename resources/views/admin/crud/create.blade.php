@@ -97,16 +97,13 @@
                                     </tr>
                                     <tr id="{{ $key.'_'.$column->Field }}_tr_collapse" class="collapse">
                                         <td colspan="6">
-                                            <table class="my-5 table table-bordered   border border-secondary bg-primary">
-                                                <tr>
+                                            <table class="my-5 table table-bordered   border  border-primary">
+                                                <tr class="bg-primary">
                                                     <td><b>Indice</td>
                                                     <td><b>Incluir <br>campo</b></td>
                                                     <td><b>Incluir <br>list</b></td>
                                                     <td><b>Alias</b></td>
-                                                    <td><b>Validación <br>Regex</b></td>
-                                                    <td><b>Validación <br>maxlength</b></td>
-                                                    <td><b>Requerido</b></td>
-                                                    <td><b>Readonly</b></td>                                                    
+                                                    <td><b>Texto <br> Ayuda</b></td>
                                                 </tr>
                                                 <tr>
                                                     <td>
@@ -119,42 +116,67 @@
                                                         <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field.'_list' }}" id="{{ $key.'_'.$column->Field.'_list' }}">
                                                     </td>
                                                     <td>
-                                                        <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_alias' }}" id="{{ $key.'_'.$column->Field.'_alias' }}" >
+                                                        <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_alias' }}" id="{{ $key.'_'.$column->Field.'_alias' }}">
                                                     </td>
                                                     <td>
-                                                        <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_regex' }}" id="{{ $key.'_'.$column->Field.'_regex' }}" >
+                                                        <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_help' }}" id="{{ $key.'_'.$column->Field.'_help' }}">
+                                                    </td>
+                                                </tr>
+                                                <tr class="bg-primary">
+                                                    <td colspan=2><b>Validación <br>Regex</b></td>
+                                                    <td><b>Validación <br>maxlength</b></td>
+                                                    <td><b>Requerido</b></td>
+                                                    <td><b>Readonly</b></td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td colspan=2>
+                                                        <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_regex' }}" id="{{ $key.'_'.$column->Field.'_regex' }}">
                                                     </td>
                                                     <td>
-                                                        <input type="number" class="form-input" name="{{ $key.'_'.$column->Field.'_maxlength' }}" id="{{ $key.'_'.$column->Field.'_maxlength' }}" size="2" >
+                                                        <input type="number" class="form-input" name="{{ $key.'_'.$column->Field.'_maxlength' }}" id="{{ $key.'_'.$column->Field.'_maxlength' }}" size="2">
                                                     </td>
                                                     <td>
                                                         <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field.'_required' }}" id="{{ $key.'_'.$column->Field.'_required' }}">
                                                     </td>
                                                     <td>
                                                         <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field.'_readonly' }}" id="{{ $key.'_'.$column->Field.'_readonly' }}">
-                                                    </td>                                                    
+                                                    </td>
                                                 </tr>
-                                                <tr>
-
-                                                    <td colspan=2><b>Seleccionar <br>FK</b></td>
+                                                <tr class="bg-primary">
+                                                    <td colspan="2"><b>Seleccionar <br>FK</b></td>
+                                                    <td colspan="2"><b>Campo Anidado<br>dependiente FK</b></td>
                                                     <td><b>Reglas <br>FK</b></td>
-                                                    <td colspan=2><b>Incluir <br>Acorddion en:</b></td>
-                                                    <td colspan=2><b>Permisos <br>Acorddion</b></td>
-
                                                 </tr>
                                                 <tr>
-                                                    <td colspan=2>
+                                                    <td colspan="2">
                                                         <select name="{{ $key.'_'.$column->Field.'_select' }}" id="{{ $key.'_'.$column->Field.'_select' }}" class="form-select form-select-transparent" aria-label="Seleccione una opción">
                                                             <option value="">---</option>
-                                                            @foreach($cruds_availables as $crud_table)
-                                                            <option value="{{ $crud_table }}">{{ $crud_table }}</option>
+                                                            @foreach($cruds_availables as $crud_table_available)
+                                                            <option value="{{ $crud_table_available }}">{{ $crud_table_available }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </td>
+                                                    <td colspan="2">
+                                                        <select name="{{ $key.'_'.$column->Field.'_anidado' }}" id="{{ $key.'_'.$column->Field.'_anidado' }}" class="form-select form-select-transparent" aria-label="Seleccione una opción">
+                                                            <option value="">---</option>
+                                                            @foreach($crud_table as $columnDepend)
+                                                            <option value="{{ $columnDepend->Field }}">{{ $columnDepend->Field}}</option>
                                                             @endforeach
                                                         </select>
                                                     </td>
                                                     <td>
                                                         <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_select_rules' }}" id="{{ $key.'_'.$column->Field.'_select_rules' }}" size="10">
                                                     </td>
-                                                    <td colspan=2>
+                                                </tr>
+
+                                                <tr class="bg-primary">
+                                                    <td colspan="3"><b>Incluir <br>Acorddion en:</b></td>
+                                                    <td colspan="2"><b>Permisos <br>Acorddion</b></td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3">
                                                         <select name="{{ $key.'_'.$column->Field.'_show_fk' }}" id="{{ $key.'_'.$column->Field.'_show_fk' }}" class="form-select form-select-transparent" aria-label="Seleccione una opción">
                                                             <option value="">---</option>
                                                             @foreach($cruds_generated as $crud)
@@ -162,7 +184,7 @@
                                                             @endforeach
                                                         </select>
                                                     </td>
-                                                    <td colspan=2>
+                                                    <td colspan="2">
                                                         <select name="{{ $key.'_'.$column->Field.'_show_fk_permisos' }}[]" id="{{ $key.'_'.$column->Field.'_show_fk_permisos' }}" class="form-select form-select-transparent py-5 select2" aria-label="Seleccione una opción" data-control="select2" multiple="multiple">
                                                             <option value="">---</option>
                                                             @foreach($options_crud as $option)
@@ -181,7 +203,7 @@
 
                         <p>Nota: si ningún campo esta marcado para incluir, automáticamente se incluyen todos</p>
                         <p>Rules: para setear una o más reglas, el formato es el siguiente: campo,operador,valor;campo,operador,valor</p>
-                        <p>Regex: solo para campos de tipo: text, date, search, url, tel, email, and password. Ejemplos: 
+                        <p>Regex: solo para campos de tipo: text, date, search, url, tel, email, and password. Ejemplos:
                             <br>-validación de todos los caracteres en minúsuculas: ^[a-z][a-z0-9_.]*$
                             <br>-validación solo letras: ^[a-zA-Z]*$
                             <br>-validación para emails: ^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$

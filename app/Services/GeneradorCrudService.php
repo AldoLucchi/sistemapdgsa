@@ -79,13 +79,18 @@ class GeneradorCrudService
                 $column_select_indice = $table_crud . '_' . $colum->Field . '_indice';
                 $column_request_include = $table_crud . '_' . $colum->Field;
                 $column_select_list = $table_crud . '_' . $colum->Field . '_list';
+                $column_select_alias = $table_crud . '_' . $colum->Field . '_alias';
+                $column_select_help = $table_crud . '_' . $colum->Field . '_help';
+
                 $column_select_readonly = $table_crud . '_' . $colum->Field . '_readonly';
                 $column_select_required = $table_crud . '_' . $colum->Field . '_required';
-                $column_select_alias = $table_crud . '_' . $colum->Field . '_alias';
                 $column_select_regex = $table_crud . '_' . $colum->Field . '_regex';
                 $column_select_maxlength = $table_crud . '_' . $colum->Field . '_maxlength';
+
                 $column_select_request = $table_crud . '_' . $colum->Field . '_select';
+                $column_select_anidado = $table_crud . '_' . $colum->Field . '_anidado';
                 $column_select_rules = $table_crud . '_' . $colum->Field . '_select_rules';
+
                 $column_show_fk = $table_crud . '_' . $colum->Field . '_show_fk';
                 $column_show_fk_permisos = $table_crud . '_' . $colum->Field . '_show_fk_permisos';
 
@@ -156,6 +161,11 @@ class GeneradorCrudService
                     $table_column_detail['alias'] = $request[$column_select_alias];
                 }
 
+                //help
+                if (isset($request[$column_select_help]) && !empty($request[$column_select_help]) &&  $column_select_help && $column_select_help != 'NULL' && $column_select_help != NULL) {
+                    $table_column_detail['help'] = $request[$column_select_help];
+                }
+
                 //regex
                 if (isset($request[$column_select_regex]) && !empty($request[$column_select_regex]) &&  $column_select_regex && $column_select_regex != 'NULL' && $column_select_regex != NULL) {
                     $table_column_detail['regex'] = $request[$column_select_regex];
@@ -170,6 +180,11 @@ class GeneradorCrudService
                 if (isset($request[$column_select_request]) && !empty($request[$column_select_request]) &&  $column_select_request && $column_select_request != 'NULL' && $column_select_request != NULL) {
                     $table_column_detail['select'] = $request[$column_select_request];
                     $tables_fk[$colum->Field] = $request[$column_select_request];
+
+
+                    if (isset($request[$column_select_anidado]) && !empty($request[$column_select_anidado]) &&  $column_select_anidado && $column_select_anidado != 'NULL' && $column_select_anidado != NULL) {
+                        $table_column_detail['anidado'] = $request[$column_select_anidado];
+                    }
 
                     if (isset($request[$column_select_rules]) && !empty($request[$column_select_rules]) &&  $column_select_rules && $column_select_rules != 'NULL' && $column_select_rules != NULL) {
                         $table_column_detail['select_rules'] = $request[$column_select_rules];
@@ -795,9 +810,14 @@ class GeneradorCrudService
             $column_required = '';
             $column_regex = '';
             $column_maxlength = '';
+            $column_text_help = "";
+            $column_anidado = "";
 
             if (isset($column['alias'])) {
                 $show_column_name_alias = $column['alias'];
+            }
+            if (isset($column['help'])) {
+                $column_text_help = '<p class="text-muted">'.$column['help'].'</p>';
             }
             if (isset($column['readonly']) && $column['readonly']) {
                 $column_readonly = "readonly";
@@ -816,9 +836,45 @@ class GeneradorCrudService
                 $column_idproyecto_fk = $data['tables_fk'][$column['name']]['table_column_fk_idproyecto'];
                 $column_idcliente_fk = $data['tables_fk'][$column['name']]['table_column_fk_idcliente'];
 
+                $anidado = '';
+                $anidadoOption = '';
+                if (isset($column['anidado']) && $column['anidado']) {
+                    $anidado = '
+                    <script>
+                    const ' . $column['anidado'] . 'Element = document.getElementById("' . $column['anidado'] . '");
+
+                    ' . $column['anidado'] . 'Element.addEventListener("load", (event) => {                    
+                            console.log("load - '.$column['anidado'].'Options" );
+                            '.$column['anidado'].'Options();  
+                    });
+
+                    ' . $column['anidado'] . 'Element.addEventListener("change", (event) => {                    
+                            console.log("change - '.$column['anidado'].'Options" );
+                            '.$column['anidado'].'Options();  
+                    });
+
+                    function '.$column['anidado'].'Options(){
+                        console.log("' . $column['anidado'] . 'Element --- " + ' . $column['anidado'] . 'Element.value);
+
+                        Array.from(document.querySelector("#' . $column['name'] . '").options).forEach(function(option_element) {
+                            option_element.style.display = "block";
+                            //let option_value = option_element.value;
+                            let option_' . $column['anidado'] . ' = option_element.getAttribute("' . $column['anidado'] . '");  
+
+                            if (option_' . $column['anidado'] . ' != ' . $column['anidado'] . 'Element.value) {
+                                option_element.style.display = "none";
+                            }
+                        });
+                    }
+                    </script>
+                    ';
+
+                    $anidadoOption = $column['anidado'] . '={{ $item->' . $column['anidado'] . ' }}';
+                }
+
                 $value = '
                     @foreach($' . $model_name . ' as $item)
-                    <option value="{{ $item->' . $column_id . ' }}"  {{ (isset($' . $data['crud_name'] . ') && $item->' . $column_id . ' == $' . $data['crud_name'] . '->' . $show_column_name . ')?"selected":"" }} {{ (session()->has("' . $column_id . '") && $item->' . $column_id . ' == session()->get("' . $column_id . '")) ? "selected" : "" }} {{ (request()->has("' . $column_id . '") && $item->' . $column_id . ' == request()->get("' . $column_id . '")) ? "selected" : "" }} >
+                    <option value="{{ $item->' . $column_id . ' }}" class="" ' . $anidadoOption . ' {{ (isset($' . $data['crud_name'] . ') && $item->' . $column_id . ' == $' . $data['crud_name'] . '->' . $show_column_name . ')?"selected":"" }} {{ (session()->has("' . $column_id . '") && $item->' . $column_id . ' == session()->get("' . $column_id . '")) ? "selected" : "" }} {{ (request()->has("' . $column_id . '") && $item->' . $column_id . ' == request()->get("' . $column_id . '")) ? "selected" : "" }} >
                     {{ $item->' . $column_name . ' }}
                     </option>
                     @endforeach';
@@ -827,7 +883,10 @@ class GeneradorCrudService
                     $column_readonly = '{!! !in_array("create",request()->segments())?"aria-readonly=\'true\' style=\'pointer-events: none;\'":"" !!}';
                 }
 
+
+
                 $template = str_replace('%FIELD_SELECT_OPTIONS%', $value, $template);
+                $template = str_replace('%FIELD_SELECT_ANIDADO%', $anidado, $template);
             } elseif ($column['type_html'] == 'html') {
                 $template = $template_fields_html;
 
@@ -902,6 +961,7 @@ class GeneradorCrudService
             $template = str_replace('%FIELD_REQUIRED%', $column_required, $template);
             $template = str_replace('%FIELD%', $show_column_name, $template);
             $template = str_replace('%FIELD_ALIAS%', $show_column_name_alias, $template);
+            $template = str_replace('%FIELD_TEXT_HELP%', $column_text_help, $template);
 
             $fields_all .= $template;
         }

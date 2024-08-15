@@ -7,6 +7,8 @@
     <textarea id="%FIELD%" name="%FIELD%" class="tox-target" %FIELD_READONLY% %FIELD_REQUIRED%>
     {{ %FIELD_VALUE_SHOW% }}
     </textarea>
+    <br>
+    %FIELD_TEXT_HELP%
 
     <script src="/assets/plugins/custom/tinymce/tinymce.js"></script>
 

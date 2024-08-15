@@ -64,6 +64,7 @@ return ($OpcionesMenues99->estatus?"ON":"OFF");
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(2)
+            ->pageLength(100)
             ->drawCallback("function() {" . file_get_contents(resource_path('views/cruds/OpcionesMenues99/columns/_draw-scripts.js')) . "}");
     }
 
