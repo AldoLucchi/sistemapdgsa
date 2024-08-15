@@ -1695,7 +1695,7 @@ class GeneradorCrudService
             }
 
             foreach ($crudsRefresh as $crud) {
-                $this->crudRefreshProcess($crud);
+                $this->crudRefresh($crud);
             }
 
             return true;
