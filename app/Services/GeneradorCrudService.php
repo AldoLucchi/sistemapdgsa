@@ -907,7 +907,7 @@ class GeneradorCrudService
                 '; */
             } else {
                 if (isset($column['regex']) && $column['regex']) {
-                    $column_regex = $column['regex'];
+                    $column_regex = ' pattern="'.$column['regex'].'" ';
                 }
 
                 if (isset($column['maxlength']) && $column['maxlength']) {
