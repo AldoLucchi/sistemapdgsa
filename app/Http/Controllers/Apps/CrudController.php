@@ -189,7 +189,8 @@ class CrudController extends Controller
 
             if ($crud) {
 
-                $crudGenerado = $this->generadorCrudService->store($request->all());
+                //$crudGenerado = $this->generadorCrudService->store($request->all());
+                $crudGenerado = $this->generadorCrudService->crudRefresh($crud->id);
 
                 if ($crudGenerado) {
                     $message = 'Proceso completado. CRUD actualizado correctamente';
