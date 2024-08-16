@@ -808,6 +808,7 @@ class GeneradorCrudService
             $show_column_name_alias = $column['name'];
             $column_readonly = '';
             $column_required = '';
+            $column_required_icon = '';
             $column_regex = '';
             $column_maxlength = '';
             $column_text_help = "";
@@ -824,6 +825,7 @@ class GeneradorCrudService
             }
             if (isset($column['required']) && $column['required']) {
                 $column_required = "required";
+                $column_required_icon = '<label class="text-danger">*</label>';
             }
 
             $value = '';
@@ -959,6 +961,7 @@ class GeneradorCrudService
 
             $template = str_replace('%FIELD_READONLY%', $column_readonly, $template);
             $template = str_replace('%FIELD_REQUIRED%', $column_required, $template);
+            $template = str_replace('%FIELD_REQUIRED_ICON%', $column_required_icon, $template);
             $template = str_replace('%FIELD%', $show_column_name, $template);
             $template = str_replace('%FIELD_ALIAS%', $show_column_name_alias, $template);
             $template = str_replace('%FIELD_TEXT_HELP%', $column_text_help, $template);

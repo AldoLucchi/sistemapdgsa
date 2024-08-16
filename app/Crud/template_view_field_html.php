@@ -1,9 +1,6 @@
 <div class="mb-10 col-12 ">
-    <label for="%FIELD%" class="form-label">
-        %FIELD_ALIAS%
-
-    </label>
-    </label>
+    <label for="%FIELD%" class="form-label">%FIELD_ALIAS%</label>%FIELD_REQUIRED_ICON%
+    
     <textarea id="%FIELD%" name="%FIELD%" class="tox-target" %FIELD_READONLY% %FIELD_REQUIRED%>
     {{ %FIELD_VALUE_SHOW% }}
     </textarea>

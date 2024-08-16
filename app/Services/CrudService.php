@@ -23,7 +23,7 @@ class CrudService
         $table_fk_columns = DB::select("SHOW COLUMNS FROM " . $table_name);
         foreach ($table_fk_columns as $colum) {
             $incluir_campo = (isset($request[$table_name . '_' . $colum->Field]) ? 1 : 0);
-            $incluir_list = (isset($request[$table_name . '_' . $colum->Field . '_list']) ? 1 : 0);            
+            $incluir_list = (isset($request[$table_name . '_' . $colum->Field . '_list']) ? 1 : 0);
             $indice = (isset($request[$table_name . '_' . $colum->Field . '_indice']) ? $request[$table_name . '_' . $colum->Field . '_indice'] : 99);
             $alias = (isset($request[$table_name . '_' . $colum->Field . '_alias']) ? $request[$table_name . '_' . $colum->Field . '_alias'] : '');
             $help = (isset($request[$table_name . '_' . $colum->Field . '_help']) ? $request[$table_name . '_' . $colum->Field . '_help'] : '');
@@ -43,14 +43,19 @@ class CrudService
             }
 
             $campos .=  '{"field": "' . $colum->Field . '", "type": "' . $colum->Type . '", "null": "' . $colum->Null . '", "key": "' . $colum->Key . '", "default": "' . $colum->Default . '", "extra": "' . $colum->Extra . '", ';
-            $campos .=  '"incluir_campo": ' . $incluir_campo . ', "incluir_list": ' . $incluir_list . ', "indice": ' . $indice .', "alias": "' . $alias .'", "help": "' . $help .'", ';
-            $campos .= '"required": ' . $required  .', "readonly": ' . $readonly  . ', "maxlength": "' . $maxlength .'", "regex": "' . $regex . '",';
-            $campos .=  '"select": "' . $select . '",  "anidado": "' . $anidado .'",  "select_rules": "' . $select_rules . '",  "show_fk": "' . $show_fk . '",  "show_fk_permisos": "' . $show_fk_permisos . '" },';
+            $campos .=  '"incluir_campo": ' . $incluir_campo . ', "incluir_list": ' . $incluir_list . ', "indice": ' . $indice . ', "alias": "' . $alias . '", "help": "' . $help . '", ';
+            $campos .= '"required": ' . $required  . ', "readonly": ' . $readonly  . ', "maxlength": "' . $maxlength . '", "regex": "' . $regex . '",';
+            $campos .=  '"select": "' . $select . '",  "anidado": "' . $anidado . '",  "select_rules": "' . $select_rules . '",  "show_fk": "' . $show_fk . '",  "show_fk_permisos": "' . $show_fk_permisos . '" },';
         }
         $campos = substr($campos, 0, -1);
         $campos .= ']';
 
+        Log::info('CrudServices - store - campos');
         Log::info($campos);
+
+        if (!json_validate($campos)) {
+            return false;
+        }
 
         $crud = null;
         $crud_permisos = '';

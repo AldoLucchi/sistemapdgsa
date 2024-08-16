@@ -108,6 +108,8 @@ class CrudController extends Controller
                     return redirect('/admin/crud')->with('message', $message);
                 }
             }
+
+            return redirect('/admin/crud')->with('message-error', 'Ha ocurrido un error al intentar guardar los datos del CRUD. Por favor, revise los valores ingresados en los campos');
         } catch (Exception $e) {
             return redirect('/admin/crud')->with('message-error', $e->getMessage());
         }
@@ -195,6 +197,7 @@ class CrudController extends Controller
                     return redirect('/admin/crud')->with('message', $message);
                 }
             }
+            return redirect('/admin/crud')->with('message-error', 'Ha ocurrido un error al intentar guardar los datos del CRUD. Por favor, revise los valores ingresados en los campos');
         } catch (Exception $e) {
             return redirect('/admin/crud')->with('message-error', $e->getMessage());
         }
