@@ -796,7 +796,6 @@ class GeneradorCrudService
         $action_documento = '';
 
         $table_columns = $data['table_columns'];
-        //array_multisort(array_column($table_columns, 'indice'), SORT_ASC, $table_columns);
 
         usort($table_columns, function ($a, $b) {
             return $a['indice'] <=> $b['indice'];
@@ -1024,8 +1023,14 @@ class GeneradorCrudService
         $template_fields_list = '';
 
         Log::info('generateCrudDatatable---------');
-        //Log::info($data['table_columns']);
-        foreach ($data['table_columns'] as $column) {
+
+        $table_columns = $data['table_columns'];
+
+        usort($table_columns, function ($a, $b) {
+            return $a['indice'] <=> $b['indice'];
+        });
+
+        foreach ($table_columns as $column) {
             $datatable_column_name = $column['name'];
             if (isset($column['alias']) && $column['name'] != $data['table_column_id']) {
                 $datatable_column_name = $column['alias'];
@@ -1115,7 +1120,7 @@ class GeneradorCrudService
 
         $template_filters_texto = $data['table_column_id'] . ",' ',";
 
-        foreach ($data['table_columns'] as $column) {
+        foreach ($table_columns as $column) {
             $datatable_column_field_name = $column['name'];
             if (isset($column['alias']) && $column['name'] != $data['table_column_id']) {
                 $datatable_column_field_name = $column['alias'];
