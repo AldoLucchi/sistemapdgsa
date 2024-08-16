@@ -29,6 +29,7 @@ class CrudService
             $help = (isset($request[$table_name . '_' . $colum->Field . '_help']) ? $request[$table_name . '_' . $colum->Field . '_help'] : '');
 
             $regex = (isset($request[$table_name . '_' . $colum->Field . '_regex']) ? $request[$table_name . '_' . $colum->Field . '_regex'] : '');
+            $regex = urlencode($regex);
             $maxlength = (isset($request[$table_name . '_' . $colum->Field . '_maxlength']) ? $request[$table_name . '_' . $colum->Field . '_maxlength'] : null);
             $required = (isset($request[$table_name . '_' . $colum->Field . '_required']) ? 1 : 0);
             $readonly = (isset($request[$table_name . '_' . $colum->Field . '_readonly']) ? 1 : 0);

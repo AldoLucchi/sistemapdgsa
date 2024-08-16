@@ -42,23 +42,23 @@ class GeneradorCrudService
             $alias_opcion = $request['alias_opcion'];
             $alias_opcion_individual = $request['alias_opcion_individual'];
             $rules = $request['reglas'];
-            $crud_permisos = isset($request['crud_permisos']) ? $request['crud_permisos'] : '';
+            $crud_permisos = isset($request['crud_permisos']) ? explode(',',$request['crud_permisos']) : '';
 
             $crud_permisos_create = true;
             $crud_permisos_read = true;
             $crud_permisos_update = true;
             $crud_permisos_delete = true;
-            if (isset($request['crud_permisos']) && $request['crud_permisos']) {
-                if (!in_array('create', $request['crud_permisos'])) {
+            if (isset($crud_permisos) && $crud_permisos) {
+                if (!in_array('create', $crud_permisos)) {
                     $crud_permisos_create = false;
                 }
-                if (!in_array('read', $request['crud_permisos'])) {
+                if (!in_array('read', $crud_permisos)) {
                     $crud_permisos_read = false;
                 }
-                if (!in_array('update', $request['crud_permisos'])) {
+                if (!in_array('update', $crud_permisos)) {
                     $crud_permisos_update = false;
                 }
-                if (!in_array('delete', $request['crud_permisos'])) {
+                if (!in_array('delete', $crud_permisos)) {
                     $crud_permisos_delete = false;
                 }
             }
@@ -907,7 +907,12 @@ class GeneradorCrudService
                 '; */
             } else {
                 if (isset($column['regex']) && $column['regex']) {
-                    $column_regex = ' pattern="'.$column['regex'].'" ';
+                    Log::info('$column["regex"]');
+                    Log::info($column['regex']);
+                    $regexDecode = urldecode($column['regex']);
+                    Log::info('$regexDecode');
+                    Log::info($regexDecode);
+                    $column_regex = ' pattern="'.$regexDecode.'" ';
                 }
 
                 if (isset($column['maxlength']) && $column['maxlength']) {

@@ -175,7 +175,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td colspan=2>
-                                                        <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_regex' }}" id="{{ $key.'_'.$column->Field.'_regex' }}" value="{{ ($campoPreference && isset($campoPreference->regex) && $campoPreference->regex)?$campoPreference->regex:'' }}">
+                                                        <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_regex' }}" id="{{ $key.'_'.$column->Field.'_regex' }}" value="{{ ($campoPreference && isset($campoPreference->regex) && $campoPreference->regex)?urldecode($campoPreference->regex):'' }}">
                                                     </td>
                                                     <td>
                                                         <input type="number" class="form-input" name="{{ $key.'_'.$column->Field.'_maxlength' }}" id="{{ $key.'_'.$column->Field.'_maxlength' }}" size="2" value="{{ ($campoPreference && isset($campoPreference->maxlength))?$campoPreference->maxlength:'' }}">
