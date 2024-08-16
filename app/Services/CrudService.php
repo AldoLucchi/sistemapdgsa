@@ -50,7 +50,7 @@ class CrudService
         $campos = substr($campos, 0, -1);
         $campos .= ']';
 
-        //dd($campos);
+        Log::info($campos);
 
         $crud = null;
         $crud_permisos = '';
