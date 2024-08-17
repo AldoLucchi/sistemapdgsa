@@ -6,19 +6,21 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\DataTables\%OBJETO_DATATABLE%;
 use App\Models\%OBJETO%;
+
 use App\Services\EtiquetaDocumentoService;
 use App\Services\FunctionsService;
 use App\Services\DocumentoService;
 use App\Services\BitacoraService;
-use Exception;
+use App\Services\Crud\%OBJETO_SERVICE%;
+
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
+use Exception;
 
-%TABLAS_ASOCIADAS_USE%
 
 %SELECT_USE%
 
@@ -30,13 +32,16 @@ class %OBJETO_CONTROLLER% extends Controller
   protected $etiquetasDocumentosService;
   protected $documentosService;
   protected $bitacoraService;
+  protected $%OBJETO_SERVICE%;
 
   public function __construct(
+      %OBJETO_SERVICE% $%OBJETO_SERVICE%,
       FunctionsService $functionsService,
       EtiquetaDocumentoService $etiquetasDocumentosService,
       DocumentoService $documentosService,
       BitacoraService $bitacoraService
   ) {
+      $this->%OBJETO_SERVICE% = $%OBJETO_SERVICE%;
       $this->functionsService = $functionsService;
       $this->etiquetasDocumentosService = $etiquetasDocumentosService;
       $this->documentosService = $documentosService;
@@ -116,11 +121,9 @@ class %OBJETO_CONTROLLER% extends Controller
 
       %OBJETO_CONTROLLER_CREATE%
 
-      %TABLAS_ASOCIADAS_GET%
+      $data = $this->%OBJETO_SERVICE%->getData();
 
-      $data = [
-        %TABLAS_ASOCIADAS%
-      ];
+      %CONTROLLER_VARIABLES_ANIDADOS%
       
       return view('cruds/%OBJETO_VIEW%.create', $data);
     }
@@ -155,6 +158,11 @@ class %OBJETO_CONTROLLER% extends Controller
         %FIELD_FILE_STORAGE%
 
         $%OBJETO_VARIABLE% = %OBJETO%::create($request->all());
+
+        $request['%FIELD_ID%'] = $%OBJETO_VARIABLE%->%FIELD_ID% ;
+        $request['idfield'] = '%FIELD_ID%';
+
+        $this->insertAnidados($request->all());
 
         %FIELD_PDF%
 
@@ -197,17 +205,20 @@ class %OBJETO_CONTROLLER% extends Controller
       $idRegister = $%OBJETO_VARIABLE%;
       $documentos = $this->documentosService->getDocumentosByCrud('%OBJETO%');
 
-      %TABLAS_ASOCIADAS_GET%
 
       //%RELATION_DATATABLE_VARIABLES%
 
-        $data = [
+        $data1 = [
           'documentos' => $documentos,
           '%OBJETO_VARIABLE%' => %OBJETO%::find($%OBJETO_VARIABLE%),
-          %TABLAS_ASOCIADAS%
 
           //%RELATION_DATATABLE_VARIABLES_DATA%
         ];
+
+        $data2 = $this->%OBJETO_SERVICE%->getData();
+
+        $data = array_merge($data1, $data2);
+
         return view('cruds/%OBJETO_VIEW%.show', $data);
 
     }
@@ -231,14 +242,16 @@ class %OBJETO_CONTROLLER% extends Controller
       $idRegister = $%OBJETO_VARIABLE%;
       $documentos = $this->documentosService->getDocumentosByCrud('%OBJETO%');
 
-      %TABLAS_ASOCIADAS_GET%
 
-      $data = [
+      $data1 = [
         'documentos' => $documentos,
 
         '%OBJETO_VARIABLE%' => %OBJETO%::find($%OBJETO_VARIABLE%),
-        %TABLAS_ASOCIADAS%
       ];
+
+      $data2 = $this->%OBJETO_SERVICE%->getData();
+
+      $data = array_merge($data1, $data2);
 
       return view('cruds/%OBJETO_VIEW%.edit', $data);
     }
@@ -329,6 +342,13 @@ class %OBJETO_CONTROLLER% extends Controller
 
        $dataTable%OBJETO% = new %OBJETO_DATATABLE%($filters, $documentos);
         return $dataTable%OBJETO%->render('cruds/%OBJETO%.datatable');
+    }
+
+    public function insertAnidados($request)
+    {
+      Log::info('%OBJETO_CONTROLLER% - insertAnidados');
+
+      %CONTROLLER_INSERT_ANIDADOS%
     }
 	
 }

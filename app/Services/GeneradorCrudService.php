@@ -328,6 +328,7 @@ class GeneradorCrudService
                 'controller_name' => $crud_name_format . 'Controller',
                 'datatable_name' => $crud_name_format . 'DataTable',
                 'observer_name' => $crud_name_format . 'Observer',
+                'service_name' => $crud_name_format . 'Service',
             ];
 
             Log::info($data);
@@ -457,16 +458,22 @@ class GeneradorCrudService
             mkdir("../app/Http/Controllers/Crud/");
         }
 
-        $file_controller = fopen("../app/Http/Controllers/Crud/" . $data['controller_name'] . ".php", "w") or die("Unable to open file - Model " . $data['controller_name']);
+        $file_controller = fopen("../app/Http/Controllers/Crud/" . $data['controller_name'] . ".php", "w") or die("Unable to open file - controller " . $data['controller_name']);
         $template_controller = file_get_contents('../app/Crud/template_controller.php');
         $template_controller = $this->generateCrudReplace($template_controller, $data);
 
+        $file_service = fopen("../app/Services/Crud/" . $data['service_name'] . ".php", "w") or die("Unable to open file - service " . $data['service_name']);
+        $template_service = file_get_contents('../app/Crud/template_service.php');
+        $template_service = $this->generateCrudReplace($template_service, $data);
+
         $template_controller_file = file_get_contents('../app/Crud/template_controller_file.php');
 
-        $fields_checkobx = '';
         $tablas_asociadas_uses = '';
         $tablas_asociadas_get = '';
         $tablas_asociadas = '';
+
+        $fields_checkobx = '';
+        
         $field_file_storage = '';
         $pdf = '';
         $filtersControllerIndex = '';
@@ -489,6 +496,9 @@ class GeneradorCrudService
             "%OBJETO_VARIABLE%" => $request["%OBJETO_VARIABLE%"],
         ';
 
+        $insert_crud_anidados = '';
+        $variables_crud_anidados= '';
+
         foreach ($data['table_columns'] as $column) {
             if ($column['type_html'] == 'checkbox') {
                 $field_checkbox = '
@@ -507,12 +517,12 @@ class GeneradorCrudService
                 $column_idcliente_fk = $data['tables_fk'][$column['name']]['table_column_fk_idcliente'];
                 $column_idproyecto_fk = $data['tables_fk'][$column['name']]['table_column_fk_idproyecto'];
 
-                $use = '
+                $use_model = '
                 use App\Models\\' . $model_name_fk . ';
                 ';
 
                 $tabla_get = '
-                $' . $model_name_fk . ' = ' . $model_name_fk . '::select("*"); 
+                $' . $model_name_fk . ' = \App\Models\\' . $model_name_fk . '::select("*"); 
                 ';
 
                 if (isset($column['select_rules'])) {
@@ -525,10 +535,7 @@ class GeneradorCrudService
                     }
                     //$condition = 'whereIn("' . $column_id_fk . '",[' . $column['select_rules'] . '])';
                 }
-
-                /*else {
-                    $condition = '->whereRaw("1 = 1")';
-                }*/
+                
 
                 if ($column_idcliente_fk) {
                     $tabla_get  .= '
@@ -551,12 +558,19 @@ class GeneradorCrudService
                 ->get();
                 ';
 
-
                 $tabla_add = '
                 "' . $model_name_fk . '" => $' . $model_name_fk . ', 
                 ';
 
-                $tablas_asociadas_uses .= $use;
+                
+                if (isset($column['crud_anidado_rules']) && $column['crud_anidado_rules']) {
+                    $variables_crud_anidados = $this->getVariablesCrudAnidadoController($column['crud_anidado_rules']);
+                    
+                    $insert_crud_anidados = $this->getInsertCrudAnidadoController($column['crud_anidado_rules']);
+                }
+                
+
+                $tablas_asociadas_uses .= $use_model;
                 $tablas_asociadas_get .= $tabla_get;
                 $tablas_asociadas .= $tabla_add;
 
@@ -606,40 +620,126 @@ class GeneradorCrudService
             }
 
             if ($column['type_html'] == 'html') {
-                $use = '
+                $use_model = '
                 use App\Models\EtiquetasDocumentos104;
                 ';
                 $tabla_add = '
                 "etiquetasDocumentos" => EtiquetasDocumentos104::orderBy("alias","ASC")->get(), 
                 ';
 
-                $tablas_asociadas_uses .= $use;
-                $tablas_asociadas .= $tabla_add;
-
-                /*  $pdf = '
-                    $html = $' . $data['model_name'] . '->' . $column['name'] . ';
-                    $html = $this->etiquetasDocumentosService->replaceVariables($html, $' . $data['model_name'] . '->' . $data['table_column_id'] . ');
-                    $pdf = App::make("dompdf.wrapper");
-                    Log::info($html);
-                    $pdf->loadHTML($html);
-                    $pdf->save(public_path() . "/docs/' . $data['model_name'] . '_" . $' . $data['model_name'] . '->' . $data['table_column_id'] . ' . ".pdf");
-                ';  */
+                $tablas_asociadas_uses .= $use_model;
+                $tablas_asociadas .= $tabla_add;                
             }
         }
 
-        $template_controller = str_replace('%FIELD_CHECKBOX%', $fields_checkobx, $template_controller);
-        $template_controller = str_replace('%TABLAS_ASOCIADAS_USE%', $tablas_asociadas_uses, $template_controller);
-        $template_controller = str_replace('%TABLAS_ASOCIADAS_GET%', $tablas_asociadas_get, $template_controller);
-        $template_controller = str_replace('%TABLAS_ASOCIADAS%', $tablas_asociadas, $template_controller);
+        $template_controller = str_replace('%FIELD_CHECKBOX%', $fields_checkobx, $template_controller);        
 
         $template_controller = str_replace('%FIELD_FILE_STORAGE%', $field_file_storage, $template_controller);
         $template_controller = str_replace('%FILTERS_CONTROLLER_INDEX%', $filtersControllerIndex, $template_controller);
         $template_controller = str_replace('%FILTERS_VARIABLES_GET%', $tablas_asociadas_get, $template_controller);
         $template_controller = str_replace('%FILTERS_VARIABLES%', $filters_variables, $template_controller);
         $template_controller = str_replace('%FIELD_PDF%', $pdf, $template_controller);
+        $template_controller = str_replace('%CONTROLLER_VARIABLES_ANIDADOS%', $variables_crud_anidados, $template_controller);
+        $template_controller = str_replace('%CONTROLLER_INSERT_ANIDADOS%', $insert_crud_anidados, $template_controller);
 
         fwrite($file_controller, $template_controller);
         fclose($file_controller);
+
+        $template_service = str_replace('%TABLAS_ASOCIADAS_USE%', $tablas_asociadas_uses, $template_service);
+        $template_service = str_replace('%TABLAS_ASOCIADAS_GET%', $tablas_asociadas_get, $template_service);
+        $template_service = str_replace('%TABLAS_ASOCIADAS%', $tablas_asociadas, $template_service);
+
+        fwrite($file_service, $template_service);
+        fclose($file_service);
+    }
+
+
+    public function getVariablesCrudAnidadoController($rules)
+    {
+        Log::info('GeneradorCrudService - getVariablesCrudAnidadoController');
+        Log::info($rules);
+
+        $rules = explode(';', $rules);
+
+        $variables = '';
+
+        foreach ($rules as $rule) {
+            if ($rule) {
+                $items = explode(',', $rule);
+                $operator_field = $items[0];
+                $operator_value = $items[2];
+                $crud_asociado_id = $items[3];
+                $crud_cantidad_registros = $items[4];
+
+                $crud = Crud::find($crud_asociado_id);
+
+                if ($crud) {
+                    $variables .= '
+                    $'.$crud->nombre_componente.'Service = new \App\Services\Crud\\'.$crud->nombre_componente.'Service();
+                    $data'.$crud->nombre_componente.' = $'.$crud->nombre_componente.'Service->getData();
+
+                    $data =  array_merge($data, $data'.$crud->nombre_componente.');
+                    ';
+                }
+            }
+        }
+
+        return $variables;
+    }
+
+    public function getInsertCrudAnidadoController($rules)
+    {
+        Log::info('GeneradorCrudService - getInsertCrudAnidadoController');
+        Log::info($rules);
+
+        $rules = explode(';', $rules);
+
+        $inserts = '';
+
+        foreach ($rules as $rule) {
+            if ($rule) {
+                $items = explode(',', $rule);
+                $operator_field = $items[0];
+                $operator_value = $items[2];
+                $crud_asociado_id = $items[3];
+                $crud_cantidad_registros = $items[4];
+
+                $crud = Crud::find($crud_asociado_id);
+
+                if ($crud) {
+
+                   $inserts.= '
+                   $fieldsAnidado = [];
+                    $crudAnidado = "'.$crud->nombre_componente.'";
+
+                    foreach ($request as $key => $value) {
+                    if (str_contains($key,  $crudAnidado)) {
+                        $field_part = explode("_", $key);
+                        $iteration = $field_part[1];
+                        $fieldname = $field_part[2];
+                        $fieldsAnidado[$iteration][$fieldname] = $value;
+                    }
+                    }
+
+                    foreach ($fieldsAnidado as $fieldAnidado) {
+                    $insertRegister = false;
+                    foreach ($fieldAnidado as $keyIndividual => $fieldIndividual) {
+                        if ($fieldIndividual) {
+                        $insertRegister = true;
+                        }
+                    }
+
+                    if ($insertRegister) {
+                        $fieldAnidado["idproyecto"] = $request["idproyecto"];
+                        \App\Models\UsuariosEstatus60::create($fieldAnidado);
+                    }
+                    }
+                   ';
+                }
+            }
+        }
+
+        return $inserts;
     }
 
     public function generateCrudViews($data)
@@ -800,7 +900,7 @@ class GeneradorCrudService
         $file_fields = fopen("../resources/views/cruds/" . $data['crud_name'] . "/fields.blade.php", "w") or die("Unable to open file - view fields.blade.php");
         $template_fields = file_get_contents('../app/Crud/template_view_field.php');
         $template_fields_select = file_get_contents('../app/Crud/template_view_field_select.php');
-        $template_fields_select_anidado = file_get_contents('../app/Crud/template_view_field_select_anidado.php');
+        $template_fields_select_anidado = file_get_contents('../app/Crud/template_view_field_select_campo_anidado.php');
         $template_fields_html = file_get_contents('../app/Crud/template_view_field_html.php');
 
         $fields_all = '<input type="hidden" name="redirect_url" id="redirect_url" value="{{ (request()->has("redirect_url")) ? request()->get("redirect_url") : "" }}">';
@@ -848,21 +948,23 @@ class GeneradorCrudService
                 $column_idproyecto_fk = $data['tables_fk'][$column['name']]['table_column_fk_idproyecto'];
                 $column_idcliente_fk = $data['tables_fk'][$column['name']]['table_column_fk_idcliente'];
 
-                $anidado = '';
-                $anidadoOption = '';
+                $campo_anidado = '';
+                $campo_anidado_option = '';
+                $crud_anidado = '';
+
                 if (isset($column['anidado']) && $column['anidado']) {
                     $template_select_anidado = $template_fields_select_anidado;
                     $template_select_anidado = str_replace('%SELECT_CAMPO_ANIDADO%', $column['anidado'], $template_select_anidado);
                     $template_select_anidado = str_replace('%SELECT_NAME%', $column['name'], $template_select_anidado);
 
-                    $anidado = $template_select_anidado;
+                    $campo_anidado = $template_select_anidado;
 
-                    $anidadoOption = $column['anidado'] . '={{ $item->' . $column['anidado'] . ' }}';
+                    $campo_anidado_option = $column['anidado'] . '={{ $item->' . $column['anidado'] . ' }}';
                 }
 
                 $options = '
                     @foreach($' . $model_name . ' as $item)
-                    <option value="{{ $item->' . $column_id . ' }}" class="" ' . $anidadoOption . ' {{ (isset($' . $data['crud_name'] . ') && $item->' . $column_id . ' == $' . $data['crud_name'] . '->' . $show_column_name . ')?"selected":"" }} {{ (session()->has("' . $column_id . '") && $item->' . $column_id . ' == session()->get("' . $column_id . '")) ? "selected" : "" }} {{ (request()->has("' . $column_id . '") && $item->' . $column_id . ' == request()->get("' . $column_id . '")) ? "selected" : "" }} >
+                    <option value="{{ $item->' . $column_id . ' }}" class="" ' . $campo_anidado_option . ' {{ (isset($' . $data['crud_name'] . ') && $item->' . $column_id . ' == $' . $data['crud_name'] . '->' . $show_column_name . ')?"selected":"" }} {{ (session()->has("' . $column_id . '") && $item->' . $column_id . ' == session()->get("' . $column_id . '")) ? "selected" : "" }} {{ (request()->has("' . $column_id . '") && $item->' . $column_id . ' == request()->get("' . $column_id . '")) ? "selected" : "" }} >
                     {{ $item->' . $column_name . ' }}
                     </option>
                     @endforeach';
@@ -872,7 +974,13 @@ class GeneradorCrudService
                 }
 
                 $template = str_replace('%FIELD_SELECT_OPTIONS%', $options, $template);
-                $template = str_replace('%FIELD_SELECT_ANIDADO%', $anidado, $template);
+                $template = str_replace('%FIELD_SELECT_CAMPO_ANIDADO%', $campo_anidado, $template);
+
+                if (isset($column['crud_anidado_rules']) && $column['crud_anidado_rules']) {
+                    $crud_anidado = $this->getCrudAnidado($column['crud_anidado_rules']);
+                }
+
+                $template = str_replace('%FIELD_SELECT_CRUD_ANIDADO%', $crud_anidado, $template);
             } elseif ($column['type_html'] == 'html') {
                 $template = $template_fields_html;
 
@@ -1610,6 +1718,7 @@ class GeneradorCrudService
         $content = str_replace('%OBJETO_TABLE%', $data['table_fullname'], $content);
         $content = str_replace('%OBJETO_CONTROLLER%', $data['controller_name'], $content);
         $content = str_replace('%OBJETO_OBSERVER%', $data['observer_name'], $content);
+        $content = str_replace('%OBJETO_SERVICE%', $data['service_name'], $content);
         $content = str_replace('%SELECT_USE%', '', $content);
         $content = str_replace('%OBJETO_VIEW%', $data['crud_name'], $content);
         $content = str_replace('%OBJETO_VARIABLE%', $data['crud_name'], $content);
@@ -1715,12 +1824,12 @@ class GeneradorCrudService
             foreach ($campos_array as $campo) {
                 $tablaCampo = $crud->nombre . '_' . $campo['field'];
 
-                $crud_campos[$tablaCampo . '_indice'] = (isset($campo['indice']) ? $campo['indice'] : null);  
+                $crud_campos[$tablaCampo . '_indice'] = (isset($campo['indice']) ? $campo['indice'] : null);
                 $crud_campos[$tablaCampo] = $campo['incluir_campo'];
                 $crud_campos[$tablaCampo . '_list'] = $campo['incluir_list'];
                 $crud_campos[$tablaCampo . '_alias'] = $campo['alias'];
                 $crud_campos[$tablaCampo . '_help'] = (isset($campo['help']) ? $campo['help'] : null);
-                
+
                 $crud_campos[$tablaCampo . '_required'] = (isset($campo['required']) ? $campo['required'] : null);
                 $crud_campos[$tablaCampo . '_readonly'] = (isset($campo['readonly']) ? $campo['readonly'] : null);
                 $crud_campos[$tablaCampo . '_regex'] = (isset($campo['regex']) ? $campo['regex'] : null);
@@ -1770,5 +1879,77 @@ class GeneradorCrudService
         }
 
         return false;
+    }
+
+    public function getCrudAnidado($rules)
+    {
+        Log::info('GeneradorCrudService - getCrudAnidado');
+        Log::info($rules);
+
+        $crud_anidado = '';
+        $rules = explode(';', $rules);
+        $template_fields_select_crud_anidado = file_get_contents('../app/Crud/template_view_field_select_crud_anidado.php');
+        $template_fields_select_crud_anidado_js = file_get_contents('../app/Crud/template_view_field_select_crud_anidado_js.php');
+
+        $operator_field = '';
+        $js_validation = '';
+
+        foreach ($rules as $rule) {
+            if ($rule) {
+                $items = explode(',', $rule);
+                $operator_field = $items[0];
+                $operator_value = $items[2];
+                $crud_asociado_id = $items[3];
+                $crud_cantidad_registros = $items[4];
+                $crud = Crud::find($crud_asociado_id);
+
+                if ($crud) {
+                    $template_crud_anidado =  $template_fields_select_crud_anidado;
+                    $template_crud_anidado = str_replace('%CRUD_ANIDADO_TITLE%', $crud->alias_opcion, $template_crud_anidado);
+                    $card_id = 'crud_anidado_' . $crud->nombre_componente . '_' . $operator_value;
+                    $template_crud_anidado = str_replace('%CRUD_ANIDADO_ID%', $card_id, $template_crud_anidado);
+                    
+                    $card_fieldset_id = 'crud_anidado_fieldset_' . $crud->nombre_componente . '_' . $operator_value;
+                    $template_crud_anidado = str_replace('%CRUD_ANIDADO_FIELDSET_ID%', $card_fieldset_id, $template_crud_anidado);
+                    $template_fields = file_get_contents("../resources/views/cruds/" . $crud->nombre_componente . "/fields.blade.php");
+                    $crud_anidado_fields = '';
+
+                    for ($i = 1; $i <= $crud_cantidad_registros; $i++) {
+                        $fields_crud = $template_fields;
+                        $crud_anidado_ref = $crud->nombre_componente . '_' . $i . '_';
+                        $fields_crud = str_replace('name="', 'name="' . $crud_anidado_ref, $fields_crud);
+                        $fields_crud = str_replace('id="', 'id="' . $crud_anidado_ref, $fields_crud);
+                        $crud_anidado_fields .= $fields_crud;
+                        $crud_anidado_fields .= '<hr class="primary text-primary">';
+                    }
+
+                    $template_crud_anidado = str_replace('%CRUD_ANIDADO_BODY%', $crud_anidado_fields, $template_crud_anidado);
+
+
+                    $crud_anidado .= $template_crud_anidado;
+
+                    $js_validation .= '
+                    var '.$card_id.' = document.getElementById("'.$card_id.'");
+                    var '.$card_fieldset_id.' = document.getElementById("'.$card_fieldset_id.'");
+                    '.$card_id.'.style.display = "none";
+                    '.$card_fieldset_id.'.disabled = true;
+
+                    if ('.$operator_field.'CrudElement.value == '.$operator_value.') {
+                        '.$card_id.'.style.display = "block";
+                        '.$card_fieldset_id.'.disabled = false;
+                    }
+                    ';
+                }
+            }
+        }
+
+        if ($operator_field) {
+            $template_crud_anidado_js = $template_fields_select_crud_anidado_js;
+            $template_crud_anidado_js = str_replace('%SELECT_CAMPO_ANIDADO%', $operator_field, $template_crud_anidado_js);
+            $template_crud_anidado_js = str_replace('%SELECT_CAMPO_VALIDATION%', $js_validation, $template_crud_anidado_js);
+            $crud_anidado .= $template_crud_anidado_js;
+        }
+
+        return $crud_anidado;
     }
 }
