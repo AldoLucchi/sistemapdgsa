@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Apps\CrudController;
 use App\Http\Controllers\Crud\Accesosdirectos69Controller;
 use App\Http\Controllers\Crud\Bitacora71Controller;
@@ -51,6 +52,7 @@ Route::name('admin.')->group(function () {
 
     Route::resource('/admin/bitacora', Bitacora71Controller::class);
 
-
-
 });
+
+Route::get('/notificationMarkRead/{notification_id}', [NotificationController::class, 'notificationMarkRead'])->name('notificationMarkRead');
+

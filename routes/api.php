@@ -3,6 +3,7 @@
 use App\Actions\SamplePermissionApi;
 use App\Actions\SampleRoleApi;
 use App\Actions\SampleUserApi;
+use App\Http\Controllers\Api\NotificationController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('v1')->group(function () {
 
+    Route::post('/setNotification', [NotificationController::class, 'setNotification']);
+
+    /*
     Route::get('/users', function (Request $request) {
         return app(SampleUserApi::class)->datatableList($request);
     });
@@ -107,4 +111,5 @@ Route::prefix('v1')->group(function () {
     Route::delete('/permissions/{id}', function ($id) {
         return app(SamplePermissionApi::class)->delete($id);
     });
+    */
 });
