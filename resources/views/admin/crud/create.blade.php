@@ -131,7 +131,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td colspan=2>
-                                                        <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_regex' }}" id="{{ $key.'_'.$column->Field.'_regex' }}">
+                                                        <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_regex' }}" id="{{ $key.'_'.$column->Field.'_regex' }}" style="width:90%;">
                                                     </td>
                                                     <td>
                                                         <input type="number" class="form-input" name="{{ $key.'_'.$column->Field.'_maxlength' }}" id="{{ $key.'_'.$column->Field.'_maxlength' }}" size="2">
@@ -166,12 +166,20 @@
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_select_rules' }}" id="{{ $key.'_'.$column->Field.'_select_rules' }}" size="10">
+                                                        <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_select_rules' }}" id="{{ $key.'_'.$column->Field.'_select_rules' }}">
                                                     </td>
-                                                </tr>
+                                                </tr>                                                
 
                                                 <tr class="bg-primary">
-                                                    <td colspan="3"><b>Incluir <br>Acorddion en:</b></td>
+                                                    <td colspan="5"><b>Reglas <br>CRUD anidado</b></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5">
+                                                        <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_crud_anidado_rules' }}" id="{{ $key.'_'.$column->Field.'_crud_anidado_rules' }}" style="width:90%;">
+                                                    </td>
+                                                </tr>
+                                                <tr class="bg-primary">
+                                                    <td colspan="3"><b>Incluir <br>Acorddion en</b></td>
                                                     <td colspan="2"><b>Permisos <br>Acorddion</b></td>
 
                                                 </tr>
@@ -220,6 +228,11 @@
                                     <br>-validación para emails: ^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$
                                     <br>-validación para teléfono (9 dígitos): ^(\d{7})$
 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Rules CRUD anidado: para setear una o más reglas de crud anidado, el formato es el siguiente: campo,operador,valor,idcrud,cantidadregistros;campo,operador,valor,idcrud,cantidadregistros
                                 </td>
                             </tr>
                         </table>
