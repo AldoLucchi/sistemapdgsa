@@ -187,14 +187,7 @@
                                                         <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field.'_readonly' }}" id="{{ $key.'_'.$column->Field.'_readonly' }}" {{ ($campoPreference && isset($campoPreference->incluir_readonly) && $campoPreference->incluir_readonly)?'checked':'' }}>
                                                     </td>
                                                 </tr>
-                                                <tr class="bg-primary">
-                                                    <td colspan="5"><b>Reglas <br>CRUD anidado</b></td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="5">
-                                                        <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_crud_anidado_rules' }}" id="{{ $key.'_'.$column->Field.'_crud_anidado_rules' }}" value="{{ ($campoPreference && isset($campoPreference->crud_anidado_rules) )?$campoPreference->crud_anidado_rules:'' }}" style="width:90%;">
-                                                    </td>
-                                                </tr>
+                                                
                                                 <tr class="bg-primary">
                                                     <td colspan=2><b>Seleccionar FK</b></td>
                                                     <td colspan=2><b>Campo Anidado<br>dependiente FK</b></td>
@@ -219,6 +212,14 @@
                                                     </td>
                                                     <td>
                                                         <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_select_rules' }}" id="{{ $key.'_'.$column->Field.'_select_rules' }}" size="10" value="{{ ($campoPreference && isset($campoPreference->select_rules))?$campoPreference->select_rules:'' }}">
+                                                    </td>
+                                                </tr>
+                                                <tr class="bg-primary">
+                                                    <td colspan="5"><b>Reglas <br>CRUD anidado</b></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5">
+                                                        <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_crud_anidado_rules' }}" id="{{ $key.'_'.$column->Field.'_crud_anidado_rules' }}" value="{{ ($campoPreference && isset($campoPreference->crud_anidado_rules) )?$campoPreference->crud_anidado_rules:'' }}" style="width:90%;">
                                                     </td>
                                                 </tr>
                                                 <tr class="bg-primary">
