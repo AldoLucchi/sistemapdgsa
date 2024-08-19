@@ -56,6 +56,7 @@
                             <option id="{{ $crud_table }}" value="{{ $crud_table }}">{{ $crud_table }}</option>
                             @endforeach
                         </select>
+                        <label class="tex-secondary">Tamaño máximo del nombre de tabla: 32 caracteres</label>
                         <!--end::Crud-->
                     </div>
                     <!--end::Input group-->

@@ -44,7 +44,12 @@ class GeneradorCrudService
             $rules = $request['reglas'];
             $crud_permisos =  null;
             if (isset($request['crud_permisos']) && $request['crud_permisos']) {
-                $crud_permisos = explode(',', $request['crud_permisos']);
+                if (is_string($request['crud_permisos'])) {
+                    $crud_permisos = explode(',', $request['crud_permisos']);
+                }
+                if (is_array($request['crud_permisos'])) {
+                    $crud_permisos = $request['crud_permisos'];
+                }
             }
 
             $crud_permisos_create = true;
@@ -473,7 +478,7 @@ class GeneradorCrudService
         $tablas_asociadas = '';
 
         $fields_checkobx = '';
-        
+
         $field_file_storage = '';
         $pdf = '';
         $filtersControllerIndex = '';
@@ -497,7 +502,7 @@ class GeneradorCrudService
         ';
 
         $insert_crud_anidados = '';
-        $variables_crud_anidados= '';
+        $variables_crud_anidados = '';
 
         foreach ($data['table_columns'] as $column) {
             if ($column['type_html'] == 'checkbox') {
@@ -535,7 +540,7 @@ class GeneradorCrudService
                     }
                     //$condition = 'whereIn("' . $column_id_fk . '",[' . $column['select_rules'] . '])';
                 }
-                
+
 
                 if ($column_idcliente_fk) {
                     $tabla_get  .= '
@@ -562,13 +567,13 @@ class GeneradorCrudService
                 "' . $model_name_fk . '" => $' . $model_name_fk . ', 
                 ';
 
-                
+
                 if (isset($column['crud_anidado_rules']) && $column['crud_anidado_rules']) {
                     $variables_crud_anidados = $this->getVariablesCrudAnidadoController($column['crud_anidado_rules']);
-                    
+
                     $insert_crud_anidados = $this->getInsertCrudAnidadoController($column['crud_anidado_rules']);
                 }
-                
+
 
                 $tablas_asociadas_uses .= $use_model;
                 $tablas_asociadas_get .= $tabla_get;
@@ -628,11 +633,11 @@ class GeneradorCrudService
                 ';
 
                 $tablas_asociadas_uses .= $use_model;
-                $tablas_asociadas .= $tabla_add;                
+                $tablas_asociadas .= $tabla_add;
             }
         }
 
-        $template_controller = str_replace('%FIELD_CHECKBOX%', $fields_checkobx, $template_controller);        
+        $template_controller = str_replace('%FIELD_CHECKBOX%', $fields_checkobx, $template_controller);
 
         $template_controller = str_replace('%FIELD_FILE_STORAGE%', $field_file_storage, $template_controller);
         $template_controller = str_replace('%FILTERS_CONTROLLER_INDEX%', $filtersControllerIndex, $template_controller);
@@ -675,10 +680,10 @@ class GeneradorCrudService
 
                 if ($crud) {
                     $variables .= '
-                    $'.$crud->nombre_componente.'Service = new \App\Services\Crud\\'.$crud->nombre_componente.'Service();
-                    $data'.$crud->nombre_componente.' = $'.$crud->nombre_componente.'Service->getData();
+                    $' . $crud->nombre_componente . 'Service = new \App\Services\Crud\\' . $crud->nombre_componente . 'Service();
+                    $data' . $crud->nombre_componente . ' = $' . $crud->nombre_componente . 'Service->getData();
 
-                    $data =  array_merge($data, $data'.$crud->nombre_componente.');
+                    $data =  array_merge($data, $data' . $crud->nombre_componente . ');
                     ';
                 }
             }
@@ -708,9 +713,9 @@ class GeneradorCrudService
 
                 if ($crud) {
 
-                   $inserts.= '
+                    $inserts .= '
                    $fieldsAnidado = [];
-                    $crudAnidado = "'.$crud->nombre_componente.'";
+                    $crudAnidado = "' . $crud->nombre_componente . '";
 
                     foreach ($request as $key => $value) {
                     if (str_contains($key,  $crudAnidado)) {
@@ -1908,7 +1913,7 @@ class GeneradorCrudService
                     $template_crud_anidado = str_replace('%CRUD_ANIDADO_TITLE%', $crud->alias_opcion, $template_crud_anidado);
                     $card_id = 'crud_anidado_' . $crud->nombre_componente . '_' . $operator_value;
                     $template_crud_anidado = str_replace('%CRUD_ANIDADO_ID%', $card_id, $template_crud_anidado);
-                    
+
                     $card_fieldset_id = 'crud_anidado_fieldset_' . $crud->nombre_componente . '_' . $operator_value;
                     $template_crud_anidado = str_replace('%CRUD_ANIDADO_FIELDSET_ID%', $card_fieldset_id, $template_crud_anidado);
                     $template_fields = file_get_contents("../resources/views/cruds/" . $crud->nombre_componente . "/fields.blade.php");
@@ -1929,14 +1934,14 @@ class GeneradorCrudService
                     $crud_anidado .= $template_crud_anidado;
 
                     $js_validation .= '
-                    var '.$card_id.' = document.getElementById("'.$card_id.'");
-                    var '.$card_fieldset_id.' = document.getElementById("'.$card_fieldset_id.'");
-                    '.$card_id.'.style.display = "none";
-                    '.$card_fieldset_id.'.disabled = true;
+                    var ' . $card_id . ' = document.getElementById("' . $card_id . '");
+                    var ' . $card_fieldset_id . ' = document.getElementById("' . $card_fieldset_id . '");
+                    ' . $card_id . '.style.display = "none";
+                    ' . $card_fieldset_id . '.disabled = true;
 
-                    if ('.$operator_field.'CrudElement.value == '.$operator_value.') {
-                        '.$card_id.'.style.display = "block";
-                        '.$card_fieldset_id.'.disabled = false;
+                    if (' . $operator_field . 'CrudElement.value == ' . $operator_value . ') {
+                        ' . $card_id . '.style.display = "block";
+                        ' . $card_fieldset_id . '.disabled = false;
                     }
                     ';
                 }
