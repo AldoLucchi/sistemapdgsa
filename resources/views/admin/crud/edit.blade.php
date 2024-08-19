@@ -105,8 +105,7 @@
                                         <td><b>Type</b> </td>
                                         <td><b>Key</b></td>
                                         <td><b>Null</b></td>
-                                        <td><b>Default</b></td>
-                                        <td><b>Extra</b></td>
+                                        <td><b>Default</b> | <b>Extra</b></td>
                                         <td><b></b></td>
                                     </tr>
                                 </thead>
@@ -124,7 +123,8 @@
                                     @endphp
                                     @endforeach
                                     <tr id="{{ $key.'_'.$column->Field }}_tr" class="my-5 py-5" data-bs-toggle="collapse" data-bs-target="#{{ $key.'_'.$column->Field }}_tr_collapse" aria-expanded="false" aria-controls="{{ $key.'_'.$column->Field }}_tr_collapse">
-                                        <td class="my-5 py-5">{{ $column->Field }}</td>
+                                        <td class="my-5 py-5">#{{ $loop->iteration }} </td>
+                                        <td>   {{ $column->Field }}</td>
                                         <td>
                                             {{ $column->Type }}
                                         </td>
@@ -133,10 +133,7 @@
                                         </td>
                                         <td>{{ $column->Null }}</td>
                                         <td>
-                                            {{ $column->Default }}
-                                        </td>
-                                        <td>
-                                            {{ $column->Extra }}
+                                            {{ $column->Default }} | {{ $column->Extra }}
                                         </td>
                                         <td><i class="ki-duotone ki-down"></i></td>
                                     </tr>

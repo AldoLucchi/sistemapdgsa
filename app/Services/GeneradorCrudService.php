@@ -44,6 +44,8 @@ class GeneradorCrudService
             $rules = $request['reglas'];
             $crud_permisos =  null;
             if (isset($request['crud_permisos']) && $request['crud_permisos']) {
+                Log::info('GeneradorCrudServices - store - crud_permisos');
+                Log::info($request['crud_permisos']);
                 if (is_string($request['crud_permisos'])) {
                     $crud_permisos = explode(',', $request['crud_permisos']);
                 }
@@ -56,7 +58,7 @@ class GeneradorCrudService
             $crud_permisos_read = true;
             $crud_permisos_update = true;
             $crud_permisos_delete = true;
-            if (isset($crud_permisos) && $crud_permisos) {
+            if ( $crud_permisos) {
                 if (!in_array('create', $crud_permisos)) {
                     $crud_permisos_create = false;
                 }
@@ -964,6 +966,8 @@ class GeneradorCrudService
                 $column_idcliente_fk = $data['tables_fk'][$column['name']]['table_column_fk_idcliente'];
 
                 $campo_anidado = '';
+                $campo_anidado_refresh = '';
+                $campo_anidado_display = '';
                 $campo_anidado_option = '';
                 $crud_anidado = '';
 
@@ -975,6 +979,8 @@ class GeneradorCrudService
                     $campo_anidado = $template_select_anidado;
 
                     $campo_anidado_option = $column['anidado'] . '={{ $item->' . $column['anidado'] . ' }}';
+                    $campo_anidado_refresh = '<i class="fa fa-refresh fs-6 text-primary" onclick="'.$column['anidado'].'Options()" style="cursor:pointer;"></i>';
+                    $campo_anidado_display = 'display:none;';
                 }
 
                 $options = '
@@ -990,6 +996,8 @@ class GeneradorCrudService
 
                 $template = str_replace('%FIELD_SELECT_OPTIONS%', $options, $template);
                 $template = str_replace('%FIELD_SELECT_CAMPO_ANIDADO%', $campo_anidado, $template);
+                $template = str_replace('%FIELD_SELECT_CAMPO_ANIDADO_DISPLAY%', $campo_anidado_display, $template);
+                $template = str_replace('%FIELD_SELECT_CAMPO_ANIDADO_REFRESH%', $campo_anidado_refresh, $template);
 
                 if (isset($column['crud_anidado_rules']) && $column['crud_anidado_rules']) {
                     $crud_anidado = $this->getCrudAnidado($column['crud_anidado_rules']);
