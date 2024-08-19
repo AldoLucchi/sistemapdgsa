@@ -481,6 +481,7 @@ class GeneradorCrudService
         $tablas_asociadas_uses = '';
         $tablas_asociadas_get = '';
         $tablas_asociadas = '';
+        $models_array = [];
 
         $fields_checkobx = '';
 
@@ -527,9 +528,15 @@ class GeneradorCrudService
                 $column_idcliente_fk = $data['tables_fk'][$column['name']]['table_column_fk_idcliente'];
                 $column_idproyecto_fk = $data['tables_fk'][$column['name']]['table_column_fk_idproyecto'];
 
-                $use_model = '
-                use App\Models\\' . $model_name_fk . ';
-                ';
+                if (!in_array($model_name_fk, $models_array)) {
+                    $use_model = '
+                    use App\Models\\' . $model_name_fk . ';
+                    ';
+                    $models_array[] = $model_name_fk;
+                }
+                else{
+                    $use_model = '';
+                }
 
                 $tabla_get = '
                 $' . $model_name_fk . ' = \App\Models\\' . $model_name_fk . '::select("*"); 
@@ -641,6 +648,7 @@ class GeneradorCrudService
                 $tablas_asociadas .= $tabla_add;
             }
         }
+
 
         $template_controller = str_replace('%FIELD_CHECKBOX%', $fields_checkobx, $template_controller);
 
