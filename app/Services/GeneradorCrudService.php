@@ -74,9 +74,9 @@ class GeneradorCrudService
             $table_crud_columns = DB::select("SHOW COLUMNS FROM " . $table_crud);
             $table_columns_string = "";
 
-            $table_columns = $table_columns_all_null = [];
-            $all_columns_null = true;
-            $table_columns_all_null_string = '';
+            $table_columns = $table_columns_include_all = [];
+            $all_columns_include = true;
+            $table_columns_include_all_string = '';
             $table_column_id = '';
             $table_column_name = '';
             $k = 1;
@@ -217,15 +217,12 @@ class GeneradorCrudService
                 }
 
                 //incude field
-                if (isset($request[$column_request_include])) {
-                    $all_columns_null = false;
-
+                if (isset($request[$column_request_include]) && $request[$column_request_include]) {
                     $table_columns[] =  $table_column_detail;
                     $table_columns_string .= "'" . $colum->Field . "',";
                 }
-
-                if (!isset($request[$column_request_include])) {
-                    $all_columns_null = false;
+                else {
+                    $all_columns_include = false;
                 }
 
                 //pk
@@ -241,13 +238,13 @@ class GeneradorCrudService
                 $k++;
 
                 //all                
-                $table_columns_all_null[] = $table_column_detail;
-                $table_columns_all_null_string .= "'" . $colum->Field . "',";
+                $table_columns_include_all[] = $table_column_detail;
+                $table_columns_include_all_string .= "'" . $colum->Field . "',";
             }
             // all columns o selected columns
-            if ($all_columns_null) {
-                $table_columns =  $table_columns_all_null;
-                $table_columns_string = $table_columns_all_null_string;
+            if ($all_columns_include) {
+                $table_columns =  $table_columns_include_all;
+                $table_columns_string = $table_columns_include_all_string;
             }
 
 
