@@ -396,20 +396,25 @@ class GeneradorCrudService
         $template_model = $this->generateCrudReplace($template_model, $data);
 
         $relations = '';
-        foreach ($data['tables_fk'] as $key => $table) {
-            $relation = '';
+        $relations_array = [];
 
-            if ($table['table_name_fk'] == 'Users') {
-                $relation = '
+        foreach ($data['tables_fk'] as $key => $table) {
+            if (!in_array($table['table_name_fk'], $relations_array)) {
+                $relation = '';
+
+                if ($table['table_name_fk'] == 'Users') {
+                    $relation = '
                 public function ' . $table['table_name_fk'] . '() { return $this->hasMany(' . $table['model_name'] . '::class,"id","' . $key . '"); }
                     ';
-            } else {
-                $relation = '
+                } else {
+                    $relation = '
                 public function ' . $table['table_name_fk'] . '() { return $this->hasMany(' . $table['model_name'] . '::class,"' . $key . '","' . $key . '"); }
                     ';
-            }
+                }
 
-            $relations .=  $relation;
+                $relations .=  $relation;
+                $relations_array[] = $table['table_name_fk'];
+            }
         }
 
         $template_model = str_replace('%RELATIONS%', $relations, $template_model);
