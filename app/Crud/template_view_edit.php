@@ -66,8 +66,7 @@
     </div>
 
     @push('scripts')
-    <script>
-    </script>
+    @include('cruds.%OBJETO_VIEW%.scripts')
     @endpush
 
 </x-default-layout>

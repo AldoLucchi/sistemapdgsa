@@ -180,13 +180,11 @@
                                                     </td>
                                                 </tr>
 
-                                                <tr class="bg-primary">
-                                                    <td colspan=2><b>Seleccionar FK</b></td>
-                                                    <td colspan=2><b>Campo Anidado<br> FK</b></td>
-                                                    <td><b>Reglas select <br>FK</b></td>
+                                                <tr class="bg-success">
+                                                    <td colspan=5><b>Seleccionar FK</b></td>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan=2>
+                                                    <td colspan=5>
                                                         <select name="{{ $key.'_'.$column->Field.'_select' }}" id="{{ $key.'_'.$column->Field.'_select' }}" class="form-select form-select-transparent" aria-label="Seleccione una opción">
                                                             <option value="">---</option>
                                                             @foreach($cruds_availables as $crud_table_available)
@@ -194,6 +192,14 @@
                                                             @endforeach
                                                         </select>
                                                     </td>
+                                                </tr>
+                                                <tr class="bg-primary">
+                                                    <td colspan=2><b>Campo Anidado<br> FK</b></td>
+                                                    <td colspan=3><b>Reglas select <br>FK</b></td>
+                                                </tr>
+
+                                                <tr>
+
                                                     <td colspan=2>
                                                         <select name="{{ $key.'_'.$column->Field.'_anidado' }}" id="{{ $key.'_'.$column->Field.'_anidado' }}" class="form-select form-select-transparent" aria-label="Seleccione una opción">
                                                             <option value="">---</option>
@@ -202,7 +208,7 @@
                                                             @endforeach
                                                         </select>
                                                     </td>
-                                                    <td>
+                                                    <td colspan=3>
                                                         <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_select_rules' }}" id="{{ $key.'_'.$column->Field.'_select_rules' }}" size="10" value="{{ ($campoPreference && isset($campoPreference->select_rules))?$campoPreference->select_rules:'' }}" style="width:90%;">
                                                     </td>
                                                 </tr>

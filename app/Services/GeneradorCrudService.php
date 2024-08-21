@@ -730,6 +730,8 @@ class GeneradorCrudService
                    $fieldsAnidado = [];
                     $crudAnidado = "' . $crud->nombre_componente . '";
 
+                    Log::info("GeneradorCrudService - getInsertCrudAnidadoController - ". $crudAnidado);
+
                     foreach ($request as $key => $value) {
                     if (str_contains($key,  $crudAnidado)) {
                         $field_part = explode("_", $key);
@@ -748,8 +750,16 @@ class GeneradorCrudService
                     }
 
                     if ($insertRegister) {
+                        $campo_label_id = $request["idfield"];
+                        $fieldAnidado[$campo_label_id ] = $request[$campo_label_id ];
+
+                        if(isset($request["idcliente"]) && $request["idcliente"]){
+                        $fieldAnidado["idcliente"] = $request["idcliente"];
+                        }
+                        if(isset($request["idproyecto"]) && $request["idproyecto"]){
                         $fieldAnidado["idproyecto"] = $request["idproyecto"];
-                        \App\Models\UsuariosEstatus60::create($fieldAnidado);
+                        }
+                        \App\Models\\' . $crud->nombre_componente . '::create($fieldAnidado);
                     }
                     }
                    ';
@@ -922,20 +932,26 @@ class GeneradorCrudService
 
         // field------------------
         $file_fields = fopen("../resources/views/cruds/" . $data['crud_name'] . "/fields.blade.php", "w") or die("Unable to open file - view fields.blade.php");
+        $file_scripts = fopen("../resources/views/cruds/" . $data['crud_name'] . "/scripts.blade.php", "w") or die("Unable to open file - view scripts.blade.php");
+
         $template_fields = file_get_contents('../app/Crud/template_view_field.php');
         $template_fields_select = file_get_contents('../app/Crud/template_view_field_select.php');
-        $template_fields_select_anidado = file_get_contents('../app/Crud/template_view_field_select_campo_anidado.php');
+        $template_fields_select_anidado_js = file_get_contents('../app/Crud/template_view_field_select_campo_anidado_js.php');
         $template_fields_html = file_get_contents('../app/Crud/template_view_field_html.php');
+        $template_scripts = file_get_contents('../app/Crud/template_view_scripts.php');
 
         $fields_all = '<input type="hidden" name="redirect_url" id="redirect_url" value="{{ (request()->has("redirect_url")) ? request()->get("redirect_url") : "" }}">';
         $action_documento = '';
 
         $table_columns = $data['table_columns'];
 
+        $scripts_js = '';
+
         usort($table_columns, function ($a, $b) {
             return $a['indice'] <=> $b['indice'];
         });
 
+        //dependiente oculto
         $columns_oculto_depends = [];
         foreach ($table_columns as $column) {
             if (isset($column['dependiente_oculto_rules'])) {
@@ -954,7 +970,6 @@ class GeneradorCrudService
 
         foreach ($table_columns as $column) {
             $template = '';
-
             $show_column_name = $column['name'];
             $show_column_name_alias = $column['name'];
             $column_readonly = '';
@@ -992,18 +1007,18 @@ class GeneradorCrudService
                 $column_id = $data['tables_fk'][$column['name']]['table_column_fk_id'];
                 $column_idproyecto_fk = $data['tables_fk'][$column['name']]['table_column_fk_idproyecto'];
                 $column_idcliente_fk = $data['tables_fk'][$column['name']]['table_column_fk_idcliente'];
-
                 $campo_anidado = '';
                 $campo_anidado_refresh = '';
                 $campo_anidado_display = '';
                 $campo_anidado_option = '';
-                $crud_anidado = '';
+                $crud_anidado = '';                
 
                 if (isset($column['anidado']) && $column['anidado']) {
-                    $template_select_anidado = $template_fields_select_anidado;
-                    $template_select_anidado = str_replace('%SELECT_CAMPO_ANIDADO%', $column['anidado'], $template_select_anidado);
-                    $template_select_anidado = str_replace('%SELECT_NAME%', $column['name'], $template_select_anidado);
-                    $campo_anidado = $template_select_anidado;
+                    $template_select_anidado_js = $template_fields_select_anidado_js;
+                    $template_select_anidado_js = str_replace('%SELECT_CAMPO_ANIDADO%', $column['anidado'], $template_select_anidado_js);
+                    $template_select_anidado_js = str_replace('%SELECT_NAME%', $column['name'], $template_select_anidado_js);
+                    $scripts_js .= $template_select_anidado_js;
+                    
                     $campo_anidado_option = $column['anidado'] . '={{ $item->' . $column['anidado'] . ' }}';
                     $campo_anidado_refresh = '<i class="fa fa-refresh fs-6 text-primary" onclick="' . $column['anidado'] . 'Options()" style="cursor:pointer;"></i>';
                     $campo_anidado_display = 'display:none;';
@@ -1021,12 +1036,14 @@ class GeneradorCrudService
                 }
 
                 $template = str_replace('%FIELD_SELECT_OPTIONS%', $options, $template);
-                $template = str_replace('%FIELD_SELECT_CAMPO_ANIDADO%', $campo_anidado, $template);
+                //$template = str_replace('%FIELD_SELECT_CAMPO_ANIDADO%', $campo_anidado, $template);
                 $template = str_replace('%FIELD_SELECT_CAMPO_ANIDADO_DISPLAY%', $campo_anidado_display, $template);
                 $template = str_replace('%FIELD_SELECT_CAMPO_ANIDADO_REFRESH%', $campo_anidado_refresh, $template);
 
                 if (isset($column['crud_anidado_rules']) && $column['crud_anidado_rules']) {
-                    $crud_anidado = $this->getCrudAnidado($column['crud_anidado_rules']);
+                    $crud_anidado_data = $this->getCrudAnidado($column['crud_anidado_rules']);
+                    $crud_anidado = $crud_anidado_data['crud_anidado'];
+                    $scripts_js .= $crud_anidado_data['crud_anidado_js'];
                 }
 
                 $template = str_replace('%FIELD_SELECT_CRUD_ANIDADO%', $crud_anidado, $template);
@@ -1122,6 +1139,11 @@ class GeneradorCrudService
 
         fwrite($file_fields, $fields_all);
         fclose($file_fields);
+
+        $template_scripts = str_replace('%ADD_VIEW_SCRIPT%', $scripts_js, $template_scripts);
+
+        fwrite($file_scripts, $template_scripts);
+        fclose($file_scripts);
 
         //actions ----------------------
         $file_action_view = fopen("../resources/views/cruds/" . $data['crud_name'] . "/columns/_actions.blade.php", "w") or die("Unable to open file - view actions.blade.php");
@@ -1571,116 +1593,123 @@ class GeneradorCrudService
                 $componentName = $crud->nombre_componente;
                 $viewShowName = 'show';
 
-                $template_controller = file_get_contents('../app/Http/Controllers/Crud/' . $controllerName . '.php');
-                //$search_datatable = 'use App\DataTables\\' . $tableNameDatatable . ';';
-                $create = false;
+                if (file_exists('../app/Http/Controllers/Crud/' . $controllerName . '.php')) {
+                    Log::info('GeneradorCrudService - generateCrudRelations - controller - exist');
+                    $template_controller = file_get_contents('../app/Http/Controllers/Crud/' . $controllerName . '.php');
 
-                if (!str_contains($template_controller, $tableNameDatatable)) {
-                    $relation_variables_data_use = '
+                    //$search_datatable = 'use App\DataTables\\' . $tableNameDatatable . ';';
+                    $create = false;
+
+                    if (!str_contains($template_controller, $tableNameDatatable)) {
+                        $relation_variables_data_use = '
                     use App\DataTables\\' . $tableNameDatatable . ';
                     //%RELATION_DATATABLE_VARIABLES_USE%
                     ';
 
-                    $template_controller = str_replace("//%RELATION_DATATABLE_VARIABLES_USE%", $relation_variables_data_use, $template_controller);
-                }
+                        $template_controller = str_replace("//%RELATION_DATATABLE_VARIABLES_USE%", $relation_variables_data_use, $template_controller);
+                    }
 
-                $relation_variables = '
+                    $relation_variables = '
                     $filters' . $crudName . ' = [];
                     $filters' . $crudName . ' = ["rutaDatatable" => true];
                     ';
 
-                foreach ($permisos as $key => $permiso) {
-                    if ($permiso == 'read') {
-                        $relation_variables .= '
+                    foreach ($permisos as $key => $permiso) {
+                        if ($permiso == 'read') {
+                            $relation_variables .= '
                             $filters' . $crudName . ' ["datatable"] ["read"] = true;
                             ';
-                    }
-                    if ($permiso == 'update') {
-                        $relation_variables .= '
+                        }
+                        if ($permiso == 'update') {
+                            $relation_variables .= '
                             $filters' . $crudName . ' ["datatable"] ["update"] = true;
                             ';
-                    }
-                    if ($permiso == 'delete') {
-                        $relation_variables .= '
+                        }
+                        if ($permiso == 'delete') {
+                            $relation_variables .= '
                             $filters' . $crudName . ' ["datatable"] ["delete"] = true;
                             ';
+                        }
+                        if ($permiso == 'create') {
+                            $create = true;
+                        }
                     }
-                    if ($permiso == 'create') {
-                        $create = true;
-                    }
-                }
 
-                $relation_variables .= '
+                    $relation_variables .= '
                             $filters' . $crudName . ' ["datatableFilters"] = ["' . $keyCrud . '" => $idRegister];
                             ';
 
-                $relation_variables .= '
+                    $relation_variables .= '
                     $dataTable' . $crudName . ' = new ' . $tableNameDatatable . '($filters' . $crudName . ');
                     
                     //%RELATION_DATATABLE_VARIABLES%
                     ';
 
-                $template_controller = str_replace("//%RELATION_DATATABLE_VARIABLES%", $relation_variables, $template_controller);
+                    $template_controller = str_replace("//%RELATION_DATATABLE_VARIABLES%", $relation_variables, $template_controller);
 
-                $search = '$dataTable' . $crudName . '->html()';
-                if (!str_contains($template_controller, $search)) {
+                    $search = '$dataTable' . $crudName . '->html()';
+                    if (!str_contains($template_controller, $search)) {
 
-                    $relation_variables_data = '
+                        $relation_variables_data = '
                     "dataTable' . $crudName . '" => $dataTable' . $crudName . '->html(),
 
                     //%RELATION_DATATABLE_VARIABLES_DATA%
                     ';
 
                     $template_controller = str_replace("//%RELATION_DATATABLE_VARIABLES_DATA%", $relation_variables_data, $template_controller);
-                }
+                    }
 
-                $file_controller = fopen("../app/Http/Controllers/Crud/" . $controllerName . ".php", "w") or die("Unable to open file - controller " . $controllerName);
-                fwrite($file_controller, $template_controller);
-                fclose($file_controller);
+                    $file_controller = fopen("../app/Http/Controllers/Crud/" . $controllerName . ".php", "w") or die("Unable to open file - controller " . $controllerName);
+                    fwrite($file_controller, $template_controller);
+                    fclose($file_controller);
 
-                //show
-                $template_datatable =  $template_show_datatable;
-                $template_datatable = str_replace("%OBJETO%", $crudName, $template_datatable);
-                $template_datatable = str_replace("%OBJETO_ALIAS%", $tableNameLabelAlias, $template_datatable);
-                $template_datatable = str_replace("%OBJETO_DATATABLE%", $tableNameDatatable, $template_datatable);
+                    //show
+                    $template_datatable =  $template_show_datatable;
+                    $template_datatable = str_replace("%OBJETO%", $crudName, $template_datatable);
+                    $template_datatable = str_replace("%OBJETO_ALIAS%", $tableNameLabelAlias, $template_datatable);
+                    $template_datatable = str_replace("%OBJETO_DATATABLE%", $tableNameDatatable, $template_datatable);
 
-                if ($create) {
-                    $link = '
+                    if ($create) {
+                        $link = '
                     <a href="{{ route("' . $tableNameDatatable . '.create") }}?' . $keyCrud . '={{ $' . $componentName . '->' . $keyCrud . ' }}&&redirect_url={{ url()->current() }}" class="btn btn-primary float-end"> 
                     Agregar
                     </a> ';
-                    $template_datatable = str_replace("%ACCORDION_CREATE%", $link, $template_datatable);
-                } else {
-                    $template_datatable = str_replace("%ACCORDION_CREATE%", '', $template_datatable);
-                }
+                        $template_datatable = str_replace("%ACCORDION_CREATE%", $link, $template_datatable);
+                    } else {
+                        $template_datatable = str_replace("%ACCORDION_CREATE%", '', $template_datatable);
+                    }
 
-                $file_datatable_show = fopen('../resources/views/cruds/' . $componentName . '/datatable_' . $crudName . '.blade.php', "w") or die("Unable to open file - view datatable_'.$crudName.'.blade.php");
-                fwrite($file_datatable_show, $template_datatable);
-                fclose($file_datatable_show);
+                    $file_datatable_show = fopen('../resources/views/cruds/' . $componentName . '/datatable_' . $crudName . '.blade.php', "w") or die("Unable to open file - view datatable_'.$crudName.'.blade.php");
+                    fwrite($file_datatable_show, $template_datatable);
+                    fclose($file_datatable_show);
 
-                $template_show = file_get_contents('../resources/views/cruds/' . $componentName . '/show.blade.php');
-                $search = 'datatable_' . $crudName;
+                    $template_show = file_get_contents('../resources/views/cruds/' . $componentName . '/show.blade.php');
+                    $search = 'datatable_' . $crudName;
 
-                if (!str_contains($template_show, $search)) {
-                    $template_datatable = '
+                    if (!str_contains($template_show, $search)) {
+                        $template_datatable = '
                     @include("cruds.' . $componentName . '.datatable_' . $crudName . '")
     
                     <!-- %RELATIONS_DATATABLE% -->
                     ';
 
-                    $template_show = str_replace("<!-- %RELATIONS_DATATABLE% -->", $template_datatable, $template_show);
+                        $template_show = str_replace("<!-- %RELATIONS_DATATABLE% -->", $template_datatable, $template_show);
 
-                    $template_datatable_script = '                  
+                        $template_datatable_script = '                  
                     {{$dataTable' . $crudName . '->scripts()}}
 
                     <!-- %RELATIONS_DATATABLE_SCRIPTS% -->
                     ';
 
-                    $template_show = str_replace("<!-- %RELATIONS_DATATABLE_SCRIPTS% -->", $template_datatable_script, $template_show);
+                        $template_show = str_replace("<!-- %RELATIONS_DATATABLE_SCRIPTS% -->", $template_datatable_script, $template_show);
 
-                    $file_show = fopen('../resources/views/cruds/' . $componentName . '/show.blade.php', "w") or die("Unable to open file - view show.blade.php");
-                    fwrite($file_show, $template_show);
-                    fclose($file_show);
+                        $file_show = fopen('../resources/views/cruds/' . $componentName . '/show.blade.php', "w") or die("Unable to open file - view show.blade.php");
+                        fwrite($file_show, $template_show);
+                        fclose($file_show);
+                    }
+                }
+                else{
+                    Log::info('GeneradorCrudService - generateCrudRelations - controller - no exist');
                 }
             }
         }
@@ -1836,6 +1865,7 @@ class GeneradorCrudService
 
     public function crudRefresh($crud_id)
     {
+        Log::info('GeneradorCrudService - crudRefresh');
         $result = $this->crudRefreshProcess($crud_id);
 
         if ($result) {
@@ -1865,6 +1895,7 @@ class GeneradorCrudService
 
     public function crudRefreshProcess($crud_id)
     {
+        Log::info('GeneradorCrudService - crudRefreshProcess - crud '.$crud_id);
         $crud = Crud::find($crud_id);
 
         if ($crud) {
@@ -1905,6 +1936,8 @@ class GeneradorCrudService
 
     public function crudRefreshAll()
     {
+        Log::info('GeneradorCrudService - crudRefreshAll  ');
+  
         $crudsRefresh = [];
         $cruds = Crud::where('estatus', 1)->get();
 
@@ -1938,6 +1971,7 @@ class GeneradorCrudService
         Log::info($rules);
 
         $crud_anidado = '';
+        $crud_anidado_js = '';
         $rules = explode(';', $rules);
         $template_fields_select_crud_anidado = file_get_contents('../app/Crud/template_view_field_select_crud_anidado.php');
         $template_fields_select_crud_anidado_js = file_get_contents('../app/Crud/template_view_field_select_crud_anidado_js.php');
@@ -1998,9 +2032,14 @@ class GeneradorCrudService
             $template_crud_anidado_js = $template_fields_select_crud_anidado_js;
             $template_crud_anidado_js = str_replace('%SELECT_CAMPO_ANIDADO%', $operator_field, $template_crud_anidado_js);
             $template_crud_anidado_js = str_replace('%SELECT_CAMPO_VALIDATION%', $js_validation, $template_crud_anidado_js);
-            $crud_anidado .= $template_crud_anidado_js;
+            $crud_anidado_js = $template_crud_anidado_js;
         }
 
-        return $crud_anidado;
+        $data = [
+            'crud_anidado' => $crud_anidado,
+            'crud_anidado_js' => $crud_anidado_js,
+        ];
+
+        return $data;
     }
 }

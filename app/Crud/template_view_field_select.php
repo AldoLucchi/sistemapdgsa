@@ -8,7 +8,7 @@
     %FIELD_TEXT_HELP%
 </div>
 
-%FIELD_SELECT_CAMPO_ANIDADO%
+
 
 @if(in_array('create', request()->segments()))
 %FIELD_SELECT_CRUD_ANIDADO%
