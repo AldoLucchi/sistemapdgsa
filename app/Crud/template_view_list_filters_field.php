@@ -2,8 +2,8 @@
     <label for="%OBJETO_LABEL_INDIVIDUAL%" class=" form-label">%OBJETO_LABEL%</label>
     <select class="form-control form-select form-select-transparent" aria-label="Select example" id="%OBJETO_LABEL_INDIVIDUAL%" name="%OBJETO_LABEL_INDIVIDUAL%">
         <option value="">---</option>
-        @foreach($%OBJETO_LABEL%List as $%OBJETO_LABEL_INDIVIDUAL%Option)
-        <option value="{{ $%OBJETO_LABEL_INDIVIDUAL%Option->%FIELD_ID% }}" {{ (isset($%OBJETO_LABEL%) && $%OBJETO_LABEL% == $%OBJETO_LABEL_INDIVIDUAL%Option->%FIELD_ID% )?'selected':'' }} {{ (session()->has("%FIELD_ID%") && $%OBJETO_LABEL_INDIVIDUAL%Option->%FIELD_ID% == session()->get("%FIELD_ID%")) ? "selected" : "" }}>{{ $%OBJETO_LABEL_INDIVIDUAL%Option->%FIELD_NAME% }}</option>
+        @foreach($%OBJETO_VARIABLE%List as $%OBJETO_LABEL_INDIVIDUAL%Option)
+        <option value="{{ $%OBJETO_LABEL_INDIVIDUAL%Option->%FIELD_ID% }}" {{ (isset($%OBJETO_VARIABLE%) && $%OBJETO_VARIABLE% == $%OBJETO_LABEL_INDIVIDUAL%Option->%FIELD_ID% )?'selected':'' }} {{ (session()->has("%FIELD_ID%") && $%OBJETO_LABEL_INDIVIDUAL%Option->%FIELD_ID% == session()->get("%FIELD_ID%")) ? "selected" : "" }}>{{ $%OBJETO_LABEL_INDIVIDUAL%Option->%FIELD_NAME% }}</option>
         @endforeach
     </select>
 </div>

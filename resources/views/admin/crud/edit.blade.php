@@ -101,12 +101,13 @@
                             <table class="table table-bordered table-striped table-hover g-1 text-center">
                                 <thead class="text-uppercase">
                                     <tr>
+                                        <td><b>#</b></td>
                                         <td><b>Field</b></td>
                                         <td><b>Type</b> </td>
                                         <td><b>Key</b></td>
                                         <td><b>Null</b></td>
                                         <td><b>Default</b> | <b>Extra</b></td>
-                                        <td><b></b></td>
+                                        <td><b><i class="ki-duotone ki-down"></i></b></td>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -124,21 +125,15 @@
                                     @endforeach
                                     <tr id="{{ $key.'_'.$column->Field }}_tr" class="my-5 py-5" data-bs-toggle="collapse" data-bs-target="#{{ $key.'_'.$column->Field }}_tr_collapse" aria-expanded="false" aria-controls="{{ $key.'_'.$column->Field }}_tr_collapse">
                                         <td class="my-5 py-5">#{{ $loop->iteration }} </td>
-                                        <td>   {{ $column->Field }}</td>
-                                        <td>
-                                            {{ $column->Type }}
-                                        </td>
-                                        <td>
-                                            {{ $column->Key }}
-                                        </td>
+                                        <td> {{ $column->Field }}</td>
+                                        <td> {{ $column->Type }} </td>
+                                        <td> {{ $column->Key }} </td>
                                         <td>{{ $column->Null }}</td>
-                                        <td>
-                                            {{ $column->Default }} | {{ $column->Extra }}
-                                        </td>
+                                        <td> {{ $column->Default }} | {{ $column->Extra }} </td>
                                         <td><i class="ki-duotone ki-down"></i></td>
                                     </tr>
                                     <tr id="{{ $key.'_'.$column->Field }}_tr_collapse" class="collapse">
-                                        <td colspan="6">
+                                        <td colspan="7">
                                             <table class="my-5 table table-bordered   border border-primary ">
                                                 <tr class="bg-primary">
                                                     <td><b>Indice</td>
@@ -184,11 +179,11 @@
                                                         <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field.'_readonly' }}" id="{{ $key.'_'.$column->Field.'_readonly' }}" {{ ($campoPreference && isset($campoPreference->incluir_readonly) && $campoPreference->incluir_readonly)?'checked':'' }}>
                                                     </td>
                                                 </tr>
-                                                
+
                                                 <tr class="bg-primary">
                                                     <td colspan=2><b>Seleccionar FK</b></td>
-                                                    <td colspan=2><b>Campo Anidado<br>dependiente FK</b></td>
-                                                    <td><b>Reglas FK</b></td>
+                                                    <td colspan=2><b>Campo Anidado<br> FK</b></td>
+                                                    <td><b>Reglas select <br>FK</b></td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan=2>
@@ -208,15 +203,20 @@
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_select_rules' }}" id="{{ $key.'_'.$column->Field.'_select_rules' }}" size="10" value="{{ ($campoPreference && isset($campoPreference->select_rules))?$campoPreference->select_rules:'' }}">
+                                                        <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_select_rules' }}" id="{{ $key.'_'.$column->Field.'_select_rules' }}" size="10" value="{{ ($campoPreference && isset($campoPreference->select_rules))?$campoPreference->select_rules:'' }}" style="width:90%;">
                                                     </td>
                                                 </tr>
                                                 <tr class="bg-primary">
-                                                    <td colspan="5"><b>Reglas <br>CRUD anidado</b></td>
+                                                    <td colspan="3"><b>Reglas <br>CRUD anidado</b></td>
+                                                    <td colspan="2"><b>Campo dependiente<br>oculto FK</b></td>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan="5">
+                                                    <td colspan="3">
                                                         <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_crud_anidado_rules' }}" id="{{ $key.'_'.$column->Field.'_crud_anidado_rules' }}" value="{{ ($campoPreference && isset($campoPreference->crud_anidado_rules) )?$campoPreference->crud_anidado_rules:'' }}" style="width:90%;">
+                                                    </td>
+                                                    <td colspan="2">
+                                                        <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_dependiente_oculto_rules' }}" id="{{ $key.'_'.$column->Field.'_dependiente_oculto_rules' }}" size="10" value="{{ ($campoPreference && isset($campoPreference->dependiente_oculto_rules))?$campoPreference->dependiente_oculto_rules:'' }}" style="width:90%;">
+
                                                     </td>
                                                 </tr>
                                                 <tr class="bg-primary">
@@ -252,12 +252,12 @@
                         <table class="table border border-secondary text-start">
                             <tr>
                                 <td>
-                                    Nota: si ningún campo esta marcado para incluir, automáticamente se incluyen todos
+                                    Incluir campo / Incluir list: si ningún campo esta marcado para incluir, automáticamente se incluyen todos
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    Rules: para setear una o más reglas, el formato es el siguiente: campo,operador,valor;campo,operador,valor
+                                    Reglas select FK: para setear una o más reglas, el formato es el siguiente: campo,operador,valor;campo,operador,valor
                                 </td>
                             </tr>
                             <tr>
@@ -272,7 +272,12 @@
                             </tr>
                             <tr>
                                 <td>
-                                    Rules CRUD anidado: para setear una o más reglas de crud anidado, el formato es el siguiente: campo,operador,valor,idcrud,cantidadregistros;campo,operador,valor,idcrud,cantidadregistros
+                                    Reglas CRUD anidado: para setear una o más reglas de crud anidado, el formato es el siguiente: campo,operador,valor,idcrud,cantidadregistros;campo,operador,valor,idcrud,cantidadregistros
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Reglas campos dependientes ocultos: para setear una o más reglas de campos dependientes ocultos, el formato es el siguiente: campo,operador,valor,nombrecampo1:nombrecampos2;campo,operador,valor,nombrecampo1
                                 </td>
                             </tr>
                         </table>

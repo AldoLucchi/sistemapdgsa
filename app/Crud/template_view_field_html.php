@@ -1,4 +1,4 @@
-<div class="mb-10 col-12 ">
+<div class="mb-10 col-12 " id="div_%FIELD%" style="%FIELD_HIDDEN%">
     <label for="%FIELD%" class="form-label">%FIELD_ALIAS%</label>%FIELD_REQUIRED_ICON%
     
     <textarea id="%FIELD%" name="%FIELD%" class="tox-target" %FIELD_READONLY% %FIELD_REQUIRED%>

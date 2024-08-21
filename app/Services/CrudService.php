@@ -35,6 +35,7 @@ class CrudService
             $readonly = (isset($request[$table_name . '_' . $colum->Field . '_readonly']) ? 1 : 0);
 
             $crud_anidado_rules = (isset($request[$table_name . '_' . $colum->Field . '_crud_anidado_rules']) ? $request[$table_name . '_' . $colum->Field . '_crud_anidado_rules'] : '');
+            $dependiente_oculto_rules = (isset($request[$table_name . '_' . $colum->Field . '_dependiente_oculto_rules']) ? $request[$table_name . '_' . $colum->Field . '_dependiente_oculto_rules'] : '');
 
             $select = (isset($request[$table_name . '_' . $colum->Field . '_select']) ? $request[$table_name . '_' . $colum->Field . '_select'] : null);
             $anidado = (isset($request[$table_name . '_' . $colum->Field . '_anidado']) ? $request[$table_name . '_' . $colum->Field . '_anidado'] : null);
@@ -50,7 +51,7 @@ class CrudService
             $campos .=  '"incluir_campo": ' . $incluir_campo . ', "incluir_list": ' . $incluir_list . ', "indice": ' . $indice . ', "alias": "' . $alias . '", "help": "' . $help . '", ';
             $campos .= '"required": ' . $required  . ', "readonly": ' . $readonly  . ', "maxlength": "' . $maxlength . '", "regex": "' . $regex . '",';
             $campos .=  '"select": "' . $select . '",  "anidado": "' . $anidado . '",  "select_rules": "' . $select_rules . '",';
-            $campos .=  '"crud_anidado_rules": "' . $crud_anidado_rules . '",';
+            $campos .=  '"crud_anidado_rules": "' . $crud_anidado_rules . '", "dependiente_oculto_rules": "' . $dependiente_oculto_rules . '",';
             $campos .=  '"show_fk": "' . $show_fk . '",  "show_fk_permisos": "' . $show_fk_permisos . '" },';
         }
         $campos = substr($campos, 0, -1);

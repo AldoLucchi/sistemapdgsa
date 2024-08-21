@@ -74,12 +74,13 @@
                             <table class="table table-bordered table-striped table-hover g-1 text-center ">
                                 <thead class="text-uppercase">
                                     <tr>
+                                        <td><b>#</b></td>
                                         <td><b>Field</b></td>
                                         <td><b>Type</b></td>
                                         <td><b>Key</b></td>
                                         <td><b>Null</b></td>
                                         <td><b>Default</b> | <b>Extra</b></td>
-                                        <td><b></b></td>
+                                        <td><b><i class="ki-duotone ki-down"></i></b></td>
 
                                     </tr>
                                 </thead>
@@ -145,8 +146,8 @@
                                                 </tr>
                                                 <tr class="bg-primary">
                                                     <td colspan="2"><b>Seleccionar <br>FK</b></td>
-                                                    <td colspan="2"><b>Campo Anidado<br>dependiente FK</b></td>
-                                                    <td><b>Reglas <br>FK</b></td>
+                                                    <td colspan="2"><b>Campo Anidado<br>FK</b></td>
+                                                    <td><b>Reglas select <br>FK</b></td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="2">
@@ -166,22 +167,25 @@
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_select_rules' }}" id="{{ $key.'_'.$column->Field.'_select_rules' }}">
+                                                        <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_select_rules' }}" id="{{ $key.'_'.$column->Field.'_select_rules' }}" style="width:90%;">
                                                     </td>
-                                                </tr>                                                
+                                                </tr>
 
                                                 <tr class="bg-primary">
-                                                    <td colspan="5"><b>Reglas <br>CRUD anidado</b></td>
+                                                    <td colspan="3"><b>Reglas <br>CRUD anidado</b></td>
+                                                    <td colspan="2"><b>Campo dependiente<br>oculto FK</b></td>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan="5">
+                                                    <td colspan="3">
                                                         <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_crud_anidado_rules' }}" id="{{ $key.'_'.$column->Field.'_crud_anidado_rules' }}" style="width:90%;">
+                                                    </td>
+                                                    <td colspan="2">
+                                                        <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_dependiente_oculto_rules' }}" id="{{ $key.'_'.$column->Field.'_dependiente_oculto_rules' }}" style="width:90%;">
                                                     </td>
                                                 </tr>
                                                 <tr class="bg-primary">
                                                     <td colspan="3"><b>Incluir <br>Acorddion en</b></td>
                                                     <td colspan="2"><b>Permisos <br>Acorddion</b></td>
-
                                                 </tr>
                                                 <tr>
                                                     <td colspan="3">
@@ -212,12 +216,12 @@
                         <table class="table border border-secondary text-start">
                             <tr>
                                 <td>
-                                    Nota: si ningún campo esta marcado para incluir, automáticamente se incluyen todos
+                                    Incluir campo / Incluir list: si ningún campo esta marcado para incluir, automáticamente se incluyen todos
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    Rules: para setear una o más reglas, el formato es el siguiente: campo,operador,valor;campo,operador,valor
+                                    Reglas Select FK: para setear una o más reglas, el formato es el siguiente: campo,operador,valor;campo,operador,valor
                                 </td>
                             </tr>
                             <tr>
@@ -232,7 +236,12 @@
                             </tr>
                             <tr>
                                 <td>
-                                    Rules CRUD anidado: para setear una o más reglas de crud anidado, el formato es el siguiente: campo,operador,valor,idcrud,cantidadregistros;campo,operador,valor,idcrud,cantidadregistros
+                                    Reglas CRUD anidado: para setear una o más reglas de crud anidado, el formato es el siguiente: campo,operador,valor,idcrud,cantidadregistros;campo,operador,valor,idcrud,cantidadregistros
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Reglas campos dependientes ocultos: para setear una o más reglas de campos dependientes ocultos, el formato es el siguiente: campo,operador,valor,nombrecampo1:nombrecampos2;campo,operador,valor,nombrecampo1
                                 </td>
                             </tr>
                         </table>
