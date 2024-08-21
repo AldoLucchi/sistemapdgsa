@@ -84,7 +84,7 @@ class CrudDataTable extends DataTable
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(0, 'desc')
-            ->pageLength(100)
+            ->pageLength(50)
             ->drawCallback("function() {" . file_get_contents(resource_path('views/admin/crud/columns/_draw-scripts.js')) . "}");
     }
 

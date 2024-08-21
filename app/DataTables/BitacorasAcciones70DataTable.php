@@ -105,7 +105,7 @@ return mb_convert_encoding( $BitacorasAcciones70->accion, "UTF-8", "UTF-8") ;
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(0)
-            ->pageLength(100)
+            ->pageLength(50)
             ->drawCallback("function() {" . file_get_contents(resource_path('views/cruds/BitacorasAcciones70/columns/_draw-scripts.js')) . "}");
     }
 
