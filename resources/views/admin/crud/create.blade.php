@@ -158,7 +158,7 @@
                                                     </td>
                                                 </tr>
 
-                                                <tr class="bg-primary">
+                                                <tr class="bg-danger">
                                                     <td colspan="2"><b>Campo Anidado<br>FK</b></td>
                                                     <td colspan="3"><b>Reglas select <br>FK</b></td>
                                                 </tr>
@@ -176,7 +176,7 @@
                                                     </td>
                                                 </tr>
 
-                                                <tr class="bg-primary">
+                                                <tr class="bg-info">
                                                     <td colspan="3"><b>Reglas <br>CRUD anidado</b></td>
                                                     <td colspan="2"><b>Campo dependiente<br>oculto FK</b></td>
                                                 </tr>
@@ -188,7 +188,7 @@
                                                         <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_dependiente_oculto_rules' }}" id="{{ $key.'_'.$column->Field.'_dependiente_oculto_rules' }}" style="width:90%;">
                                                     </td>
                                                 </tr>
-                                                <tr class="bg-primary">
+                                                <tr class="bg-warning">
                                                     <td colspan="3"><b>Incluir <br>Acorddion en</b></td>
                                                     <td colspan="2"><b>Permisos <br>Acorddion</b></td>
                                                 </tr>
@@ -218,18 +218,13 @@
                             </table>
                         </fieldset>
 
-                        <table class="table border border-secondary text-start">
-                            <tr>
+                        <table class="table border border-primary text-start">
+                            <tr class="bg-primary">
                                 <td>
                                     Incluir campo / Incluir list: si ningún campo esta marcado para incluir, automáticamente se incluyen todos
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    Reglas Select FK: para setear una o más reglas, el formato es el siguiente: campo,operador,valor;campo,operador,valor
-                                </td>
-                            </tr>
-                            <tr>
+                            <tr class="bg-primary">
                                 <td>
                                     Regex: solo para campos de tipo: text, date, search, url, tel, email, and password. Ejemplos:
                                     <br>-validación de todos los caracteres en minúsuculas: ^[a-z][a-z0-9_.]*$
@@ -239,12 +234,18 @@
 
                                 </td>
                             </tr>
-                            <tr>
+                            <tr class="bg-danger">
+                                <td>
+                                    Reglas Select FK: para setear una o más reglas, el formato es el siguiente: campo,operador,valor;campo,operador,valor
+                                </td>
+                            </tr>
+
+                            <tr class="bg-info">
                                 <td>
                                     Reglas CRUD anidado: para setear una o más reglas de crud anidado, el formato es el siguiente: campo,operador,valor,idcrud,cantidadregistros;campo,operador,valor,idcrud,cantidadregistros
                                 </td>
                             </tr>
-                            <tr>
+                            <tr class="bg-info">
                                 <td>
                                     Reglas campos dependientes ocultos: para setear una o más reglas de campos dependientes ocultos, el formato es el siguiente: campo,operador,valor,nombrecampo1:nombrecampos2;campo,operador,valor,nombrecampo1
                                 </td>

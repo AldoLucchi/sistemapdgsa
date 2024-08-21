@@ -211,13 +211,15 @@ class GeneradorCrudService
                     }
 
                     //
-                    if (isset($request[$column_show_fk]) && !empty($request[$column_show_fk]) &&  $column_show_fk && $column_show_fk != 'NULL' && $column_show_fk != NULL) {
-                        $table_column_detail['select_crud_relation'] = $request[$column_show_fk];
-                        $tables_crud_relation_fk[$colum->Field]['crud'] = $request[$column_show_fk];
-                        if (isset($request[$column_show_fk_permisos]) && !empty($request[$column_show_fk_permisos]) &&  $column_show_fk_permisos && $column_show_fk_permisos != 'NULL' && $column_show_fk_permisos != NULL) {
-                            $table_column_detail['select_crud_relation_permisos'] = $request[$column_show_fk_permisos];
-                            $tables_crud_relation_fk[$colum->Field]['permisos'] = $request[$column_show_fk_permisos];
-                        }
+                    
+                }
+
+                if (isset($request[$column_show_fk]) && !empty($request[$column_show_fk]) &&  $column_show_fk && $column_show_fk != 'NULL' && $column_show_fk != NULL) {
+                    $table_column_detail['select_crud_relation'] = $request[$column_show_fk];
+                    $tables_crud_relation_fk[$colum->Field]['crud'] = $request[$column_show_fk];
+                    if (isset($request[$column_show_fk_permisos]) && !empty($request[$column_show_fk_permisos]) &&  $column_show_fk_permisos && $column_show_fk_permisos != 'NULL' && $column_show_fk_permisos != NULL) {
+                        $table_column_detail['select_crud_relation_permisos'] = $request[$column_show_fk_permisos];
+                        $tables_crud_relation_fk[$colum->Field]['permisos'] = $request[$column_show_fk_permisos];
                     }
                 }
 
@@ -939,6 +941,7 @@ class GeneradorCrudService
         $template_fields_select_anidado_js = file_get_contents('../app/Crud/template_view_field_select_campo_anidado_js.php');
         $template_fields_html = file_get_contents('../app/Crud/template_view_field_html.php');
         $template_scripts = file_get_contents('../app/Crud/template_view_scripts.php');
+        $template_field_dependiente_oculto_js = file_get_contents('../app/Crud/template_view_field_select_campo_dependiente_oculto_js.php');
 
         $fields_all = '<input type="hidden" name="redirect_url" id="redirect_url" value="{{ (request()->has("redirect_url")) ? request()->get("redirect_url") : "" }}">';
         $action_documento = '';
@@ -1011,14 +1014,14 @@ class GeneradorCrudService
                 $campo_anidado_refresh = '';
                 $campo_anidado_display = '';
                 $campo_anidado_option = '';
-                $crud_anidado = '';                
+                $crud_anidado = '';
 
                 if (isset($column['anidado']) && $column['anidado']) {
                     $template_select_anidado_js = $template_fields_select_anidado_js;
                     $template_select_anidado_js = str_replace('%SELECT_CAMPO_ANIDADO%', $column['anidado'], $template_select_anidado_js);
                     $template_select_anidado_js = str_replace('%SELECT_NAME%', $column['name'], $template_select_anidado_js);
                     $scripts_js .= $template_select_anidado_js;
-                    
+
                     $campo_anidado_option = $column['anidado'] . '={{ $item->' . $column['anidado'] . ' }}';
                     $campo_anidado_refresh = '<i class="fa fa-refresh fs-6 text-primary" onclick="' . $column['anidado'] . 'Options()" style="cursor:pointer;"></i>';
                     $campo_anidado_display = 'display:none;';
@@ -1047,6 +1050,52 @@ class GeneradorCrudService
                 }
 
                 $template = str_replace('%FIELD_SELECT_CRUD_ANIDADO%', $crud_anidado, $template);
+
+                if (isset($column['dependiente_oculto_rules'])) {
+                    Log::info('GeneradorCrudService - generateCrudViews - '.$column['dependiente_oculto_rules']);
+                    $template_dependiente_oculto_js = $template_field_dependiente_oculto_js;
+                    $campo_dependiente_oculto_var = '';
+                    $campo_dependiente_oculto_none = '';
+                    $campo_dependiente_oculto_block = '';
+                    $campo_dependiente_oculto_if = '';
+
+                    $reglas_oculto = explode(';', $column['dependiente_oculto_rules']);
+                    foreach ($reglas_oculto as $regla_oculto) {
+                        if ($regla_oculto) {
+                            $regla_oculto_detalle = explode(',', $regla_oculto);
+                            $detalle_dependiente = $regla_oculto_detalle[0];
+                            $detalle_operador = $regla_oculto_detalle[1];
+                            $detalle_value = $regla_oculto_detalle[2];
+                            $detalle_campos_oculto = explode(':', $regla_oculto_detalle[3]);
+
+                            $campo_dependiente_oculto_block = '';
+
+                            foreach ($detalle_campos_oculto as $detalle_campo_oculto) {
+                                $campo_dependiente_oculto_var .= '
+                                var '.$detalle_campo_oculto.'OcultoElement = document.getElementById("div_'.$detalle_campo_oculto.'");';
+
+                                $campo_dependiente_oculto_none .= '
+                                '.$detalle_campo_oculto.'OcultoElement.style.display = "none";';
+
+                                $campo_dependiente_oculto_block .= '
+                                '.$detalle_campo_oculto.'OcultoElement.style.display = "block";
+                                ';
+                            }
+
+                            $campo_dependiente_oculto_if .= '
+                            if ('.$column['name'].'OcultoElement.value == '.$detalle_value.') {';
+                            $campo_dependiente_oculto_if .= $campo_dependiente_oculto_block;
+                            $campo_dependiente_oculto_if .= '}';
+                            
+                        }
+                    }
+
+                    $template_dependiente_oculto_js = str_replace('%CAMPO_SELECT_OCULTO%', $column['name'], $template_dependiente_oculto_js);
+                    $template_dependiente_oculto_js = str_replace('%CAMPOS_DEPENDIENTES_OCULTO_VAR%', $campo_dependiente_oculto_var, $template_dependiente_oculto_js);
+                    $template_dependiente_oculto_js = str_replace('%CAMPOS_DEPENDIENTES_OCULTO_NONE%', $campo_dependiente_oculto_none, $template_dependiente_oculto_js);
+                    $template_dependiente_oculto_js = str_replace('%CAMPOS_DEPENDIENTES_OCULTO_IF%', $campo_dependiente_oculto_if, $template_dependiente_oculto_js);
+                    $scripts_js .= $template_dependiente_oculto_js;
+                }
             } elseif ($column['type_html'] == 'html') {
                 $template = $template_fields_html;
 
@@ -1656,7 +1705,7 @@ class GeneradorCrudService
                     //%RELATION_DATATABLE_VARIABLES_DATA%
                     ';
 
-                    $template_controller = str_replace("//%RELATION_DATATABLE_VARIABLES_DATA%", $relation_variables_data, $template_controller);
+                        $template_controller = str_replace("//%RELATION_DATATABLE_VARIABLES_DATA%", $relation_variables_data, $template_controller);
                     }
 
                     $file_controller = fopen("../app/Http/Controllers/Crud/" . $controllerName . ".php", "w") or die("Unable to open file - controller " . $controllerName);
@@ -1707,8 +1756,7 @@ class GeneradorCrudService
                         fwrite($file_show, $template_show);
                         fclose($file_show);
                     }
-                }
-                else{
+                } else {
                     Log::info('GeneradorCrudService - generateCrudRelations - controller - no exist');
                 }
             }
@@ -1895,7 +1943,7 @@ class GeneradorCrudService
 
     public function crudRefreshProcess($crud_id)
     {
-        Log::info('GeneradorCrudService - crudRefreshProcess - crud '.$crud_id);
+        Log::info('GeneradorCrudService - crudRefreshProcess - crud ' . $crud_id);
         $crud = Crud::find($crud_id);
 
         if ($crud) {
@@ -1937,7 +1985,7 @@ class GeneradorCrudService
     public function crudRefreshAll()
     {
         Log::info('GeneradorCrudService - crudRefreshAll  ');
-  
+
         $crudsRefresh = [];
         $cruds = Crud::where('estatus', 1)->get();
 
