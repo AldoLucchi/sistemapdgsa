@@ -114,7 +114,7 @@ class EtiquetasDocumentos104Controller extends Controller
       return redirect($rutaCrud)->with('message', $message);
     } catch (Exception $e) {
       Log::info('EtiquetasDocumentos104Controller - store - Exception ' . $e->getMessage());
-
+      $rutaCrud = '/admin/etiquetaDocumento';
       return redirect($rutaCrud)->with('message-error', $e->getMessage());
     }
   }
