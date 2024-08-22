@@ -12,7 +12,7 @@
         <!--end::Title-->
 
         <!--begin::Content-->
-        <span>{{ Session::get('message') }}</span>
+        <span>{!! Session::get('message') !!}</span>
         <!--end::Content-->
     </div>
     <!--end::Wrapper-->
@@ -40,7 +40,7 @@
         <!--end::Title-->
 
         <!--begin::Content-->
-        <span>{{ Session::get('message-error') }}</span>
+        <span>{!! Session::get('message-error') !!}</span>
         <!--end::Content-->
     </div>
     <!--end::Wrapper-->

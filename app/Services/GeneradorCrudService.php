@@ -1922,17 +1922,20 @@ class GeneradorCrudService
             $campos_array = json_decode($crud_generado->campos);
             if ($campos_array) {
                 foreach ($campos_array as $campo) {
-                    if ($campo->show_fk && $campo->show_fk == $crud_id) {
+                    if (isset($campo->show_fk) && $campo->show_fk && $campo->show_fk == $crud_id) {
                         $accordions[] = $crud_generado->id;
                     }
-                    if ($campo->crud_anidado_rules) {
-                        foreach ($campo->crud_anidado_rules as $rule) {
+                    
+                    if (isset($campo->crud_anidado_rules) && $campo->crud_anidado_rules) {
+                        $crud_anidado_rules = explode(';', $campo->crud_anidado_rules);
+                        foreach ($crud_anidado_rules as $rule) {
                             if ($rule) {
                                 $items = explode(',', $rule);
                                 $accordions[]  = $items[3]; //crud_asociado_id
                             }
                         }
                     }
+                        
                 }
             }
         }

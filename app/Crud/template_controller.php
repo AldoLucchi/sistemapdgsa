@@ -166,7 +166,7 @@ class %OBJETO_CONTROLLER% extends Controller
 
         %FIELD_PDF%
 
-        $message =  ' %OBJETO_LABEL_INDIVIDUAL%: registro creado correctamente: <a href="/#'.$%OBJETO_VARIABLE%->%FIELD_ID%.'>'.$%OBJETO_VARIABLE%->%FIELD_ID%.'</a>';
+        $message =  ' %OBJETO_LABEL_INDIVIDUAL%: registro creado correctamente: <a href="/#'.$%OBJETO_VARIABLE%->%FIELD_ID%.'">'.$%OBJETO_VARIABLE%->%FIELD_ID%.'</a>';
 
         if(isset($request['redirect_url']) && $request['redirect_url']){
           $rutaCrud = $request['redirect_url'];
@@ -265,6 +265,8 @@ class %OBJETO_CONTROLLER% extends Controller
      */
     public function update(Request $request, $%OBJETO_VARIABLE%)
     {
+      $id = $%OBJETO_VARIABLE%;
+
       $rutaCrud = '/crud/%OBJETO_ROUTE%';
 
       if( Session::has('%OBJETO_ROUTE%')){
@@ -288,7 +290,7 @@ class %OBJETO_CONTROLLER% extends Controller
       
         %FIELD_PDF%
 
-        $message =  ' %OBJETO_LABEL_INDIVIDUAL%: registro actualizado correctamente: <a href="/#'.$%OBJETO_VARIABLE%.'>'.$%OBJETO_VARIABLE%.'</a>';       
+        $message =  ' %OBJETO_LABEL_INDIVIDUAL%: registro actualizado correctamente: <a href="/#'.$id.'">'.$id.'</a>';       
 
         return redirect($rutaCrud)->with('message',$message);
       
@@ -317,6 +319,8 @@ class %OBJETO_CONTROLLER% extends Controller
       Log::info('%OBJETO_CONTROLLER% - destroy');
       Log::info($%OBJETO_VARIABLE%);
 
+      $id = $%OBJETO_VARIABLE%;
+
       $rutaCrud = '/crud/%OBJETO_ROUTE%';
 
       if( Session::has('%OBJETO_ROUTE%')){
@@ -328,7 +332,7 @@ class %OBJETO_CONTROLLER% extends Controller
        $%OBJETO_VARIABLE%_delete = %OBJETO_VARIABLE%::find($%OBJETO_VARIABLE%);
       $%OBJETO_VARIABLE%_delete = $%OBJETO_VARIABLE%_delete->delete();       
 
-      $message =  ' %OBJETO_LABEL_INDIVIDUAL%: registro eliminado correctamente: <a href="/#'.$%OBJETO_VARIABLE%.'>'.$%OBJETO_VARIABLE%.'</a>';        
+      $message =  ' %OBJETO_LABEL_INDIVIDUAL%: registro eliminado correctamente: <a href="/#'.$id.'">'.$id.'</a>';        
 
       return redirect($rutaCrud)->with('message',$message);	
     }
