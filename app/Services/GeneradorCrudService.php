@@ -1374,17 +1374,19 @@ class GeneradorCrudService
                 $column_name = $data['tables_fk'][$column['name']]['table_column_fk_name'];
                 $column_id = $data['tables_fk'][$column['name']]['table_column_fk_id'];
 
-                $list_filters = str_replace('%OBJETO_LABEL%', $model_name, $list_filters);
-
-                // if (in_array($model_name, ['Users', 'users'])) {
-                //     $list_filters = str_replace('%FIELD_ID%', 'idusuario', $list_filters);
-                // } else {
-                $list_filters = str_replace('%FIELD_ID%', $column['name'], $list_filters);
-                // }
+                $list_filters = str_replace('%OBJETO_LABEL%', $model_name, $list_filters);                
+                $list_filters = str_replace('%FIELD_ID%', $column['name'], $list_filters);                
 
                 $filters .= $list_filters;
 
+                $list_filters = $template_filters;
+                $list_filters = str_replace('%OBJETO_LABEL%', $column['name'], $list_filters);
+                $list_filters = str_replace('%FIELD_ID%', $column['name'], $list_filters);
 
+                $filters .= $list_filters;
+            }
+
+            if (isset($column['select_crud_relation'])) {
                 $list_filters = $template_filters;
                 $list_filters = str_replace('%OBJETO_LABEL%', $column['name'], $list_filters);
                 $list_filters = str_replace('%FIELD_ID%', $column['name'], $list_filters);
@@ -1939,7 +1941,6 @@ class GeneradorCrudService
                 }
             }
         }
-
 
         foreach ($anidados as $anidado_id) {
             $this->crudRefreshProcess($anidado_id);

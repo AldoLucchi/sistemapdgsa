@@ -123,6 +123,8 @@ class CrudController extends Controller
      */
     public function edit($crud_id)
     {
+        Log::info('CrudController - edit');
+
         $crud = Crud::find($crud_id);
         $crud_campos = ((isset($crud->campos) && $crud->campos )?json_decode($crud->campos):[]);
         $cruds_created = []; //Crud::pluck('name')->toArray();
@@ -163,6 +165,7 @@ class CrudController extends Controller
             'cruds_generated' => $cruds_generated,
             'options_crud' => $options_crud,
         ];
+        Log::info($data);
 
         return view('admin.crud.edit', $data);
     }
