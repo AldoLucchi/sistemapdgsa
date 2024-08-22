@@ -176,7 +176,7 @@
                                                         <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field.'_required' }}" id="{{ $key.'_'.$column->Field.'_required' }}" {{ ($campoPreference && isset($campoPreference->required) && $campoPreference->required)?'checked':'' }}>
                                                     </td>
                                                     <td>
-                                                        <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field.'_readonly' }}" id="{{ $key.'_'.$column->Field.'_readonly' }}" {{ ($campoPreference && isset($campoPreference->incluir_readonly) && $campoPreference->incluir_readonly)?'checked':'' }}>
+                                                        <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field.'_readonly' }}" id="{{ $key.'_'.$column->Field.'_readonly' }}" {{ ($campoPreference && isset($campoPreference->readonly) && $campoPreference->readonly)?'checked':'' }}>
                                                     </td>
                                                 </tr>
 
