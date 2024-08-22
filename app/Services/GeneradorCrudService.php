@@ -211,7 +211,7 @@ class GeneradorCrudService
                     }
 
                     //
-                    
+
                 }
 
                 if (isset($request[$column_show_fk]) && !empty($request[$column_show_fk]) &&  $column_show_fk && $column_show_fk != 'NULL' && $column_show_fk != NULL) {
@@ -1052,7 +1052,7 @@ class GeneradorCrudService
                 $template = str_replace('%FIELD_SELECT_CRUD_ANIDADO%', $crud_anidado, $template);
 
                 if (isset($column['dependiente_oculto_rules'])) {
-                    Log::info('GeneradorCrudService - generateCrudViews - '.$column['dependiente_oculto_rules']);
+                    Log::info('GeneradorCrudService - generateCrudViews - ' . $column['dependiente_oculto_rules']);
                     $template_dependiente_oculto_js = $template_field_dependiente_oculto_js;
                     $campo_dependiente_oculto_var = '';
                     $campo_dependiente_oculto_none = '';
@@ -1072,21 +1072,20 @@ class GeneradorCrudService
 
                             foreach ($detalle_campos_oculto as $detalle_campo_oculto) {
                                 $campo_dependiente_oculto_var .= '
-                                var '.$detalle_campo_oculto.'OcultoElement = document.getElementById("div_'.$detalle_campo_oculto.'");';
+                                var ' . $detalle_campo_oculto . 'OcultoElement = document.getElementById("div_' . $detalle_campo_oculto . '");';
 
                                 $campo_dependiente_oculto_none .= '
-                                '.$detalle_campo_oculto.'OcultoElement.style.display = "none";';
+                                ' . $detalle_campo_oculto . 'OcultoElement.style.display = "none";';
 
                                 $campo_dependiente_oculto_block .= '
-                                '.$detalle_campo_oculto.'OcultoElement.style.display = "block";
+                                ' . $detalle_campo_oculto . 'OcultoElement.style.display = "block";
                                 ';
                             }
 
                             $campo_dependiente_oculto_if .= '
-                            if ('.$column['name'].'OcultoElement.value == '.$detalle_value.') {';
+                            if (' . $column['name'] . 'OcultoElement.value == ' . $detalle_value . ') {';
                             $campo_dependiente_oculto_if .= $campo_dependiente_oculto_block;
                             $campo_dependiente_oculto_if .= '}';
-                            
                         }
                     }
 
@@ -1914,23 +1913,38 @@ class GeneradorCrudService
     public function crudRefresh($crud_id)
     {
         Log::info('GeneradorCrudService - crudRefresh');
-        $result = $this->crudRefreshProcess($crud_id);
 
-        if ($result) {
-            $accordions = [];
-            $cruds = Crud::where('estatus', 1)->get();
+        $anidados = [];
+        $accordions = [];
+        $cruds = Crud::where('estatus', 1)->get();
 
-            foreach ($cruds as $crud_generado) {
-                $campos_array = json_decode($crud_generado->campos);
-                if ($campos_array) {
-                    foreach ($campos_array as $campo) {
-                        if ($campo->show_fk && $campo->show_fk == $crud_id) {
-                            $accordions[] = $crud_generado->id;
+        foreach ($cruds as $crud_generado) {
+            $campos_array = json_decode($crud_generado->campos);
+            if ($campos_array) {
+                foreach ($campos_array as $campo) {
+                    if ($campo->show_fk && $campo->show_fk == $crud_id) {
+                        $accordions[] = $crud_generado->id;
+                    }
+                    if ($campo->crud_anidado_rules) {
+                        foreach ($campo->crud_anidado_rules as $rule) {
+                            if ($rule) {
+                                $items = explode(',', $rule);
+                                $accordions[]  = $items[3]; //crud_asociado_id
+                            }
                         }
                     }
                 }
             }
+        }
 
+
+        foreach ($anidados as $anidado_id) {
+            $this->crudRefreshProcess($anidado_id);
+        }
+
+        $result = $this->crudRefreshProcess($crud_id);
+
+        if ($result) {
             foreach ($accordions as $accordion_id) {
                 $this->crudRefreshProcess($accordion_id);
             }
