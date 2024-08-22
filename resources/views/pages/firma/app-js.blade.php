@@ -1,11 +1,15 @@
 <script>
     var wrapper = document.getElementById("signature-pad");
 var clearButton = wrapper.querySelector("[data-action=clear]");
-var changeColorButton = wrapper.querySelector("[data-action=change-color]");
+//var changeColorButton = wrapper.querySelector("[data-action=change-color]");
 var undoButton = wrapper.querySelector("[data-action=undo]");
-var savePNGButton = wrapper.querySelector("[data-action=save-png]");
-var saveJPGButton = wrapper.querySelector("[data-action=save-jpg]");
-var saveSVGButton = wrapper.querySelector("[data-action=save-svg]");
+//var savePNGButton = wrapper.querySelector("[data-action=save-png]");
+//var saveJPGButton = wrapper.querySelector("[data-action=save-jpg]");
+//var saveSVGButton = wrapper.querySelector("[data-action=save-svg]");
+
+//var saveImageButton = wrapper.querySelector("[data-action=save-image]");
+//var saveFormButton = wrapper.querySelector("#registrarFirma");
+
 var canvas = wrapper.querySelector("canvas");
 var signaturePad = new SignaturePad(canvas, {
   // It's Necessary to use an opaque color when saving image as JPEG;
@@ -86,6 +90,7 @@ undoButton.addEventListener("click", function (event) {
   }
 });
 
+/*
 changeColorButton.addEventListener("click", function (event) {
   var r = Math.round(Math.random() * 255);
   var g = Math.round(Math.random() * 255);
@@ -94,18 +99,41 @@ changeColorButton.addEventListener("click", function (event) {
 
   signaturePad.penColor = color;
 });
-
+*/
+/*
+saveImageButton.addEventListener("click", function (event) {
+  savePng();
+});
+*/
+/*
 savePNGButton.addEventListener("click", function (event) {
+  savePng();
+});
+*/
+/*
+saveFormButton.addEventListener("submit", function(event) {
+  event.preventDefault();
+  
+  if (!savePng()) 
+  { return; } 
+});
+*/
+
+function savePng(){
   if (signaturePad.isEmpty()) {
+    console.log("Por favor, registre una firma");
     alert("Por favor, registre una firma");
+    return false;
   } else {
     var dataURL = signaturePad.toDataURL();
     //download(dataURL, "signature.png");
     firmaGenerada.value=dataURL;
+    console.log("Firma generada correctamente");
     alert("Firma generada correctamente");
+    return true;
   }
-});
-
+}
+/*
 saveJPGButton.addEventListener("click", function (event) {
   if (signaturePad.isEmpty()) {
     alert("Por favor, registre una firma");
@@ -116,7 +144,8 @@ saveJPGButton.addEventListener("click", function (event) {
     alert("Firma generada correctamente");
   }
 });
-
+*/
+/*
 saveSVGButton.addEventListener("click", function (event) {
   if (signaturePad.isEmpty()) {
     alert("Por favor, registre una firma");
@@ -127,4 +156,5 @@ saveSVGButton.addEventListener("click", function (event) {
     alert("Firma generada correctamente");
   }
 });
+*/
 </script>

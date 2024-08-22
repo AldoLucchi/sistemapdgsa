@@ -23,71 +23,61 @@
 
         <!--begin::Card body-->
         <div class="card-body py-4">
-
-
             <div class="row mt-5">
                 <div class="mb-10 col-12 col-lg-6">
                     <h3>Detalle</h3>
                     <table>
                         @foreach($registerColumns as $colum)
 
-                        @if($loop->iteration < 4) @php $nameColumn=$colum->Field;
-                            @endphp
-                            <tr>
-                                <td>{{ $nameColumn  }}</td>
-                                <td>{{ $register->$nameColumn }} </td>
-                            </tr>
-                            @endif
-                            @endforeach
+                        @if($loop->iteration == 2)
+                        @php $nameColumn=$colum->Field;
+                        @endphp
+                        <tr>
+
+                            <td>{{ $register->$nameColumn }} </td>
+                        </tr>
+                        @endif
+                        @endforeach
                     </table>
                 </div>
             </div>
 
-
-
             <div class="row">
                 <div class="col-12 text-center justify-content-center">
-
-
                     <div id="signature-pad" class="signature-pad">
                         <div class="signature-pad--body">
                             <canvas></canvas>
                         </div>
                         <div class="signature-pad--footer">
-                            <div class="description">Sign above</div>
+                            <div class="description">firma</div>
 
                             <div class="signature-pad--actions">
                                 <div>
-                                    <button type="button" class="button clear" data-action="clear">Clear</button>
-                                    <button type="button" class="button" data-action="change-color">Change color</button>
-                                    <button type="button" class="button" data-action="undo">Undo</button>
+                                    <button type="button" class="button clear" data-action="clear">Borrar</button>
+                                    <button type="button" class="button" data-action="undo">Deshacer</button>
 
                                 </div>
                                 <div>
-                                    <button type="button" class="button save" data-action="save-png">Save as PNG</button>
-                                    <button type="button" class="button save" data-action="save-jpg">Save as JPG</button>
-                                    <button type="button" class="button save" data-action="save-svg">Save as SVG</button>
                                 </div>
                             </div>
+
+                            <form name="registrarFirma" id="registrarFirma" action="{{ url('/registrarFirmaGenerada') }}" method="POST" enctype="multipart/form-data" onsubmit="return savePng()">
+                                @csrf
+                                <input type="hidden" name="firma" id="firma">
+                                <input type="hidden" name="table" id="table" value="{{ $table }}">
+                                <input type="hidden" name="idRegister" id="idRegister" value="{{ $idRegister }}">
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <button type="submit" class="btn btn-primary w-50 ">
+                                            Registrar Firma
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
-
-
                 </div>
             </div>
-            <form name="registrarFirma" action="{{ url('/registrarFirmaGenerada') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <input type="hidden" name="firma" id="firma">
-                <input type="hidden" name="table" id="table" value="{{ $table }}">
-                <input type="hidden" name="idRegister" id="idRegister" value="{{ $idRegister }}">
-                <div class="row">
-                    <div class="col-12 text-center">
-                        <button type="submit" class="btn btn-primary w-50">
-                            Registrar Firma
-                        </button>
-                    </div>
-                </div>
-            </form>
 
 
         </div>
