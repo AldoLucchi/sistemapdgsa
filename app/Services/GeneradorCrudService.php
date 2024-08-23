@@ -941,6 +941,7 @@ class GeneradorCrudService
         $template_fields_select_anidado_js = file_get_contents('../app/Crud/template_view_field_select_campo_anidado_js.php');
         $template_fields_html = file_get_contents('../app/Crud/template_view_field_html.php');
         $template_scripts = file_get_contents('../app/Crud/template_view_scripts.php');
+        $template_accordion = file_get_contents('../app/Crud/template_view_field_accordion.php');
         $template_field_dependiente_oculto_js = file_get_contents('../app/Crud/template_view_field_select_campo_dependiente_oculto_js.php');
 
         $fields_all = '<input type="hidden" name="redirect_url" id="redirect_url" value="{{ (request()->has("redirect_url")) ? request()->get("redirect_url") : "" }}">';
@@ -1012,7 +1013,7 @@ class GeneradorCrudService
                 $column_idcliente_fk = $data['tables_fk'][$column['name']]['table_column_fk_idcliente'];
                 $campo_anidado = '';
                 $campo_anidado_refresh = '';
-                $campo_anidado_display = '';
+                $campo_select_style = '';
                 $campo_anidado_option = '';
                 $crud_anidado = '';
 
@@ -1024,7 +1025,7 @@ class GeneradorCrudService
 
                     $campo_anidado_option = $column['anidado'] . '={{ $item->' . $column['anidado'] . ' }}';
                     $campo_anidado_refresh = '<i class="fa fa-refresh fs-6 text-primary" onclick="' . $column['anidado'] . 'Options()" style="cursor:pointer;"></i>';
-                    $campo_anidado_display = 'display:none;';
+                    $campo_select_style .= 'display:none;';
                 }
 
                 $options = '
@@ -1036,20 +1037,30 @@ class GeneradorCrudService
 
                 if (isset($column['readonly']) && $column['readonly']) {
                     $column_readonly = '{!! !in_array("create",request()->segments())?"aria-readonly=\'true\' style=\'pointer-events: none;\'":"" !!}';
+                    $campo_select_style .= '{!! !in_array("create",request()->segments())?"pointer-events: none;":"" !!}';
                 }
 
                 $template = str_replace('%FIELD_SELECT_OPTIONS%', $options, $template);
                 //$template = str_replace('%FIELD_SELECT_CAMPO_ANIDADO%', $campo_anidado, $template);
-                $template = str_replace('%FIELD_SELECT_CAMPO_ANIDADO_DISPLAY%', $campo_anidado_display, $template);
+                $template = str_replace('%FIELD_SELECT_STYLE%', $campo_select_style, $template);
                 $template = str_replace('%FIELD_SELECT_CAMPO_ANIDADO_REFRESH%', $campo_anidado_refresh, $template);
 
                 if (isset($column['crud_anidado_rules']) && $column['crud_anidado_rules']) {
                     $crud_anidado_data = $this->getCrudAnidado($column['crud_anidado_rules']);
-                    $crud_anidado = $crud_anidado_data['crud_anidado'];
+                    $accordion = $crud_anidado_data['crud_anidado'];
                     $scripts_js .= $crud_anidado_data['crud_anidado_js'];
+
+                    $file_accordion = fopen("../resources/views/cruds/" . $data['crud_name'] . "/accordion_" . $column['name'] . ".blade.php", "w") or die("Unable to open file - view accordion_" . $column['name'] . ".blade.php");
+                    $accordion_content = $template_accordion;
+                    $accordion_content = str_replace('%FIELD_SELECT_CRUD_ANIDADO%', $accordion, $accordion_content);
+
+                    fwrite($file_accordion, $accordion_content);
+                    fclose($file_accordion);
+
+                    $crud_anidado = '@include("cruds.' . $data['crud_name'] . '.accordion_' . $column['name'] . '")';
                 }
 
-                $template = str_replace('%FIELD_SELECT_CRUD_ANIDADO%', $crud_anidado, $template);
+                $template = str_replace('%FIELD_SELECT_INCLUDE_CRUD_ANIDADO%', $crud_anidado, $template);
 
                 if (isset($column['dependiente_oculto_rules'])) {
                     Log::info('GeneradorCrudService - generateCrudViews - ' . $column['dependiente_oculto_rules']);
@@ -1374,8 +1385,8 @@ class GeneradorCrudService
                 $column_name = $data['tables_fk'][$column['name']]['table_column_fk_name'];
                 $column_id = $data['tables_fk'][$column['name']]['table_column_fk_id'];
 
-                $list_filters = str_replace('%OBJETO_LABEL%', $model_name, $list_filters);                
-                $list_filters = str_replace('%FIELD_ID%', $column['name'], $list_filters);                
+                $list_filters = str_replace('%OBJETO_LABEL%', $model_name, $list_filters);
+                $list_filters = str_replace('%FIELD_ID%', $column['name'], $list_filters);
 
                 $filters .= $list_filters;
 
@@ -1927,7 +1938,7 @@ class GeneradorCrudService
                     if (isset($campo->show_fk) && $campo->show_fk && $campo->show_fk == $crud_id) {
                         $accordions[] = $crud_generado->id;
                     }
-                    
+
                     if (isset($campo->crud_anidado_rules) && $campo->crud_anidado_rules) {
                         $crud_anidado_rules = explode(';', $campo->crud_anidado_rules);
                         foreach ($crud_anidado_rules as $rule) {
@@ -1937,7 +1948,6 @@ class GeneradorCrudService
                             }
                         }
                     }
-                        
                 }
             }
         }
@@ -2044,6 +2054,7 @@ class GeneradorCrudService
 
         $operator_field = '';
         $js_validation = '';
+        $js_validation_add = '';
 
         foreach ($rules as $rule) {
             if ($rule) {
@@ -2062,15 +2073,34 @@ class GeneradorCrudService
 
                     $card_fieldset_id = 'crud_anidado_fieldset_' . $crud->nombre_componente . '_' . $operator_value;
                     $template_crud_anidado = str_replace('%CRUD_ANIDADO_FIELDSET_ID%', $card_fieldset_id, $template_crud_anidado);
+
+                    $card_div_id = $crud->nombre_componente . '_div';
+                    $card_button_id = $crud->nombre_componente . '_div_button';
+                    $template_crud_anidado = str_replace('%CRUD_ANIDADO_BUTTON_ID%', $card_button_id, $template_crud_anidado);
+
+                    $card_count_id = $crud->nombre_componente . '_div_count';
+                    $template_crud_anidado = str_replace('%CRUD_ANIDADO_COUNT_ID%', $card_count_id, $template_crud_anidado);
+
                     $template_fields = file_get_contents("../resources/views/cruds/" . $crud->nombre_componente . "/fields.blade.php");
                     $crud_anidado_fields = '';
 
                     for ($i = 1; $i <= $crud_cantidad_registros; $i++) {
                         $fields_crud = $template_fields;
                         $crud_anidado_ref = $crud->nombre_componente . '_' . $i . '_';
+                        $crud_anidado_div_ref = $crud->nombre_componente . '_div_' . $i;
+                        $crud_anidado_fields .= '
+                        <div class="row border border-primary" id="' . $crud_anidado_div_ref . '"';
+                        if ($i > 1) {
+                            $crud_anidado_fields .= ' style="display:none;"';
+                        }
+                        $crud_anidado_fields .= ' > ';
+
                         $fields_crud = str_replace('name="', 'name="' . $crud_anidado_ref, $fields_crud);
                         $fields_crud = str_replace('id="', 'id="' . $crud_anidado_ref, $fields_crud);
                         $crud_anidado_fields .= $fields_crud;
+                        $crud_anidado_fields .= '
+                        </div>
+                        ';
                         $crud_anidado_fields .= '<hr class="primary text-primary">';
                     }
 
@@ -2090,6 +2120,23 @@ class GeneradorCrudService
                         ' . $card_fieldset_id . '.disabled = false;
                     }
                     ';
+
+                    $js_validation_add .= '
+                    var '.$card_button_id.' = document.getElementById("'.$card_button_id.'");
+                    ' . $card_button_id . '.addEventListener("click", (event) => {                    
+                        console.log("click - ' . $card_button_id . '" );
+                        
+                        var ' . $card_count_id . ' = document.getElementById("' . $card_count_id . '"); 
+                        ' . $card_count_id . '.value = (parseInt(' . $card_count_id . '.value) +1);                
+                        console.log(' . $card_count_id . '.value);
+
+                        var selectorCrudDivElement = "' . $card_div_id . '_"+String(' . $card_count_id . '.value);
+                        console.log(selectorCrudDivElement);
+
+                        var '.$card_div_id.' = document.getElementById(selectorCrudDivElement); 
+                        '.$card_div_id.'.style.display="block";
+                         });
+                        ';
                 }
             }
         }
@@ -2098,6 +2145,8 @@ class GeneradorCrudService
             $template_crud_anidado_js = $template_fields_select_crud_anidado_js;
             $template_crud_anidado_js = str_replace('%SELECT_CAMPO_ANIDADO%', $operator_field, $template_crud_anidado_js);
             $template_crud_anidado_js = str_replace('%SELECT_CAMPO_VALIDATION%', $js_validation, $template_crud_anidado_js);
+
+            $template_crud_anidado_js = str_replace('%SELECT_DIV_BUTTON_ANIDADO%', $js_validation_add, $template_crud_anidado_js);
             $crud_anidado_js = $template_crud_anidado_js;
         }
 

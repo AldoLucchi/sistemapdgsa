@@ -2,11 +2,12 @@
     <div class="card-header border-bottom  border-primary">
         <h3 class="card-title">%CRUD_ANIDADO_TITLE%</h3>
         <div class="card-toolbar">
-            <button type="button" class="btn btn-sm btn-light">+</button>
+            <button type="button" class="btn btn-sm btn-primary" name="%CRUD_ANIDADO_BUTTON_ID%" id="%CRUD_ANIDADO_BUTTON_ID%">+</button>
         </div>
     </div>
     <div class="card-body">
         <fieldset name="%CRUD_ANIDADO_FIELDSET_ID%" id="%CRUD_ANIDADO_FIELDSET_ID%" disabled>
+            <input type="hidden" name="%CRUD_ANIDADO_COUNT_ID%" id="%CRUD_ANIDADO_COUNT_ID%" value="1">
             <div class="row">
             %CRUD_ANIDADO_BODY%
             </div>
