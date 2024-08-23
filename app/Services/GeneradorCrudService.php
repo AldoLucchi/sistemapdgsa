@@ -115,8 +115,8 @@ class GeneradorCrudService
                 $fields_media_env = env('FIELDS_MEDIA', 'imagen,logo,avatar,archivo');
                 $fields_media = explode(',', $fields_media_env);
 
-                $fields_doc_env = env('FIELDS_DOC', 'documento,doc,pdf');
-                $fields_doc = explode(',', $fields_doc_env);
+                $fields_html_env = env('FIELDS_HTML', 'documento,doc,pdf');
+                $fields_html = explode(',', $fields_html_env);
 
                 if (str_contains($colum->Type, 'tinyint')) {
                     $type_html = 'checkbox';
@@ -124,7 +124,7 @@ class GeneradorCrudService
                     $type_html = 'password';
                 } else if (str_contains($colum->Type, 'varchar') &&   in_array(strtolower($colum->Field), $fields_media)) {
                     $type_html = 'file';
-                } else if (str_contains($colum->Type, 'text') &&   in_array(strtolower($colum->Field), $fields_doc)) {
+                } else if (str_contains($colum->Type, 'text') &&   in_array(strtolower($colum->Field), $fields_html)) {
                     $type_html = 'html';
                 } else if (str_contains($colum->Type, 'varchar')) {
                     $type_html = 'text';
