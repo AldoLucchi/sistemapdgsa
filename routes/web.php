@@ -7,6 +7,9 @@ use App\Http\Controllers\Auth\GoogleLoginController;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FirmaController;
+use App\Http\Controllers\Api\NotificationController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +24,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/google/redirect', [GoogleLoginController::class, 'redirectToGoogle'])->name('google.redirect');
 Route::get('/google/callback', [GoogleLoginController::class, 'handleGoogleCallback'])->name('google.callback');
+
+Route::get('/registrarFirmaCliente/{table}/{idRegister}', [FirmaController::class, 'registrarFirmaCliente'])->name('admin.registrarFirma');
+Route::post('/registrarFirmaGenerada', [FirmaController::class, 'registrarFirmaGenerada'])->name('admin.registrarFirmaGenerada');
+
+Route::get('/notificationMarkRead/{notification_id}', [NotificationController::class, 'notificationMarkRead'])->name('notificationMarkRead');
 
 Route::middleware(['auth'])->group(function () { //, 'verified'])->group(function () {
 

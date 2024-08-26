@@ -28,11 +28,11 @@ class FirmaController extends Controller
         Log::info('FirmaController - getDataFirma');
         Log::info($request);
 
-        if(isset($request['table'])){
+        if (isset($request['table'])) {
             $table = $request['table'];
         }
 
-        if(isset($request['idRegister'])){
+        if (isset($request['idRegister'])) {
             $idRegister = $request['idRegister'];
         }
 
@@ -44,10 +44,10 @@ class FirmaController extends Controller
     }
 
 
-    public function registrarFirma(Request $request, $table , $idRegister)
+    public function registrarFirma(Request $request, $table, $idRegister)
     {
         Log::info('FirmaController - registrarFirma');
-        Log::info($request);        
+        Log::info($request);
 
         $data = $this->firmaService->getDataRegistrarFirma($table, $idRegister);
         $data['table']       = $table;
@@ -61,8 +61,20 @@ class FirmaController extends Controller
         Log::info('FirmaController - registrarFirmaGenerada');
         //Log::info($request);  
 
-        $data = $this->firmaService->registrarFirmaGenerada($request->all());        
+        $data = $this->firmaService->registrarFirmaGenerada($request->all());
 
-        return redirect('registrarFirma/'.$request['table'].'/'.$request['idRegister'])->with('message', 'Firma generada correctamente: '.$data);
+        return redirect('registrarFirma/' . $request['table'] . '/' . $request['idRegister'])->with('message', 'Firma generada correctamente: ' . $data);
+    }
+
+    public function registrarFirmaCliente(Request $request, $table, $idRegister)
+    {   
+        Log::info('FirmaController - registrarFirma');
+        Log::info($request);
+
+        $data = $this->firmaService->getDataRegistrarFirma($table, $idRegister);
+        $data['table']       = $table;
+        $data['idRegister']       = $idRegister;
+
+        return view('pages/firma.register-cliente', $data);
     }
 }
