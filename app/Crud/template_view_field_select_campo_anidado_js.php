@@ -3,7 +3,7 @@
 const %SELECT_CAMPO_ANIDADO%Element = document.getElementById("%SELECT_CAMPO_ANIDADO%");
 const %SELECT_NAME%DependElement = document.getElementById("%SELECT_NAME%");
 
-%SELECT_CAMPO_ANIDADO%Element.addEventListener("load", (event) => {                    
+window.addEventListener("load", (event) => {                    
         console.log("load - %SELECT_CAMPO_ANIDADO%Options" );
         %SELECT_CAMPO_ANIDADO%Options();  
 });

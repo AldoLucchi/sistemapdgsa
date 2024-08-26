@@ -2,7 +2,7 @@
 //crud anidado-----------------------
 const %SELECT_CAMPO_ANIDADO%CrudElement = document.getElementById("%SELECT_CAMPO_ANIDADO%");
 
-%SELECT_CAMPO_ANIDADO%CrudElement.addEventListener("load", (event) => {                    
+window.addEventListener("load", (event) => {                    
         console.log("load - %SELECT_CAMPO_ANIDADO%CrudOptions" );
         %SELECT_CAMPO_ANIDADO%CrudOptions();  
 });

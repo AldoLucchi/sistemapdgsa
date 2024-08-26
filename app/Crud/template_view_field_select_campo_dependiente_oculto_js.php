@@ -1,7 +1,7 @@
         //campo dependiente oculto ----------------
         const %CAMPO_SELECT_OCULTO%OcultoElement = document.getElementById("%CAMPO_SELECT_OCULTO%");
 
-        %CAMPO_SELECT_OCULTO%OcultoElement.addEventListener("load", (event) => {
+        window.addEventListener("load", (event) => {
                 console.log("load - %CAMPO_SELECT_OCULTO%OcultoOptions");
                 %CAMPO_SELECT_OCULTO%OcultoOptions();
         });
