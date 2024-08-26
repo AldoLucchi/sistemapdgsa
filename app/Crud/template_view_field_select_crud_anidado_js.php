@@ -1,3 +1,4 @@
+@if(in_array('create', request()->segments()))
 
 //crud anidado-----------------------
 const %SELECT_CAMPO_ANIDADO%CrudElement = document.getElementById("%SELECT_CAMPO_ANIDADO%");
@@ -20,3 +21,4 @@ function %SELECT_CAMPO_ANIDADO%CrudOptions(){
 
 %SELECT_DIV_BUTTON_ANIDADO%
 
+@endif
