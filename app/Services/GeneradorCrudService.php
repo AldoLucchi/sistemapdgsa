@@ -1031,7 +1031,7 @@ class GeneradorCrudService
 
                 $options = '
                     @foreach($' . $model_name . ' as $item)
-                    <option value="{{ $item->' . $column_id . ' }}" class="" ' . $campo_anidado_option . ' {{ (isset($' . $data['crud_name'] . ') && $item->' . $column_id . ' == $' . $data['crud_name'] . '->' . $show_column_name . ')?"selected":"" }} {{ (session()->has("' . $column_id . '") && $item->' . $column_id . ' == session()->get("' . $column_id . '")) ? "selected" : "" }} {{ (request()->has("' . $column_id . '") && $item->' . $column_id . ' == request()->get("' . $column_id . '")) ? "selected" : "" }} >
+                    <option value="{{ $item->' . $column_id . ' }}" class="" ' . $campo_anidado_option . ' {{ (isset($' . $data['crud_name'] . ') && $item->' . $column_id . ' == $' . $data['crud_name'] . '->' . $show_column_name . ')?"selected":"" }} {{ (session()->has("' . $column['name'] . '") && $item->' . $column_id . ' == session()->get("' . $column['name'] . '")) ? "selected" : "" }} {{ (request()->has("' . $column['name'] . '") && $item->' . $column_id . ' == request()->get("' . $column['name'] . '")) ? "selected" : "" }} >
                     {{ $item->' . $column_name . ' }}
                     </option>
                     @endforeach';
