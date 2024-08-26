@@ -699,7 +699,8 @@ class GeneradorCrudService
                     $data' . $crud->nombre_componente . ' = $' . $crud->nombre_componente . 'Service->getData();
 
                     $data =  array_merge($data, $data' . $crud->nombre_componente . ');
-                    ';
+                    
+                    //%CONTROLLER_VARIABLES_ANIDADOS%';
                 }
             }
         }
