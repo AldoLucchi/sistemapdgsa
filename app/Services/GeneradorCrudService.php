@@ -1147,7 +1147,7 @@ class GeneradorCrudService
 
                 $template = str_replace('%FIELD_TYPE%', $column['type_html'], $template);
 
-                $value = '( isset($' . $data['crud_name'] . ')?$' . $data['crud_name'] . '->' . $column['name'] . ':"")';
+                $value = '( isset($' . $data['crud_name'] . ')?$' . $data['crud_name'] . '->' . $column['name'] . ': (request()->has("' . $column['name'] . '")? request()->get("' . $column['name'] . '") : ""))';
                 $value_file = '';
 
                 $field_class = "form-control form-control-solid";
