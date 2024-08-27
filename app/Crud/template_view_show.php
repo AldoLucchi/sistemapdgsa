@@ -32,9 +32,9 @@
                     </a>
                     @endforeach
 
-                    <a href="{{ url('/'.(Session::has('%OBJETO_ROUTE%')?Session::get('%OBJETO_ROUTE%'):'crud/%OBJETO_ROUTE%').'/create' ) }}" class="btn btn-primary %OBJETO_CREATE%">
+                    <a href="{{ url('/'.(Session::has('%OBJETO_ROUTE%')?Session::get('%OBJETO_ROUTE%'):'crud/%OBJETO_ROUTE%').'/'.$%OBJETO%->%FIELD_ID% .'/edit' ) }}" class="btn btn-primary %OBJETO_CREATE%">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                        Agregar %OBJETO_LABEL_INDIVIDUAL%
+                        Editar %OBJETO_LABEL_INDIVIDUAL%
                     </a>
 
                     <!--end::Add %OBJETO_ROUTE%-->
