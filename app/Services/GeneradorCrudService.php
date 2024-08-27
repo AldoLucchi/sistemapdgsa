@@ -585,7 +585,7 @@ class GeneradorCrudService
                 if (isset($column['crud_anidado_rules']) && $column['crud_anidado_rules']) {
                     $variables_crud_anidados .= $this->getVariablesCrudAnidadoController($column['crud_anidado_rules']);
 
-                    $insert_crud_anidados = $this->getInsertCrudAnidadoController($column['crud_anidado_rules']);
+                    $insert_crud_anidados .= $this->getInsertCrudAnidadoController($column['crud_anidado_rules']);
                 }
 
 
@@ -730,41 +730,43 @@ class GeneradorCrudService
                 if ($crud) {
 
                     $inserts .= '
-                   $fieldsAnidado = [];
+                    $fieldsAnidado = [];
                     $crudAnidado = "' . $crud->nombre_componente . '";
 
-                    Log::info("GeneradorCrudService - getInsertCrudAnidadoController - ". $crudAnidado);
+                    Log::info(" - getInsertCrudAnidadoController - ". $crudAnidado);
 
                     foreach ($request as $key => $value) {
-                    if (str_contains($key,  $crudAnidado)) {
-                        $field_part = explode("_", $key);
-                        $iteration = $field_part[1];
-                        $fieldname = $field_part[2];
-                        $fieldsAnidado[$iteration][$fieldname] = $value;
-                    }
+                        if (str_contains($key,  $crudAnidado)) {
+                            $field_part = explode("_", $key);
+                            $iteration = $field_part[1];
+                            $fieldname = $field_part[2];
+                            $fieldsAnidado[$iteration][$fieldname] = $value;
+                        }
                     }
 
                     foreach ($fieldsAnidado as $fieldAnidado) {
                     $insertRegister = false;
-                    foreach ($fieldAnidado as $keyIndividual => $fieldIndividual) {
-                        if ($fieldIndividual) {
-                        $insertRegister = true;
+                        foreach ($fieldAnidado as $keyIndividual => $fieldIndividual) {
+                            if ($fieldIndividual) {
+                            $insertRegister = true;
+                            }
+                        }
+
+                        if ($insertRegister) {
+                            $campo_label_id = $request["idfield"];
+                            $fieldAnidado[$campo_label_id ] = $request[$campo_label_id ];
+
+                            if(isset($request["idcliente"]) && $request["idcliente"]){
+                            $fieldAnidado["idcliente"] = $request["idcliente"];
+                            }
+                            if(isset($request["idproyecto"]) && $request["idproyecto"]){
+                            $fieldAnidado["idproyecto"] = $request["idproyecto"];
+                            }
+                            Log::info($fieldAnidado);
+                            \App\Models\\' . $crud->nombre_componente . '::create($fieldAnidado);
                         }
                     }
 
-                    if ($insertRegister) {
-                        $campo_label_id = $request["idfield"];
-                        $fieldAnidado[$campo_label_id ] = $request[$campo_label_id ];
-
-                        if(isset($request["idcliente"]) && $request["idcliente"]){
-                        $fieldAnidado["idcliente"] = $request["idcliente"];
-                        }
-                        if(isset($request["idproyecto"]) && $request["idproyecto"]){
-                        $fieldAnidado["idproyecto"] = $request["idproyecto"];
-                        }
-                        \App\Models\\' . $crud->nombre_componente . '::create($fieldAnidado);
-                    }
-                    }
                    ';
                 }
             }
