@@ -123,7 +123,7 @@ class %OBJETO_CONTROLLER% extends Controller
 
       $data = $this->%OBJETO_SERVICE%->getData();
 
-      //%CONTROLLER_VARIABLES_ANIDADOS%
+      %CONTROLLER_VARIABLES_ANIDADOS%
       
       return view('cruds/%OBJETO_VIEW%.create', $data);
     }

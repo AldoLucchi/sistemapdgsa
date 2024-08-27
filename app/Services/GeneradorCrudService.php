@@ -583,7 +583,7 @@ class GeneradorCrudService
 
 
                 if (isset($column['crud_anidado_rules']) && $column['crud_anidado_rules']) {
-                    $variables_crud_anidados = $this->getVariablesCrudAnidadoController($column['crud_anidado_rules']);
+                    $variables_crud_anidados .= $this->getVariablesCrudAnidadoController($column['crud_anidado_rules']);
 
                     $insert_crud_anidados = $this->getInsertCrudAnidadoController($column['crud_anidado_rules']);
                 }
@@ -700,7 +700,7 @@ class GeneradorCrudService
 
                     $data =  array_merge($data, $data' . $crud->nombre_componente . ');
                     
-                    //%CONTROLLER_VARIABLES_ANIDADOS%';
+                    ';
                 }
             }
         }
