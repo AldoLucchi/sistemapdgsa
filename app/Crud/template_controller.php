@@ -166,7 +166,8 @@ class %OBJETO_CONTROLLER% extends Controller
 
         %FIELD_PDF%
 
-        $message_ruta = '/%OBJETO_VARIABLE%/'.$%OBJETO_VARIABLE%->%FIELD_ID%.'/edit';
+        $message_ruta_create = str_replace('create','',url()->current());
+        $message_ruta = $message_ruta_create.'/'.$%OBJETO_VARIABLE%->%FIELD_ID%.'/edit'; //'/%OBJETO_VARIABLE%/'.$%OBJETO_VARIABLE%->%FIELD_ID%.'/edit';
 
         if(isset($request['redirect_url']) && $request['redirect_url']){
           $rutaCrud = $request['redirect_url'];
@@ -293,11 +294,11 @@ class %OBJETO_CONTROLLER% extends Controller
       
         %FIELD_PDF%
 
-        $message_ruta = '/%OBJETO_VARIABLE%/'.$id.'/edit';
+        $message_ruta = url()->current(); //'/%OBJETO_VARIABLE%/'.$id.'/edit';
 
         if(isset($request['redirect_url']) && $request['redirect_url']){
           $rutaCrud = $request['redirect_url'];
-          $message_ruta  .= '?redirect_url='.$rutaCrud;
+          $message_ruta  .= '/edit?redirect_url='.$rutaCrud;
         }
 
         $message =  ' %OBJETO_LABEL_INDIVIDUAL%: registro actualizado correctamente: <a href="'.$message_ruta .'" class="text-white">'.$id.'</a>';    
@@ -342,7 +343,7 @@ class %OBJETO_CONTROLLER% extends Controller
        $%OBJETO_VARIABLE%_delete = %OBJETO_VARIABLE%::find($%OBJETO_VARIABLE%);
       $%OBJETO_VARIABLE%_delete = $%OBJETO_VARIABLE%_delete->delete();       
 
-      $message_ruta = '/%OBJETO_VARIABLE%/'.$id.'/edit';
+      $message_ruta = url()->current(); //'/%OBJETO_VARIABLE%/'.$id.'/edit';
       $message =  ' %OBJETO_LABEL_INDIVIDUAL%: registro eliminado correctamente: <a href="'.$message_ruta.'" class="text-white">'.$id.'</a>';        
 
       return redirect($rutaCrud)->with('message',$message);	
