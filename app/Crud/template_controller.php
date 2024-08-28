@@ -166,11 +166,14 @@ class %OBJETO_CONTROLLER% extends Controller
 
         %FIELD_PDF%
 
-        $message =  ' %OBJETO_LABEL_INDIVIDUAL%: registro creado correctamente: <a href="/%OBJETO_VARIABLE%/'.$%OBJETO_VARIABLE%->%FIELD_ID%.'/edit" class="text-white">'.$%OBJETO_VARIABLE%->%FIELD_ID%.'</a>';
+        $message_ruta = '/%OBJETO_VARIABLE%/'.$%OBJETO_VARIABLE%->%FIELD_ID%.'/edit';
 
         if(isset($request['redirect_url']) && $request['redirect_url']){
           $rutaCrud = $request['redirect_url'];
+          $message_ruta .='?redirect_url='.$rutaCrud;
         }
+
+        $message =  ' %OBJETO_LABEL_INDIVIDUAL%: registro creado correctamente: <a href="'.$message_ruta.'" class="text-white">'.$%OBJETO_VARIABLE%->%FIELD_ID%.'</a>';
 
         return redirect( $rutaCrud)->with('message',$message);
       } catch (Exception $e) {
@@ -290,11 +293,14 @@ class %OBJETO_CONTROLLER% extends Controller
       
         %FIELD_PDF%
 
-        $message =  ' %OBJETO_LABEL_INDIVIDUAL%: registro actualizado correctamente: <a href="/%OBJETO_VARIABLE%/'.$id.'/edit" class="text-white">'.$id.'</a>';       
+        $message_ruta = '/%OBJETO_VARIABLE%/'.$id.'/edit';
 
         if(isset($request['redirect_url']) && $request['redirect_url']){
           $rutaCrud = $request['redirect_url'];
+          $message_ruta  .= '?redirect_url='.$rutaCrud;
         }
+
+        $message =  ' %OBJETO_LABEL_INDIVIDUAL%: registro actualizado correctamente: <a href="'.$message_ruta .'" class="text-white">'.$id.'</a>';    
 
         return redirect($rutaCrud)->with('message',$message);
       
@@ -336,7 +342,8 @@ class %OBJETO_CONTROLLER% extends Controller
        $%OBJETO_VARIABLE%_delete = %OBJETO_VARIABLE%::find($%OBJETO_VARIABLE%);
       $%OBJETO_VARIABLE%_delete = $%OBJETO_VARIABLE%_delete->delete();       
 
-      $message =  ' %OBJETO_LABEL_INDIVIDUAL%: registro eliminado correctamente: <a href="/%OBJETO_VARIABLE%/'.$id.'/edit" class="text-white">'.$id.'</a>';        
+      $message_ruta = '/%OBJETO_VARIABLE%/'.$id.'/edit';
+      $message =  ' %OBJETO_LABEL_INDIVIDUAL%: registro eliminado correctamente: <a href="'.$message_ruta.'" class="text-white">'.$id.'</a>';        
 
       return redirect($rutaCrud)->with('message',$message);	
     }
