@@ -18,7 +18,7 @@
     <div class="menu-item px-3 %OBJETO_UPDATE%">
         @if( (request()->segment(2) == '%OBJETO%') || (request()->segment(2) != '%OBJETO%' && Session::has('%OBJETO%_update') ) )
         <!--<a href="#" class="menu-link px-3" data-kt-%OBJETO_ROUTE%-id="{{ $%OBJETO_VARIABLE%->%FIELD_ID% }}" data-bs-toggle="modal" data-bs-target="#kt_modal_add_%OBJETO_ROUTE%" data-kt-action="update_row">-->
-        <a href="{{ url('/'.(Session::has('%OBJETO_ROUTE%')?Session::get('%OBJETO_ROUTE%'):'crud/%OBJETO_ROUTE%').'/'. $%OBJETO_VARIABLE%->%FIELD_ID% .'/edit' ) }}" class="menu-link px-3">
+        <a href="{{ url('/'.(Session::has('%OBJETO_ROUTE%')?Session::get('%OBJETO_ROUTE%'):'crud/%OBJETO_ROUTE%').'/'. $%OBJETO_VARIABLE%->%FIELD_ID% .'/edit' ) }}{{ (!in_array('%OBJETO_VARIABLE%',request()->segments()))? ('?redirect_url='.url()->previous()) : ''}}" class="menu-link px-3">
             Editar
         </a>
         @endif

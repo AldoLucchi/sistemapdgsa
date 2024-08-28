@@ -1,6 +1,7 @@
-@if(in_array('create', request()->segments()))
+
 
 //crud anidado-----------------------
+@if(in_array('create', request()->segments()))
 const %SELECT_CAMPO_ANIDADO%CrudElement = document.getElementById("%SELECT_CAMPO_ANIDADO%");
 
 window.addEventListener("load", (event) => {                    

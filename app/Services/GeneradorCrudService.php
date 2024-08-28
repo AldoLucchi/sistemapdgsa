@@ -736,7 +736,7 @@ class GeneradorCrudService
                     Log::info(" - getInsertCrudAnidadoController - ". $crudAnidado);
 
                     foreach ($request as $key => $value) {
-                        if (str_contains($key,  $crudAnidado)) {
+                        if (str_contains($key,  $crudAnidado) && !str_contains($key,  "div_count")) {
                             $field_part = explode("_", $key);
                             $iteration = $field_part[1];
                             $fieldname = $field_part[2];
@@ -762,6 +762,7 @@ class GeneradorCrudService
                             if(isset($request["idproyecto"]) && $request["idproyecto"]){
                             $fieldAnidado["idproyecto"] = $request["idproyecto"];
                             }
+                            Log::info("' .$crud->nombre_componente. ' - fieldAnidado");
                             Log::info($fieldAnidado);
                             \App\Models\\' . $crud->nombre_componente . '::create($fieldAnidado);
                         }
@@ -1039,8 +1040,8 @@ class GeneradorCrudService
                     @endforeach';
 
                 if (isset($column['readonly']) && $column['readonly']) {
-                    $column_readonly = '{!! !in_array("create",request()->segments())?"aria-readonly=\'true\' style=\'pointer-events: none;\'":"" !!}';
-                    $campo_select_style .= '{!! !in_array("create",request()->segments())?"pointer-events: none;":"" !!}';
+                    $column_readonly = '{!! "aria-readonly=\'true\'"  !!}';
+                    $campo_select_style .= '{!! "pointer-events: none;" !!}';
                 }
 
                 $template = str_replace('%FIELD_SELECT_OPTIONS%', $options, $template);
@@ -1678,24 +1679,26 @@ class GeneradorCrudService
                     $filters' . $crudName . ' = ["rutaDatatable" => true];
                     ';
 
-                    foreach ($permisos as $key => $permiso) {
-                        if ($permiso == 'read') {
-                            $relation_variables .= '
+                    if ($permisos) {
+                        foreach ($permisos as $key => $permiso) {
+                            if ($permiso == 'read') {
+                                $relation_variables .= '
                             $filters' . $crudName . ' ["datatable"] ["read"] = true;
                             ';
-                        }
-                        if ($permiso == 'update') {
-                            $relation_variables .= '
+                            }
+                            if ($permiso == 'update') {
+                                $relation_variables .= '
                             $filters' . $crudName . ' ["datatable"] ["update"] = true;
                             ';
-                        }
-                        if ($permiso == 'delete') {
-                            $relation_variables .= '
+                            }
+                            if ($permiso == 'delete') {
+                                $relation_variables .= '
                             $filters' . $crudName . ' ["datatable"] ["delete"] = true;
                             ';
-                        }
-                        if ($permiso == 'create') {
-                            $create = true;
+                            }
+                            if ($permiso == 'create') {
+                                $create = true;
+                            }
                         }
                     }
 
@@ -2125,7 +2128,7 @@ class GeneradorCrudService
                     ';
 
                     $js_validation_add .= '
-                    var '.$card_button_id.' = document.getElementById("'.$card_button_id.'");
+                    var ' . $card_button_id . ' = document.getElementById("' . $card_button_id . '");
                     ' . $card_button_id . '.addEventListener("click", (event) => {                    
                         console.log("click - ' . $card_button_id . '" );
                         
@@ -2136,8 +2139,8 @@ class GeneradorCrudService
                         var selectorCrudDivElement = "' . $card_div_id . '_"+String(' . $card_count_id . '.value);
                         console.log(selectorCrudDivElement);
 
-                        var '.$card_div_id.' = document.getElementById(selectorCrudDivElement); 
-                        '.$card_div_id.'.style.display="block";
+                        var ' . $card_div_id . ' = document.getElementById(selectorCrudDivElement); 
+                        ' . $card_div_id . '.style.display="block";
                          });
                         ';
                 }
