@@ -1343,13 +1343,13 @@ class GeneradorCrudService
 
         $template_filters_min = '
         if ($this->filters && isset($this->filters["%OBJETO_LABEL%"])) {
-            $query->where("%FIELD_ID%", ">",  $this->filters["%OBJETO_LABEL%"]);
+            $query->where("%FIELD_ID%", ">=",  $this->filters["%OBJETO_LABEL%"]);
         }
         ';
 
         $template_filters_max = '
         if ($this->filters && isset($this->filters["%OBJETO_LABEL%"])) {
-            $query->where("%FIELD_ID%", "<",  $this->filters["%OBJETO_LABEL%"]);
+            $query->where("%FIELD_ID%", "<=",  $this->filters["%OBJETO_LABEL%"]);
         }
         ';
 

@@ -24,10 +24,10 @@ function %SELECT_CAMPO_ANIDADO%Options(){
 
     Array.from(document.querySelector("#%SELECT_NAME%").options).forEach(function(option_element) {
         option_element.style.display = "block";
-        //let option_value = option_element.value;
+        let option_value = option_element.value;
         let option_%SELECT_CAMPO_ANIDADO% = option_element.getAttribute("%SELECT_CAMPO_ANIDADO%");  
 
-        if (option_%SELECT_CAMPO_ANIDADO% != %SELECT_CAMPO_ANIDADO%Element.value) {
+        if (option_value && option_%SELECT_CAMPO_ANIDADO% != %SELECT_CAMPO_ANIDADO%Element.value) {
             option_element.style.display = "none";
         }
     });

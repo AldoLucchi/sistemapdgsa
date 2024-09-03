@@ -12,8 +12,20 @@ class FunctionsService
     {
         $prefijo = strval(Carbon::now()->hour) . strval(Carbon::now()->minute) . strval(Carbon::now()->second);
         $nameOriginal = str_replace(" ", "", $originalName);
+        $nameOriginal = $this->filename_sanitizer($nameOriginal);
         $nameOriginal = substr($nameOriginal, 0, 15);
         $filename = $recurso . '_' . env('APP_ENV') . '_' . str_replace(" ", "", $urlAmigable) . '_' . $prefijo . '_' . $nameOriginal;
         return $filename;
+    }
+
+    function filename_sanitizer($unsafeFilename)
+    {
+        // our list of "unsafe characters", add/remove characters if necessary
+        $dangerousCharacters = array(" ", '"', "'", "&", "/", "\\", "?", "#", "ñ", "Ñ", "á", "é", "í", "ó", "ú", "Á", "É", "Í", "Ó", "Ú", '[', ']', '/', '\\', '=', '<', '>', ':', ';', ',', '$', '#', '*', '~', '`', '!', '{', '}', '%', '+', '«', '»');
+
+        // every forbidden character is replaced by an underscore
+        $safe_filename = str_replace($dangerousCharacters, '_', $unsafeFilename);
+
+        return $safe_filename;
     }
 }
