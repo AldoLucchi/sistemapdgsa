@@ -56,8 +56,13 @@ class Bitacora71DataTable extends DataTable
                 return mb_convert_encoding($Bitacora71->id, "UTF-8", "UTF-8");
             })->editColumn('idaccion', function (Bitacora71 $Bitacora71) {
                 return $Bitacora71->BitacorasAcciones->first()?->accion;
-            })->editColumn('ip', function (Bitacora71 $Bitacora71) {
-                return mb_convert_encoding($Bitacora71->ip, "UTF-8", "UTF-8");
+            })->editColumn('idusuario', function (Bitacora71 $Bitacora71) {
+                $username = '';
+                $user = $Bitacora71->Users->first();
+                if($user){
+                    $username = $user->name.' '.$user->apellido;
+                }
+                return $username;
             })->editColumn('fecha', function (Bitacora71 $Bitacora71) {
                 return mb_convert_encoding($Bitacora71->fecha, "UTF-8", "UTF-8");
             })
@@ -178,7 +183,7 @@ class Bitacora71DataTable extends DataTable
             Column::make('tabla')->orderable(true),
             Column::make('id')->orderable(true),
             Column::make('idaccion')->orderable(true),
-            Column::make('ip')->orderable(true),
+            Column::make('idusuario')->orderable(true),
             Column::make('fecha')->orderable(true),
 
             Column::computed('action')

@@ -98,6 +98,7 @@ class %OBJETO_CONTROLLER% extends Controller
         'descripcion' => 'Visita %OBJETO%',
         'ip' =>  $this->getIP(),
         'fecha' => $sysdate,
+        'idusuario'=> (Session::has('idusuario')?Session::get('idusuario'):0),
       ];
   
       $this->bitacoraService->insertBitacora($data);      

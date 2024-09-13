@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\%OBJETO%;
 use App\Services\BitacoraService;
+use Illuminate\Support\Facades\Session;
 
 class %OBJETO_OBSERVER%
 {
@@ -39,6 +40,7 @@ class %OBJETO_OBSERVER%
             'idcliente' => ($register->idcliente ? $register->idcliente : 0),
             'ip' =>  $ip,
             'fecha' => $sysdate,
+            'idusuario'=> (Session::has('idusuario')?Session::get('idusuario'):0),
         ];
 
         $this->bitacoraService->insertBitacora($data);
@@ -75,6 +77,7 @@ class %OBJETO_OBSERVER%
             'idcliente' => ($register->idcliente ? $register->idcliente : 0),
             'ip' =>  $ip,
             'fecha' => $sysdate,
+            'idusuario'=> (Session::has('idusuario')?Session::get('idusuario'):0),
         ];
 
         $this->bitacoraService->insertBitacora($data);
@@ -111,6 +114,7 @@ class %OBJETO_OBSERVER%
             'idcliente' => ($register->idcliente ? $register->idcliente : 0),
             'ip' =>  $ip,
             'fecha' => $sysdate,
+            'idusuario'=> (Session::has('idusuario')?Session::get('idusuario'):0),
         ];
 
         $this->bitacoraService->insertBitacora($data);

@@ -762,7 +762,7 @@ class GeneradorCrudService
                             if(isset($request["idproyecto"]) && $request["idproyecto"]){
                             $fieldAnidado["idproyecto"] = $request["idproyecto"];
                             }
-                            Log::info("' .$crud->nombre_componente. ' - fieldAnidado");
+                            Log::info("' . $crud->nombre_componente . ' - fieldAnidado");
                             Log::info($fieldAnidado);
                             \App\Models\\' . $crud->nombre_componente . '::create($fieldAnidado);
                         }
@@ -1370,17 +1370,22 @@ class GeneradorCrudService
                 $template_columns_list .=  $template_columns_replace;
             }
 
-            if (in_array($column['name'], $datatables_queries)) {
+            if (in_array($column['name'], $datatables_queries) && $column['name'] != 'idusuario') {
                 $template_queries_replace = $template_datatable_queries;
                 $template_queries_replace = str_replace('%FIELD%', $column['name'], $template_queries_replace);
                 $template_datatable_queries_all .=  $template_queries_replace;
             }
 
+
             if ($column['name'] == 'idusuario') {
-                $template_queries_replace = $template_datatable_queries;
+                $template_queries_replace = "if(Session::has('rolvisibilidad') && Session::get('rolvisibilidad') && Session::get('rolvisibilidad') > 1){";
+                $template_queries_replace .= $template_datatable_queries;
                 $template_queries_replace = str_replace('%FIELD%', $column['name'], $template_queries_replace);
+                $template_queries_replace .= "}";
+
                 $template_datatable_queries_all .=  $template_queries_replace;
             }
+
 
             if (isset($column['select'])) {
                 $list_filters = $template_filters;

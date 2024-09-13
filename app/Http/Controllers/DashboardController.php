@@ -41,11 +41,11 @@ class DashboardController extends Controller
             $proyectos = $user->proyectos;
         }
 
-        if ($user && $user->rol) {
-            if ($user->rol->idvisibilidad > 1) {
-                $idusuario = $user->id;
-            }
-        }
+        //if ($user && $user->rol) {
+        //if ($user->rol->idvisibilidad > 1) {
+        $idusuario = $user->id;
+        //}
+        //}
 
         $menues = $this->menuService->getMenuDashboard();
         $accesodDirectos = $this->accesoDirectoService->getAccesoDirectos();
@@ -58,6 +58,10 @@ class DashboardController extends Controller
         Session::put('menues', $menues);
         Session::put('current_crud', null);
         Session::put('accesos_directos', $accesodDirectos);
+
+        if ($user->rol) {
+            Session::put('rolvisibilidad', $user->rol->idvisibilidad);
+        }
 
         if (Session::has('idproyecto') && Session::get('idproyecto')) {
             return $this->dashboardProyecto(Session::get('idproyecto'));
@@ -106,6 +110,7 @@ class DashboardController extends Controller
             'ip' => $this->getIP(),
             'idproyecto' => $id,
             'fecha' => $sysdate,
+            'idusuario'=> (Session::has('idusuario')?Session::get('idusuario'):0),
         ];
         $this->bitacoraService->insertBitacora($dataBitacora);
 

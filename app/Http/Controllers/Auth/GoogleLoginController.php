@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
 use App\Services\BitacoraService;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 
 class GoogleLoginController extends Controller
 {
@@ -59,6 +60,7 @@ class GoogleLoginController extends Controller
                 'tabla' => 'users',
                 'id' => $user->id,
                 'campoid' => 'id',
+                'idusuario'=> (Session::has('idusuario')?Session::get('idusuario'):0),
             ];
             
             $bitacoraService->insertBitacora($data);
