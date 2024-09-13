@@ -60,7 +60,7 @@ class GoogleLoginController extends Controller
                 'tabla' => 'users',
                 'id' => $user->id,
                 'campoid' => 'id',
-                'idusuario'=> (Session::has('idusuario')?Session::get('idusuario'):0),
+                'idusuario'=> $user->id,
             ];
             
             $bitacoraService->insertBitacora($data);
