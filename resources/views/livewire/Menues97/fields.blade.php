@@ -41,6 +41,7 @@
     <!--end::Label-->
     <!--begin::Input-->
     <input type="text" wire:model="icono" name="icono" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="ícono" />
+    <p class="text-help"><a href="https://keenthemes.com/keenicons" target="_blank">https://keenthemes.com/keenicons</a></p>
     <!--end::Input-->
     @error('icono')
     <span class="text-danger">{{ $message }}</span> @enderror
