@@ -247,11 +247,14 @@ class %OBJETO_CONTROLLER% extends Controller
       $idRegister = $%OBJETO_VARIABLE%;
       $documentos = $this->documentosService->getDocumentosByCrud('%OBJETO%');
 
+      //%RELATION_DATATABLE_VARIABLES%
 
       $data1 = [
         'documentos' => $documentos,
 
         '%OBJETO_VARIABLE%' => %OBJETO%::find($%OBJETO_VARIABLE%),
+
+        //%RELATION_DATATABLE_VARIABLES_DATA%
       ];
 
       $data2 = $this->%OBJETO_SERVICE%->getData();
@@ -277,6 +280,10 @@ class %OBJETO_CONTROLLER% extends Controller
       if( Session::has('%OBJETO_ROUTE%')){
         $rutaCrud = '/'.Session::get('%OBJETO_ROUTE%');
       }  
+
+      if(isset($request['guardar_permanecer']) && $request['guardar_permanecer']){
+        $rutaCrud = '/'.Session::get('%OBJETO_ROUTE%').'/'. $id.'/edit/';
+      }
 
       %OBJETO_CONTROLLER_UPDATE%
 

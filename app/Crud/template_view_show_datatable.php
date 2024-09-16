@@ -4,7 +4,7 @@
             %OBJETO_ALIAS%
         </button>        
     </h2>
-    <div id="panel%OBJETO%Collapse" class="accordion-collapse collapse " aria-labelledby="panel%OBJETO%">
+    <div id="panel%OBJETO%Collapse" class="accordion-collapse collapse my-1" aria-labelledby="panel%OBJETO%">
         %ACCORDION_CREATE%
         <div class="accordion-body">
             <!--begin::Card body-->

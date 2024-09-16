@@ -1641,10 +1641,8 @@ class GeneradorCrudService
 
         $template_show_datatable = file_get_contents('../app/Crud/template_view_show_datatable.php');
         $crudName = $data['crud_name'];
-        $tableNameLabel = $data['table_name_label'];
         $tableNameLabelAlias = $data['table_name_label_alias'];
         $tableNameDatatable = $data['crud_name'] . 'DataTable';
-        $tableVariableDatatable = 'datatable' . $data['crud_name'];
 
         foreach ($data['tables_crud_relation_fk'] as $keyCrud => $crud_relation) {
             $crud = Crud::find($crud_relation['crud']);
@@ -1756,15 +1754,17 @@ class GeneradorCrudService
                     fclose($file_datatable_show);
 
                     $template_show = file_get_contents('../resources/views/cruds/' . $componentName . '/show.blade.php');
+                    $template_edit = file_get_contents('../resources/views/cruds/' . $componentName . '/edit.blade.php');
                     $search = 'datatable_' . $crudName;
 
-                    if (!str_contains($template_show, $search)) {
+                    if (!str_contains($template_edit, $search)) {
                         $template_datatable = '
                     @include("cruds.' . $componentName . '.datatable_' . $crudName . '")
     
                     <!-- %RELATIONS_DATATABLE% -->
                     ';
 
+                        $template_edit = str_replace("<!-- %RELATIONS_DATATABLE% -->", $template_datatable, $template_edit);
                         $template_show = str_replace("<!-- %RELATIONS_DATATABLE% -->", $template_datatable, $template_show);
 
                         $template_datatable_script = '                  
@@ -1773,7 +1773,12 @@ class GeneradorCrudService
                     <!-- %RELATIONS_DATATABLE_SCRIPTS% -->
                     ';
 
+                        $template_edit = str_replace("<!-- %RELATIONS_DATATABLE_SCRIPTS% -->", $template_datatable_script, $template_edit);
                         $template_show = str_replace("<!-- %RELATIONS_DATATABLE_SCRIPTS% -->", $template_datatable_script, $template_show);
+
+                        $file_edit = fopen('../resources/views/cruds/' . $componentName . '/edit.blade.php', "w") or die("Unable to open file - view edit.blade.php");
+                        fwrite($file_edit, $template_edit);
+                        fclose($file_edit);
 
                         $file_show = fopen('../resources/views/cruds/' . $componentName . '/show.blade.php', "w") or die("Unable to open file - view show.blade.php");
                         fwrite($file_show, $template_show);
@@ -1864,6 +1869,7 @@ class GeneradorCrudService
         $content = str_replace('%TABLA%', $data['table_fullname'], $content);
         $content = str_replace('%TABLA_CAMPOS%', $data['table_columns_string'], $content);
         $content = str_replace('%FIELD_ID%', $data['table_column_id'], $content);
+        $content = str_replace('%FIELD_NAME%', $data['table_column_name'], $content);
 
         $content = str_replace('%OBJETO_TABLE%', $data['table_fullname'], $content);
         $content = str_replace('%OBJETO_CONTROLLER%', $data['controller_name'], $content);

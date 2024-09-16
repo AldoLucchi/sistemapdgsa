@@ -3,7 +3,7 @@
 
     @section('title')
     <a href="{{ url('/'. (Session::has('%OBJETO_ROUTE%')?Session::get('%OBJETO_ROUTE%'):'crud/%OBJETO_ROUTE%') ) }}">
-        %OBJETO_LABEL_ALIAS%
+        Listado: %OBJETO_LABEL_ALIAS%
     </a>
     @endsection
 
@@ -14,7 +14,7 @@
             <div class="card-title">
                 <!--begin::Search-->
                 <div class="d-flex align-items-center position-relative my-1">
-                    DETALLE
+                    {{ $%OBJETO%->%FIELD_NAME% }}
                 </div>
                 <!--end::Search-->
             </div>
@@ -25,7 +25,6 @@
                 <!--begin::Toolbar-->
                 <div class="d-flex justify-content-end" data-kt-%OBJETO_ROUTE%-table-toolbar="base">
                     <!--begin::Add %OBJETO_ROUTE%-->
-
                     @foreach($documentos as $key=> $documento)
                     <a href="{{ url($documento.$%OBJETO%->%FIELD_ID% ) }}" class="btn btn-secondary mx-5" target="_blank">
                         Pdf: {{ $key }}
@@ -36,7 +35,6 @@
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
                         Editar %OBJETO_LABEL_INDIVIDUAL%
                     </a>
-
                     <!--end::Add %OBJETO_ROUTE%-->
                 </div>
                 <!--end::Toolbar-->
@@ -57,7 +55,7 @@
                             Datos Generales
                         </button>
                     </h2>
-                    <div id="panelDatosCollapse" class="accordion-collapse collapse" aria-labelledby="panelDatos">
+                    <div id="panelDatosCollapse" class="accordion-collapse " aria-labelledby="panelDatos">
                         <div class="accordion-body">
                             <fieldset id="show-fieldset-%OBJETO_LABEL_INDIVIDUAL%" disabled>
                                 <div class="row">

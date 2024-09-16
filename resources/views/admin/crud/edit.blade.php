@@ -188,7 +188,7 @@
                                                         <select name="{{ $key.'_'.$column->Field.'_select' }}" id="{{ $key.'_'.$column->Field.'_select' }}" class="form-select form-select-transparent" aria-label="Seleccione una opción">
                                                             <option value="">---</option>
                                                             @foreach($cruds_availables as $crud_table_available)
-                                                            <option value="{{ $crud_table_available }}" {{ ($campoPreference && $campoPreference->select == $crud_table_available)?'selected':'' }}>{{ $crud_table_available }}</option>
+                                                            <option value="{{ $crud_table_available }}" {{ ($campoPreference && isset($campoPreference->select) && $campoPreference->select == $crud_table_available)?'selected':'' }}>{{ $crud_table_available }}</option>
                                                             @endforeach
                                                         </select>
                                                     </td>
@@ -234,7 +234,7 @@
                                                         <select name="{{ $key.'_'.$column->Field.'_show_fk' }}" id="{{ $key.'_'.$column->Field.'_show_fk' }}" class="form-select form-select-transparent" aria-label="Seleccione una opción">
                                                             <option value="">---</option>
                                                             @foreach($cruds_generated as $crud_gen)
-                                                            <option value="{{ $crud_gen->id }}" {{ ($campoPreference && $campoPreference->show_fk == $crud_gen->id )?'selected':'' }}>{{ $crud_gen->alias_opcion }} | {{ $crud_gen->nombre_componente }} | {{ $crud_gen->nombre }}</option>
+                                                            <option value="{{ $crud_gen->id }}" {{ ($campoPreference && isset($campoPreference->show_fk) && $campoPreference->show_fk == $crud_gen->id )?'selected':'' }}>{{ $crud_gen->alias_opcion }} | {{ $crud_gen->nombre_componente }} | {{ $crud_gen->nombre }}</option>
                                                             @endforeach
                                                         </select>
                                                     </td>
@@ -242,7 +242,7 @@
                                                         <select name="{{ $key.'_'.$column->Field.'_show_fk_permisos' }}[]" id="{{ $key.'_'.$column->Field.'_show_fk_permisos' }}" class="form-select form-select-transparent py-5 select2" aria-label="Seleccione una opción" data-control="select2" multiple="multiple">
                                                             <option value="">---</option>
                                                             @foreach($options_crud as $option)
-                                                            <option value="{{ $option }}" {{ ($campoPreference && in_array($option, explode(',', $campoPreference->show_fk_permisos)  ))?'selected':'' }}>{{ $option }}</option>
+                                                            <option value="{{ $option }}" {{ ($campoPreference && isset($campoPreference->show_fk_permisos) && in_array($option, explode(',', $campoPreference->show_fk_permisos)  ))?'selected':'' }}>{{ $option }}</option>
                                                             @endforeach
                                                         </select>
                                                     </td>

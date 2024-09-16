@@ -3,7 +3,7 @@
 
     @section('title')
     <a href="{{ url('/'. (Session::has('%OBJETO_ROUTE%')?Session::get('%OBJETO_ROUTE%'):'crud/%OBJETO_ROUTE%') ) }}">
-        %OBJETO_LABEL_ALIAS%
+        Listado: %OBJETO_LABEL_ALIAS%
     </a>
     @endsection
 
@@ -14,7 +14,7 @@
             <div class="card-title">
                 <!--begin::Search-->
                 <div class="d-flex align-items-center position-relative my-1">
-                    EDITAR
+                Editar {{ $%OBJETO%->%FIELD_NAME% }}
                 </div>
                 <!--end::Search-->
             </div>
@@ -45,27 +45,47 @@
         <div class="card-body py-4">
             <!--begin::Table-->
 
-            <form id="edit_%OBJETO_ROUTE%_form" name="edit_%OBJETO_ROUTE%_form" class="form" action="{{ route('crud.%OBJETO_ROUTE%.update', $%OBJETO_ROUTE%) }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
-                <div class="row">
-                    @include('cruds.%OBJETO_VIEW%.fields')
-                </div>
-
-                <div class="row">
-                    <div class="d-flex justify-content-end">
-                        <button type="submit" class="btn btn-primary">
-                            Guardar
+            <div class="accordion" id="accordion%OBJETO_LABEL_INDIVIDUAL%">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="panelDatos">
+                        <button class="accordion-button bg-primary text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelDatosCollapse" aria-expanded="true" aria-controls="panelDatosCollapse">
+                            Datos Generales
                         </button>
+                    </h2>
+                    <div id="panelDatosCollapse" class="accordion-collapse " aria-labelledby="panelDatos">
+                        <div class="accordion-body">
+
+
+                            <form id="edit_%OBJETO_ROUTE%_form" name="edit_%OBJETO_ROUTE%_form" class="form" action="{{ route('crud.%OBJETO_ROUTE%.update', $%OBJETO_ROUTE%) }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                @method('PUT')
+                                <div class="row">
+                                    @include('cruds.%OBJETO_VIEW%.fields')
+                                </div>
+
+                                <div class="row">
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" name="guardar" class="btn btn-primary mx-5" value="1">Guardar</button>
+                                        <button type="submit" name="guardar_permanecer" class="btn btn-primary" value="1">Guardar y permanecer</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <!--end::Table-->
+
+                        </div>
                     </div>
                 </div>
-            </form>
-            <!--end::Table-->
+
+                <!-- %RELATIONS_DATATABLE% -->
+
+            </div>
         </div>
         <!--end::Card body-->
     </div>
 
     @push('scripts')
+
+     <!-- %RELATIONS_DATATABLE_SCRIPTS% -->
     @include('cruds.%OBJETO_VIEW%.scripts')
     @endpush
 
