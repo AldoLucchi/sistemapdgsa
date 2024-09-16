@@ -8,6 +8,7 @@ use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+use Illuminate\Support\HtmlString;
 
 class Menues97DataTable extends DataTable
 {
@@ -20,19 +21,21 @@ class Menues97DataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->editColumn('idmenu', function (Menues97 $Menues97) {
-return $Menues97->idmenu;
-})
-->editColumn('menu', function (Menues97 $Menues97) {
-return $Menues97->menu;
-})
-->editColumn('estatus', function (Menues97 $Menues97) {
-return ($Menues97->estatus?"ON":"OFF");
-})
-->editColumn('ruta', function (Menues97 $Menues97) {
-return $Menues97->ruta;
-})
+                return $Menues97->idmenu;
+            })
+            ->editColumn('menu', function (Menues97 $Menues97) {
+                return $Menues97->menu;
+            })
+            ->editColumn('estatus', function (Menues97 $Menues97) {
+                return ($Menues97->estatus ? "ON" : "OFF");
+            })
+            ->editColumn('ruta', function (Menues97 $Menues97) {
+                return $Menues97->ruta;
+            })
+            ->editColumn('icono', function (Menues97 $Menues97) {
+                return $Menues97->icono;
+            })
 
-            
             ->addColumn('action', function (Menues97 $Menues97) {
                 return view('cruds/Menues97.columns._actions', compact('Menues97'));
             })
@@ -72,9 +75,10 @@ return $Menues97->ruta;
     {
         return [
             Column::make('idmenu'),
-Column::make('menu'),
-Column::make('estatus'),
-Column::make('ruta'),
+            Column::make('menu'),
+            Column::make('estatus'),
+            Column::make('ruta'),
+            Column::make('icono'),
 
             Column::computed('action')
                 ->addClass('text-end text-nowrap')

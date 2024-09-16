@@ -12,7 +12,7 @@ class Menues extends Model
     protected $table = "adm_menues";
 	
 	protected $fillable = [
-        'idmenu','menu','estatus','ruta','created_at','updated_at',
+        'idmenu','menu','estatus','ruta','icono','created_at','updated_at',
     ];	
 
     /**

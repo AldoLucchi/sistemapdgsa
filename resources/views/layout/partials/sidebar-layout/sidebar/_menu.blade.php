@@ -23,7 +23,7 @@
 			<div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->routeIs($menu['ruta'].'.*') ? 'here show' : '' }}">
 				<!--begin:Menu link-->
 				<span class="menu-link">
-					<span class="menu-icon">{!! getIcon('abstract-28', 'fs-2') !!}</span>
+					<span class="menu-icon">{!! getIcon($menu['icono'], 'fs-2') !!}</span>
 					<span class="menu-title">{{  $menu['nombre'] }}</span>
 					<span class="menu-arrow"></span>
 				</span>

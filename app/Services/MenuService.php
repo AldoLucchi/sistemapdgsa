@@ -69,6 +69,7 @@ class MenuService
         if ($menu_asignado->menu) {
             $menu_ruta = $menu_asignado->menu->ruta;
             $menu_nombre = $menu_asignado->menu->menu;
+            $menu_icono = $menu_asignado->menu->icono;
 
             $items = [];
             if ($menu_asignado->menu->opciones) {
@@ -102,6 +103,7 @@ class MenuService
             return [
                 'nombre' => $menu_nombre,
                 'ruta' => $menu_ruta,
+                'icono' => $menu_icono,
                 'items' => $items
             ];
         }

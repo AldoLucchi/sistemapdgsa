@@ -14,22 +14,22 @@ use Illuminate\Support\Facades\Auth;
 class AddMenues97Modal extends Component
 {
     use WithFileUploads;
- 
-    
-            public $idmenu;
-            
-            public $menu;
-            
-            public bool $estatus;
-            
-            public $ruta;
-            
+
+
+    public $idmenu;
+
+    public $menu;
+
+    public bool $estatus;
+
+    public $ruta;
+
+    public $icono;
+
 
     public $edit_mode = false;
 
-    protected $rules = [
-        
-    ];
+    protected $rules = [];
 
     protected $listeners = [
         'delete_Menues97' => 'deleteMenues97',
@@ -40,9 +40,7 @@ class AddMenues97Modal extends Component
     public function render()
     {
         //fk
-        $details = [        
-        
-        ];
+        $details = [];
 
         return view('livewire.Menues97.add-Menues97-modal', $details);
     }
@@ -63,20 +61,23 @@ class AddMenues97Modal extends Component
         DB::transaction(function () {
             // Prepare the data for creating a new 
             $data = [];
-                 
-            if(  isset( $this->menu) ){
-            $data [ "menu" ] = $this->menu;  
-            } 
-            if(  isset( $this->estatus) ){
-            $data [ "estatus" ] = $this->estatus;  
-            } 
-                /*else{
+
+            if (isset($this->menu)) {
+                $data["menu"] = $this->menu;
+            }
+            if (isset($this->estatus)) {
+                $data["estatus"] = $this->estatus;
+            }
+            /*else{
                 $data [ "estatus" ] = 0;  
                 } */
-            if(  isset( $this->ruta) ){
-            $data [ "ruta" ] = $this->ruta;  
+            if (isset($this->ruta)) {
+                $data["ruta"] = $this->ruta;
             }
-            
+            if (isset($this->icono)) {
+                $data["icono"] = $this->icono;
+            }
+
             $Menues97 = Menues97::where('idmenu', $this->idmenu)->first() ?? Menues97::create($data);
 
             if ($this->edit_mode) {
@@ -89,7 +90,7 @@ class AddMenues97Modal extends Component
             if ($this->edit_mode) {
                 // Emit a success event with a message
                 $this->dispatch('success', __('Actualizado correctamente!'));
-            } else {                
+            } else {
 
                 // Emit a success event with a message
                 $this->dispatch('success', __('Creado correctamente!'));
@@ -123,17 +124,18 @@ class AddMenues97Modal extends Component
 
         $Menues97 = Menues97::find($id);
 
-        Log::info($Menues97 );
+        Log::info($Menues97);
 
-        
-            $this->idmenu = $Menues97->idmenu;
-            
-            $this->menu = $Menues97->menu;
-            
-            $this->estatus = $Menues97->estatus;
-            
-            $this->ruta = $Menues97->ruta;
-            
+
+        $this->idmenu = $Menues97->idmenu;
+
+        $this->menu = $Menues97->menu;
+
+        $this->estatus = $Menues97->estatus;
+
+        $this->ruta = $Menues97->ruta;
+
+        $this->icono = $Menues97->icono;
     }
 
     public function hydrate()
