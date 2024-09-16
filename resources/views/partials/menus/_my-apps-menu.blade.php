@@ -29,7 +29,7 @@
 					@if(!$acceso_directo->idcrud)
 					<!--begin::Col-->
 					<div class="col-4">
-						<a href="{{ url($acceso_directo->url) }}" class="d-flex flex-column flex-center text-center text-gray-800 text-hover-primary bg-hover-light rounded py-4 px-3 mb-3" target="_blank">
+						<a href="{{ url($acceso_directo->url.'?idproyecto='.session()->get('idproyecto')) }}" class="d-flex flex-column flex-center text-center text-gray-800 text-hover-primary bg-hover-light rounded py-4 px-3 mb-3" target="_blank">
 							<img src="{{ '/images/'.$acceso_directo->icono   }}" class="w-25px h-25px mb-2" alt="" />
 							<span class="fw-semibold">{{ $acceso_directo->titulo }}</span>
 						</a>
@@ -38,7 +38,7 @@
 					@elseif($acceso_directo->idcrud && request()->segment(2) && request()->segment(2) == $acceso_directo->CrudDetalle->nombre_componente && request()->segment(3) )
 					<!--begin::Col-->
 					<div class="col-4">
-						<a href="{{ url($acceso_directo->url.request()->segment(3) ) }}" class="d-flex flex-column flex-center text-center text-gray-800 text-hover-primary bg-hover-light rounded py-4 px-3 mb-3" target="_blank">
+						<a href="{{ url($acceso_directo->url.request()->segment(3).'&idproyecto='.session()->get('idproyecto') ) }}" class="d-flex flex-column flex-center text-center text-gray-800 text-hover-primary bg-hover-light rounded py-4 px-3 mb-3" target="_blank">
 							<img src="{{ '/images/'.$acceso_directo->icono   }}" class="w-25px h-25px mb-2" alt="" />
 							<span class="fw-semibold">{{ $acceso_directo->titulo }}</span>
 						</a>
