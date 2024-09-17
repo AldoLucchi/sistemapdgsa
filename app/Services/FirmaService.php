@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Crud;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -64,6 +65,7 @@ class FirmaService
 
     public function getDataRegistrarFirma($tableSelected, $idRegister)
     {
+        $registerIntro = 'Es necesario registrar su firma';
         $registerKey = '';
         $registerColumns = '';
         if ($tableSelected && $idRegister) {
@@ -76,10 +78,26 @@ class FirmaService
                 }
             }
             $register = DB::table($tableSelected)->where($registerKey, $idRegister)->first();
+
+            $crud = Crud::where('nombre',$tableSelected)->orderBy('id', 'DESC')->first();
+
+            if($crud){
+                $campos_array = json_decode($crud->campos);
+                if ($campos_array) {
+                    foreach ($campos_array as $campo) {
+                        if (isset($campo->field) && $campo->field && $campo->field == 'firma') {
+                            if (isset($campo->help) && $campo->help) {
+                                $registerIntro = $campo->help;
+                            }
+                        } 
+                    }
+                }
+            }
         }
 
         $data = [
             'register' => $register,
+            'intro' => $registerIntro,
             'registerKey' => $registerKey,
             'registerColumns' => $registerColumns,
         ];

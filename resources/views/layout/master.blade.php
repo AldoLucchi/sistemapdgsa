@@ -44,6 +44,9 @@
         .breadcrumb{
             display:none;
         }
+        .tr_row{
+            cursor: pointer;
+        }
     </style>
 </head>
 <!--end::Head-->
