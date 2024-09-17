@@ -1,1 +1,1 @@
-Column::make('%FIELD%')->orderable(false),
+Column::make('%FIELD%')->addClass('td_row')->orderable(false),

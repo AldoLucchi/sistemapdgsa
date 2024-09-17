@@ -59,7 +59,9 @@ class %OBJETO_DATATABLE% extends DataTable
                 ];
                 return view('cruds/%OBJETO_VIEW%.columns._actions', $data);
             })
-            ->setRowId('%FIELD_ID%');
+            ->setRowId('%FIELD_ID%')
+            ->setRowId('{{ "idrow_".$%FIELD_ID% }}')
+            ->setRowClass('{{ "tr_row" }}');;
     }
 
 
