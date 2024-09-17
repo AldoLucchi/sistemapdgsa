@@ -1,8 +1,4 @@
-@inject('notificationService', 'App\Services\NotificationService')
 
-@php
-$data = $notificationService->getNotificationsByUser();
-@endphp
 
 
 <!--begin::Menu-->
