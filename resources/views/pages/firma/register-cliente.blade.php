@@ -25,20 +25,15 @@
         <div class="card-body py-4">
             <div class="row mt-5">
                 <div class="mb-10 col-12 col-lg-6">
-                    <h3>Detalle</h3>
-                    <table>
-                        @foreach($registerColumns as $colum)
+                    @foreach($registerColumns as $colum)
+                    @if($loop->iteration == 2)
+                    @php
+                    $nameColumn=$colum->Field;
+                    @endphp
 
-                        @if($loop->iteration == 2)
-                        @php $nameColumn=$colum->Field;
-                        @endphp
-                        <tr>
-                            <td>{{ $register->$nameColumn }} </td>
-                        </tr>
-                        @endif
-
-                        @endforeach
-                    </table>
+                    <h3>{{ $register->$nameColumn }} </h3>
+                    @endif
+                    @endforeach
                 </div>
             </div>
 

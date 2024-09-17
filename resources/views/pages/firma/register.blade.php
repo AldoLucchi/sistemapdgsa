@@ -6,39 +6,21 @@
     @include('pages.firma.siganture-pad-css')
 
     <div class="card w-100">
-        <!--begin::Card header-->
-        <div class="card-header border-0 pt-6">
-            <!--begin::Card title-->
-            <div class="card-title">
-                Registrar firma
-            </div>
-            <!--begin::Card title-->
-
-            <!--begin::Card toolbar-->
-            <div class="card-toolbar">
-            </div>
-            <!--end::Card toolbar-->
-        </div>
-        <!--end::Card header-->
+        
 
         <!--begin::Card body-->
         <div class="card-body py-4">
             <div class="row mt-5">
                 <div class="mb-10 col-12 col-lg-6">
-                    <h3>Detalle</h3>
-                    <table>
-                        @foreach($registerColumns as $colum)
+                    @foreach($registerColumns as $colum)
+                    @if($loop->iteration == 2)
+                    @php 
+                    $nameColumn=$colum->Field;
+                    @endphp
+                    <h3>{{ $register->$nameColumn }} </h3>
 
-                        @if($loop->iteration == 2)
-                        @php $nameColumn=$colum->Field;
-                        @endphp
-                        <tr>
-
-                            <td>{{ $register->$nameColumn }} </td>
-                        </tr>
-                        @endif
-                        @endforeach
-                    </table>
+                    @endif
+                    @endforeach
                 </div>
             </div>
 
