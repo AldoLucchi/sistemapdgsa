@@ -11,7 +11,7 @@
         <div class="card-header border-0 pt-6">
             <!--begin::Card title-->
             <div class="card-title">
-                
+            @include('cruds.%OBJETO_VIEW%.filters_text')
             </div>
             <!--begin::Card title-->
 

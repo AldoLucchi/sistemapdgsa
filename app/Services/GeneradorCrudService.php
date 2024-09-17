@@ -803,7 +803,10 @@ class GeneradorCrudService
 
         //list filters -------------------------------
         $file_list_filters = fopen("../resources/views/cruds/" . $data['crud_name'] . "/filters.blade.php", "w") or die("Unable to open file - view filters.blade.php");
-        $template_list_filters = file_get_contents('../app/Crud/template_view_list_filters.php');
+        $template_list_filters = file_get_contents('../app/Crud/template_view_list_filters_form.php');
+
+        $file_list_filters_text = fopen("../resources/views/cruds/" . $data['crud_name'] . "/filters_text.blade.php", "w") or die("Unable to open file - view filters_text.blade.php");
+        $template_list_filters_text = file_get_contents('../app/Crud/template_view_list_filters_form_text.php');
 
         $file_list_filters_script = fopen("../resources/views/cruds/" . $data['crud_name'] . "/filters_script.blade.php", "w") or die("Unable to open file - view filters_script.blade.php");
         $template_list_filters_scripts = file_get_contents('../app/Crud/template_view_list_filters_scripts.php');
@@ -896,6 +899,9 @@ class GeneradorCrudService
 
         fwrite($file_list_filters, $template_list_filters);
         fclose($file_list_filters);
+
+        fwrite($file_list_filters_text, $template_list_filters_text);
+        fclose($file_list_filters_text);
 
         $template_list_filters_scripts = str_replace('%VIEW_LIST_FILTROS_JAVASCRIPT_ENTER%', $template_filters_javascript_enter, $template_list_filters_scripts);
         $template_list_filters_scripts = str_replace('%VIEW_LIST_FILTROS_JAVASCRIPT%', $template_filters_javascript, $template_list_filters_scripts);
