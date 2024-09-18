@@ -7,7 +7,7 @@
     <span class="text-danger">{{ $message }}</span>
     @enderror
     <!--begin::Crud-->
-    <input type="text" class="form-control" name="alias_opcion" id="alias_opcion" placeholder="" value="{{ (isset($crud)?$crud->alias_opcion:'') }}" />
+    <input type="text" class="form-control" name="alias_opcion" id="alias_opcion" placeholder="" value="{{ (isset($crud)?$crud->alias_opcion:'') }}" required />
     <!--end::Crud-->
 </div>
 <!--end::Input group-->
@@ -21,7 +21,7 @@
     <span class="text-danger">{{ $message }}</span>
     @enderror
     <!--begin::Crud-->
-    <input type="text" class="form-control" name="alias_opcion_individual" id="alias_opcion_individual" placeholder="" value="{{ (isset($crud)?$crud->alias_opcion_individual:'') }}" />
+    <input type="text" class="form-control" name="alias_opcion_individual" id="alias_opcion_individual" placeholder="" value="{{ (isset($crud)?$crud->alias_opcion_individual:'') }}" required />
     <!--end::Crud-->
 </div>
 <!--end::Input group-->
@@ -29,7 +29,7 @@
 <!--begin::Input group-->
 <div class="mb-7 col-12 col-lg-4">
     <!--begin::Label-->
-    <label class="required fw-semibold fs-6 mb-5">Rules</label>
+    <label class="fw-semibold fs-6 mb-5">Rules</label>
     <!--end::Label-->
     @error('reglas')
     <span class="text-danger">{{ $message }}</span>
@@ -43,7 +43,7 @@
 <!--begin::Input group-->
 <div class="mb-7 col-12 col-lg-4">
     <!--begin::Label-->
-    <label class="required fw-semibold fs-6 mb-5">CRUD permisos</label>
+    <label class="fw-semibold fs-6 mb-5">CRUD permisos</label>
     <!--end::Label-->
     @error('crud_permisos')
     <span class="text-danger">{{ $message }}</span>
@@ -55,6 +55,20 @@
         <option value="{{ $option }}" {{ (isset($crud) && in_array($option, explode(',', $crud->crud_permisos)  ))?'selected':'' }}>{{ $option }}</option>
         @endforeach
     </select>
+    <!--end::Crud-->
+</div>
+<!--end::Input group-->
+
+<!--begin::Input group-->
+<div class="mb-7 col-12 col-lg-4">
+    <!--begin::Label-->
+    <label class="fw-semibold fs-6 mb-5">Row Url Custom</label>
+    <!--end::Label-->
+    @error('row_url_custom')
+    <span class="text-danger">{{ $message }}</span>
+    @enderror
+    <!--begin::Crud-->
+    <input type="text" class="form-control" name="row_url_custom" id="row_url_custom" placeholder="" value="{{ (isset($crud)?$crud->row_url_custom:'') }}" />
     <!--end::Crud-->
 </div>
 <!--end::Input group-->

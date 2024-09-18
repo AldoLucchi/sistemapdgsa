@@ -116,6 +116,8 @@ class Accesosdirectos69DataTable extends DataTable
             }
         }
 
+        $pageLength = env('PAGINATE_QUANTITY',10);
+
         return $this->builder()
             ->setTableId('Accesosdirectos69-table')
             ->columns($this->getColumns())
@@ -124,7 +126,7 @@ class Accesosdirectos69DataTable extends DataTable
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(0)
-            ->pageLength(50)
+            ->pageLength($pageLength)
             ->drawCallback("function() {" . file_get_contents(resource_path('views/cruds/Accesosdirectos69/columns/_draw-scripts.js')) . "}");
     }
 

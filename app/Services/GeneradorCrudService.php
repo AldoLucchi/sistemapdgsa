@@ -42,6 +42,7 @@ class GeneradorCrudService
             $alias_opcion = $request['alias_opcion'];
             $alias_opcion_individual = $request['alias_opcion_individual'];
             $rules = $request['reglas'];
+            $row_url_custom = $request['row_url_custom'];
             $crud_permisos =  null;
             if (isset($request['crud_permisos']) && $request['crud_permisos']) {
                 Log::info('GeneradorCrudServices - store - crud_permisos');
@@ -94,10 +95,12 @@ class GeneradorCrudService
 
                 $column_select_readonly = $table_crud . '_' . $colum->Field . '_readonly';
                 $column_select_required = $table_crud . '_' . $colum->Field . '_required';
+                $column_select_hidden = $table_crud . '_' . $colum->Field . '_hidden';
                 $column_select_regex = $table_crud . '_' . $colum->Field . '_regex';
                 $column_select_maxlength = $table_crud . '_' . $colum->Field . '_maxlength';
 
                 $column_select_request = $table_crud . '_' . $colum->Field . '_select';
+                $column_select_style_color = $table_crud . '_' . $colum->Field . '_style_color';
                 $column_select_anidado = $table_crud . '_' . $colum->Field . '_anidado';
                 $column_select_rules = $table_crud . '_' . $colum->Field . '_select_rules';
 
@@ -164,6 +167,11 @@ class GeneradorCrudService
                     $table_column_detail['readonly'] = $request[$column_select_readonly];
                 }
 
+                //hidden
+                if (isset($request[$column_select_hidden]) && !empty($request[$column_select_hidden]) &&  $column_select_hidden && $column_select_hidden != 'NULL' && $column_select_hidden != NULL) {
+                    $table_column_detail['hidden'] = $request[$column_select_hidden];
+                }
+
                 //required
                 if (isset($request[$column_select_required]) && !empty($request[$column_select_required]) &&  $column_select_required && $column_select_required != 'NULL' && $column_select_required != NULL) {
                     $table_column_detail['required'] = $request[$column_select_required];
@@ -196,6 +204,10 @@ class GeneradorCrudService
 
                     if (isset($request[$column_select_anidado]) && !empty($request[$column_select_anidado]) &&  $column_select_anidado && $column_select_anidado != 'NULL' && $column_select_anidado != NULL) {
                         $table_column_detail['anidado'] = $request[$column_select_anidado];
+                    }
+
+                    if (isset($request[$column_select_style_color]) && !empty($request[$column_select_style_color]) &&  $column_select_style_color && $column_select_style_color != 'NULL' && $column_select_style_color != NULL) {
+                        $table_column_detail['style_color'] = $request[$column_select_style_color];
                     }
 
                     if (isset($request[$column_select_rules]) && !empty($request[$column_select_rules]) &&  $column_select_rules && $column_select_rules != 'NULL' && $column_select_rules != NULL) {
@@ -321,6 +333,7 @@ class GeneradorCrudService
                 'table_name_label_alias' => $alias_opcion,
                 'table_name_label_individual' => $alias_opcion_individual,
                 'rules' => $rules,
+                'row_url_custom' => $row_url_custom,
                 'crud_permisos' => $crud_permisos,
                 'crud_permisos_create' => $crud_permisos_create,
                 'crud_permisos_read' => $crud_permisos_read,
@@ -988,6 +1001,7 @@ class GeneradorCrudService
             $show_column_name_alias = $column['name'];
             $column_readonly = '';
             $column_required = '';
+
             $column_required_icon = '';
             $column_regex = '';
             $column_maxlength = '';
@@ -1008,7 +1022,7 @@ class GeneradorCrudService
                 $column_required = "required";
                 $column_required_icon = '<label class="text-danger">*</label>';
             }
-            if (in_array($column['name'], $columns_oculto_depends)) {
+            if (in_array($column['name'], $columns_oculto_depends) || (isset($column['hidden']) && $column['hidden'])) {
                 $column_hidden = "display:none;";
             }
 
@@ -1281,7 +1295,32 @@ class GeneradorCrudService
                 $template_fields_replace = str_replace('%FIELD%', $datatable_column_name, $template_fields_replace);
                 $model_name = $data['tables_fk'][$column['name']]['table_name_fk'];
                 $column_name = $data['tables_fk'][$column['name']]['table_column_fk_name'];
-                $return = 'return $%OBJETO_VARIABLE%->' . $model_name . '->first()?->' . $column_name . ';'; //ucwords($user->roles->first()?->name);
+
+                $return = '
+                $value = "";
+                $register = $%OBJETO_VARIABLE%->' . $model_name . '->first();
+                if($register){
+                    $value = $register->' . $column_name . ';';
+
+                if (isset($column['style_color']) && $column['style_color']) {
+                    $style_color_array = explode(';',$column['style_color']);
+                    foreach($style_color_array as $style_color_validation){
+                        $style_color_parts = explode(',',$style_color_validation);
+                        $campo = $style_color_parts[0];
+                        $valor = $style_color_parts[2];
+                        $color = $style_color_parts[3];
+                        
+                        $return .=    'if($register->'.$campo.' == '.$valor .'){
+                            $value = new HtmlString( \'<div class="badge badge-outline badge-lg badge-'.$color .'">\'.$register->'.$column_name.'.\'</div>\');
+                        }
+                        ';
+                    }                    
+                }
+
+                $return .= '}
+                return $value;                
+                ';
+                //ucwords($user->roles->first()?->name);
 
             } else {
                 $template_fields_replace = $template_fields;
@@ -1885,6 +1924,7 @@ class GeneradorCrudService
         $content = str_replace('%OBJETO_VIEW%', $data['crud_name'], $content);
         $content = str_replace('%OBJETO_VARIABLE%', $data['crud_name'], $content);
         $content = str_replace('%OBJETO_DATATABLE%', $data['datatable_name'], $content);
+        $content = str_replace('%OBJETO_ROW_URL_CUSTOM%', $data['row_url_custom'], $content);
 
         $content = str_replace('%OBJETO_ROUTE%', $data['crud_name'], $content);
 
@@ -2012,10 +2052,12 @@ class GeneradorCrudService
 
                 $crud_campos[$tablaCampo . '_required'] = (isset($campo['required']) ? $campo['required'] : null);
                 $crud_campos[$tablaCampo . '_readonly'] = (isset($campo['readonly']) ? $campo['readonly'] : null);
+                $crud_campos[$tablaCampo . '_hidden'] = (isset($campo['hidden']) ? $campo['hidden'] : null);
                 $crud_campos[$tablaCampo . '_regex'] = (isset($campo['regex']) ? $campo['regex'] : null);
                 $crud_campos[$tablaCampo . '_maxlength'] = (isset($campo['maxlength']) ? $campo['maxlength'] : null);
 
                 $crud_campos[$tablaCampo . '_select'] = $campo['select'];
+                $crud_campos[$tablaCampo . '_style_color'] = (isset($campo['style_color']) ? $campo['style_color'] : null);
                 $crud_campos[$tablaCampo . '_select_rules'] = (isset($campo['select_rules']) ? $campo['select_rules'] : null);
                 $crud_campos[$tablaCampo . '_anidado'] = (isset($campo['anidado']) ? $campo['anidado'] : null);
 

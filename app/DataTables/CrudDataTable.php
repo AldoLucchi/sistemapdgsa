@@ -45,7 +45,7 @@ class CrudDataTable extends DataTable
                     if ($campos_array) {
                         foreach ($campos_array as $campo) {
                             if ($campo->show_fk && $campo->show_fk == $crud->id) {
-                                $accordions .= $crud_generado->nombre_componente.', ';
+                                $accordions .= $crud_generado->nombre_componente . ', ';
                             }
                         }
                     }
@@ -76,6 +76,7 @@ class CrudDataTable extends DataTable
      */
     public function html(): HtmlBuilder
     {
+        $pageLength = env('PAGINATE_QUANTITY',10);
         return $this->builder()
             ->setTableId('crud-table')
             ->columns($this->getColumns())
@@ -84,7 +85,7 @@ class CrudDataTable extends DataTable
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
             ->orderBy(0, 'desc')
-            ->pageLength(50)
+            ->pageLength($pageLength)
             ->drawCallback("function() {" . file_get_contents(resource_path('views/admin/crud/columns/_draw-scripts.js')) . "}");
     }
 

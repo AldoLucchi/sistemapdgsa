@@ -7,7 +7,7 @@
             @csrf
             @method('DELETE')
             <button type="submit" class="btn btn-link btn-xs menu-link fs-7  ms-3 px-3" data-kt-%OBJETO_ROUTE%-id="{{ $%OBJETO_ROUTE%->%FIELD_ID% }}" data-kt-action="delete_row" value="{{ $%OBJETO_ROUTE%->%FIELD_ID% }}">
-                 <i class="far fa-trash-can fs-5"></i>
+                 <i class="fa fa-trash-can fs-4"></i>
             </button>
         </form>
         @endif
@@ -20,7 +20,7 @@
     <!--begin::Menu item-->
     <div class="menu-item px-3">
         <a href="{{ url($documento. $%OBJETO%->%FIELD_ID% ) }}" class="menu-link px-3" target="_blank">
-          <i class="far fa-file-pdf fs-5"></i> <!-- {{ $key }} -->
+          <i class="fa fa-file-pdf fs-4"></i> <!-- {{ $key }} -->
         </a>
     </div>
     <!--end::Menu item-->

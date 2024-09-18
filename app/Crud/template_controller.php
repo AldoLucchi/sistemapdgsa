@@ -84,8 +84,11 @@ class %OBJETO_CONTROLLER% extends Controller
 
       %FILTERS_VARIABLES_GET%
 
+      $row_url_custom = '%OBJETO_ROW_URL_CUSTOM%';
+
       $details = [  
         "texto" => $request["texto"],
+        "row_url_custom" => $row_url_custom ,        
         %FILTERS_VARIABLES%
       ];
 

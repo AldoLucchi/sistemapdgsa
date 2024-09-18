@@ -160,13 +160,14 @@
                                                     </td>
                                                 </tr>
                                                 <tr class="bg-primary">
-                                                    <td colspan=2><b>Validación <br> Regex</b></td>
+                                                    <td><b>Validación <br> Regex</b></td>
                                                     <td><b>Validación <br> maxlength</b></td>
                                                     <td><b>Requerido</b></td>
                                                     <td><b>Readonly</b></td>
+                                                    <td><b>Hidden</b></td>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan=2>
+                                                    <td>
                                                         <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_regex' }}" id="{{ $key.'_'.$column->Field.'_regex' }}" value="{{ ($campoPreference && isset($campoPreference->regex) && $campoPreference->regex)?urldecode($campoPreference->regex):'' }}" style="width:90%;">
                                                     </td>
                                                     <td>
@@ -178,19 +179,27 @@
                                                     <td>
                                                         <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field.'_readonly' }}" id="{{ $key.'_'.$column->Field.'_readonly' }}" {{ ($campoPreference && isset($campoPreference->readonly) && $campoPreference->readonly)?'checked':'' }}>
                                                     </td>
+                                                    <td>
+                                                        <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field.'_hidden' }}" id="{{ $key.'_'.$column->Field.'_hidden' }}" {{ ($campoPreference && isset($campoPreference->hidden) && $campoPreference->hidden)?'checked':'' }}>
+                                                    </td>
                                                 </tr>
-
+                                                
                                                 <tr class="bg-success">
-                                                    <td colspan=5><b>Seleccionar FK</b></td>
+                                                    <td colspan=3><b>Seleccionar FK</b></td>
+                                                    <td colspan=2><b>Style Color</b></td>
+
                                                 </tr>
                                                 <tr>
-                                                    <td colspan=5>
+                                                    <td colspan=3>
                                                         <select name="{{ $key.'_'.$column->Field.'_select' }}" id="{{ $key.'_'.$column->Field.'_select' }}" class="form-select form-select-transparent" aria-label="Seleccione una opción">
                                                             <option value="">---</option>
                                                             @foreach($cruds_availables as $crud_table_available)
                                                             <option value="{{ $crud_table_available }}" {{ ($campoPreference && isset($campoPreference->select) && $campoPreference->select == $crud_table_available)?'selected':'' }}>{{ $crud_table_available }}</option>
                                                             @endforeach
                                                         </select>
+                                                    </td>
+                                                    <td colspan=2>
+                                                        <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_style_color' }}" id="{{ $key.'_'.$column->Field.'_style_color' }}" value="{{ ($campoPreference && isset($campoPreference->style_color) && $campoPreference->style_color)?$campoPreference->style_color:'' }}" style="width:90%;">
                                                     </td>
                                                 </tr>
                                                 <tr class="bg-danger">
@@ -256,7 +265,7 @@
                         </fieldset>
 
                         <table class="table border border-primary text-start">
-                        <tr class="bg-primary">
+                            <tr class="bg-primary">
                                 <td>
                                     Indice: se utiliza para configurar el orden del campo en los listados y formularios de los CRUD
                                 </td>
@@ -306,9 +315,19 @@
                                     Readonly: se utiliza para configurar un campo como solo lectura
                                 </td>
                             </tr>
+                            <tr class="bg-primary">
+                                <td>
+                                    Hidden: se utiliza para ocultar campos de los form de creación / edición
+                                </td>
+                            </tr>
                             <tr class="bg-success">
                                 <td>
                                     Seleccionar FK: se utiliza para configurar una tabla foranea asociada al campo. Esto permite desplegar un select con los valores de dicha tabla
+                                </td>
+                            </tr>
+                            <tr class="bg-success">
+                                <td>
+                                    Style Color: se utiliza para estilizar valores de campos select los listados. Colores válidos: primary, secondary, success, info, warning, danger, dark, white, muted, gray-100 a gray-900. Por ejemplo: idestatus,=,1,success;idestatus,=2,danger;
                                 </td>
                             </tr>
                             <tr class="bg-danger">
