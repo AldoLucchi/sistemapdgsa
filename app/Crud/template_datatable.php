@@ -109,7 +109,7 @@ class %OBJETO_DATATABLE% extends DataTable
             ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
-            ->orderBy(0)
+            ->orderBy(0, 'desc')
             ->pageLength($pageLength)
             ->drawCallback("function() {" . file_get_contents(resource_path('views/cruds/%OBJETO_VIEW%/columns/_draw-scripts.js')) . "}");
     }
