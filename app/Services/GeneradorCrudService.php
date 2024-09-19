@@ -55,22 +55,22 @@ class GeneradorCrudService
                 }
             }
 
-            $crud_permisos_create = true;
-            $crud_permisos_read = true;
-            $crud_permisos_update = true;
-            $crud_permisos_delete = true;
+            $crud_permisos_create = false;
+            $crud_permisos_read = false;
+            $crud_permisos_update = false;
+            $crud_permisos_delete = false;
             if ($crud_permisos) {
-                if (!in_array('create', $crud_permisos)) {
-                    $crud_permisos_create = false;
+                if (in_array('create', $crud_permisos)) {
+                    $crud_permisos_create = true;
                 }
-                if (!in_array('read', $crud_permisos)) {
-                    $crud_permisos_read = false;
+                if (in_array('read', $crud_permisos)) {
+                    $crud_permisos_read = true;
                 }
-                if (!in_array('update', $crud_permisos)) {
-                    $crud_permisos_update = false;
+                if (in_array('update', $crud_permisos)) {
+                    $crud_permisos_update = true;
                 }
-                if (!in_array('delete', $crud_permisos)) {
-                    $crud_permisos_delete = false;
+                if (in_array('delete', $crud_permisos)) {
+                    $crud_permisos_delete = true;
                 }
             }
 

@@ -61,7 +61,7 @@ class %OBJETO_DATATABLE% extends DataTable
             })
             ->setRowId('%FIELD_ID%')
             ->setRowId('{{ "idrow_".$%FIELD_ID% }}')
-            ->setRowClass('{{ "tr_row" }}');;
+            ->setRowClass('{{ "tr_row" }}');
     }
 
 
@@ -125,7 +125,7 @@ class %OBJETO_DATATABLE% extends DataTable
                 ->addClass('text-end text-nowrap')
                 ->exportable(false)
                 ->printable(false)
-                ->width(60)
+                //->width(60)
         ];
     }
 

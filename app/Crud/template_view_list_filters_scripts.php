@@ -19,6 +19,9 @@ $(document).on('click', '.td_row', function() {
         if(redirect ){
         window.location.href = redirect;
         }
+        else{
+            $('.td_row').css("cursor", "default");
+        }
     });
     
 const texto = document.getElementById("texto");
