@@ -38,9 +38,25 @@ class GeneradorRutaService
         $item_controller = $item_nombre . "Controller";
         $item_datatable = $item_nombre . "DataTable";
 
-        $new_route = "<?php 
+        $new_route_item = "web_crud_" . $item_nombre . ".php";
+        $rutas_custom = '';
+        $search_custom = $menu_ruta;
 
-        use App\Http\Controllers\Crud\\" . $item_controller . ";
+        $new_file = '';
+
+        if (!file_exists("../routes/" . $new_route_item)) {
+            $new_file = "<?php
+            use App\Http\Controllers\Crud\\" . $item_controller .";
+            ";
+            
+        } else {
+            $rutas_custom = file_get_contents("../routes/" . $new_route_item);
+        }
+
+        if (!str_contains($rutas_custom, $search_custom)) {
+
+            $new_route = $new_file . " 
+        
         Route::name('" . $menu_ruta . ".')->group(function () {
             Route::resource('/" . $menu_ruta . "/" . $item_nombre . "', " . $item_controller . "::class);
         }); 
@@ -49,21 +65,23 @@ class GeneradorRutaService
 
                 ";
 
-        $new_route_item = "web_crud_" . $item_nombre . ".php";
+            $file_route_custom = fopen("../routes/" . $new_route_item, "w") or die("Unable to open file - web_crud_ " . $item_nombre);
 
-        $file_route = fopen("../routes/" . $new_route_item, "w") or die("Unable to open file - web_crud_ " . $item_nombre);
-        fwrite($file_route, $new_route);
-        fclose($file_route);
+            $rutas_custom .= $new_route;
 
-        $new_route_crud = "    
+            fwrite($file_route_custom, $rutas_custom);
+            fclose($file_route_custom);
+
+            $new_route_crud = "    
             require __DIR__ . '/" . $new_route_item . "';
             ";
 
-        $rutas = file_get_contents('../routes/web_crud.php');
-        $search = $new_route_item;
+            $rutas = file_get_contents('../routes/web_crud.php');
+            $search = $new_route_item;
 
-        if (!str_contains($rutas, $search)) {
-            $template_route = file_put_contents('../routes/web_crud.php', $new_route_crud . PHP_EOL, FILE_APPEND | LOCK_EX);
+            if (!str_contains($rutas, $search)) {
+                $template_route = file_put_contents('../routes/web_crud.php', $new_route_crud . PHP_EOL, FILE_APPEND | LOCK_EX);
+            }
         }
     }
 
