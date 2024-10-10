@@ -50,12 +50,8 @@
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                         <!--begin::Crud-->
-                        <select name="nombre" id="nombre" class="form-select form-select-transparent" aria-label="Seleccione una opción" onchange="changeName()">
-                            <option value="">Elija una opción</option>
-                            @foreach($cruds_filtered as $crud_table)
-                            <option id="{{ $crud_table }}" value="{{ $crud_table }}">{{ $crud_table }}</option>
-                            @endforeach
-                        </select>
+                        <input name="nombre" id="nombre" class="form-control" aria-label="Seleccione una opción" onchange="" value="{{ $table_selected }}" readonly>
+
                         <label class="tex-secondary">Tamaño máximo del nombre de tabla: 32 caracteres</label>
                         <!--end::Crud-->
                     </div>
@@ -65,12 +61,10 @@
                 </div>
 
                 <div class="row">
-                    @foreach($cruds_filtered_columns as $key => $crud_table)
-                    <div class=".crud-table d-none table-responsive text-center" id="crud-table-{{ $key }}">
-                        <h3 class="text-center mb-3"><b>Tabla: {{ $key }}</b></h3>
+                    <div class=".crud-table  table-responsive text-center" id="crud-table-{{ $table_selected }}">
+                        <h3 class="text-center mb-3"><b>Tabla: {{ $table_selected }}</b></h3>
 
-
-                        <fieldset id="crud-fieldset-{{ $key }}" disabled>
+                        <fieldset id="crud-fieldset-{{ $table_selected }}">
                             <table class="table table-bordered table-striped table-hover g-1 text-center ">
                                 <thead class="text-uppercase">
                                     <tr>
@@ -85,8 +79,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($crud_table as $column)
-                                    <tr id="{{ $key.'_'.$column->Field }}_tr" class="my-5 py-5" data-bs-toggle="collapse" data-bs-target="#{{ $key.'_'.$column->Field }}_tr_collapse" aria-expanded="false" aria-controls="{{ $key.'_'.$column->Field }}_tr_collapse">
+                                    @foreach($table_selected_columns as $column)
+                                    <tr id="{{ $table_selected.'_'.$column->Field }}_tr" class="my-5 py-5" data-bs-toggle="collapse" data-bs-target="#{{ $table_selected.'_'.$column->Field }}_tr_collapse" aria-expanded="false" aria-controls="{{ $table_selected.'_'.$column->Field }}_tr_collapse">
                                         <td class="my-5 py-5">#{{ $loop->iteration }} </td>
                                         <td> {{ $column->Field }}</td>
                                         <td>{{ $column->Type }}</td>
@@ -96,7 +90,7 @@
                                         <td><i class="ki-duotone ki-down"></i></td>
 
                                     </tr>
-                                    <tr id="{{ $key.'_'.$column->Field }}_tr_collapse" class="collapse">
+                                    <tr id="{{ $table_selected.'_'.$column->Field }}_tr_collapse" class="collapse">
                                         <td colspan="6">
                                             <table class="my-5 table table-bordered   border  border-primary">
                                                 <tr class="bg-primary">
@@ -108,19 +102,19 @@
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <input type="number" class="form-input" name="{{ $key.'_'.$column->Field.'_indice' }}" id="{{ $key.'_'.$column->Field.'_indice' }}" size="2" value="{{ $loop->iteration }}">
+                                                        <input type="number" class="form-input" name="{{ $table_selected.'_'.$column->Field.'_indice' }}" id="{{ $table_selected.'_'.$column->Field.'_indice' }}" size="2" value="{{ $loop->iteration }}">
                                                     </td>
                                                     <td>
-                                                        <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field }}" id="{{ $key.'_'.$column->Field }}" @if($loop->iteration == 1) checked @endif>
+                                                        <input type="checkbox" class="form-check-input" name="{{ $table_selected.'_'.$column->Field }}" id="{{ $table_selected.'_'.$column->Field }}" @if($loop->iteration == 1) checked @endif>
                                                     </td>
                                                     <td>
-                                                        <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field.'_list' }}" id="{{ $key.'_'.$column->Field.'_list' }}">
+                                                        <input type="checkbox" class="form-check-input" name="{{ $table_selected.'_'.$column->Field.'_list' }}" id="{{ $table_selected.'_'.$column->Field.'_list' }}">
                                                     </td>
                                                     <td>
-                                                        <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_alias' }}" id="{{ $key.'_'.$column->Field.'_alias' }}">
+                                                        <input type="text" class="form-input" name="{{ $table_selected.'_'.$column->Field.'_alias' }}" id="{{ $table_selected.'_'.$column->Field.'_alias' }}">
                                                     </td>
                                                     <td>
-                                                        <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_help' }}" id="{{ $key.'_'.$column->Field.'_help' }}">
+                                                        <input type="text" class="form-input" name="{{ $table_selected.'_'.$column->Field.'_help' }}" id="{{ $table_selected.'_'.$column->Field.'_help' }}">
                                                     </td>
                                                 </tr>
                                                 <tr class="bg-primary">
@@ -133,30 +127,30 @@
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_regex' }}" id="{{ $key.'_'.$column->Field.'_regex' }}" style="width:90%;">
+                                                        <input type="text" class="form-input" name="{{ $table_selected.'_'.$column->Field.'_regex' }}" id="{{ $table_selected.'_'.$column->Field.'_regex' }}" style="width:90%;">
                                                     </td>
                                                     <td>
-                                                        <input type="number" class="form-input" name="{{ $key.'_'.$column->Field.'_maxlength' }}" id="{{ $key.'_'.$column->Field.'_maxlength' }}" size="2">
+                                                        <input type="number" class="form-input" name="{{ $table_selected.'_'.$column->Field.'_maxlength' }}" id="{{ $table_selected.'_'.$column->Field.'_maxlength' }}" size="2">
                                                     </td>
                                                     <td>
-                                                        <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field.'_required' }}" id="{{ $key.'_'.$column->Field.'_required' }}">
+                                                        <input type="checkbox" class="form-check-input" name="{{ $table_selected.'_'.$column->Field.'_required' }}" id="{{ $table_selected.'_'.$column->Field.'_required' }}">
                                                     </td>
                                                     <td>
-                                                        <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field.'_readonly' }}" id="{{ $key.'_'.$column->Field.'_readonly' }}">
+                                                        <input type="checkbox" class="form-check-input" name="{{ $table_selected.'_'.$column->Field.'_readonly' }}" id="{{ $table_selected.'_'.$column->Field.'_readonly' }}">
                                                     </td>
                                                     <td>
-                                                        <input type="checkbox" class="form-check-input" name="{{ $key.'_'.$column->Field.'_hidden' }}" id="{{ $key.'_'.$column->Field.'_hidden' }}">
+                                                        <input type="checkbox" class="form-check-input" name="{{ $table_selected.'_'.$column->Field.'_hidden' }}" id="{{ $table_selected.'_'.$column->Field.'_hidden' }}">
                                                     </td>
                                                 </tr>
-                                                
-                                               
+
+
                                                 <tr class="bg-success">
                                                     <td colspan="3"><b>Seleccionar <br>FK</b></td>
                                                     <td colspan="2"><b>Style <br>Color</b></td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="3">
-                                                        <select name="{{ $key.'_'.$column->Field.'_select' }}" id="{{ $key.'_'.$column->Field.'_select' }}" class="form-select form-select-transparent" aria-label="Seleccione una opción">
+                                                        <select name="{{ $table_selected.'_'.$column->Field.'_select' }}" id="{{ $table_selected.'_'.$column->Field.'_select' }}" class="form-select form-select-transparent" aria-label="Seleccione una opción">
                                                             <option value="">---</option>
                                                             @foreach($cruds_availables as $crud_table_available)
                                                             <option value="{{ $crud_table_available }}">{{ $crud_table_available }}</option>
@@ -164,7 +158,7 @@
                                                         </select>
                                                     </td>
                                                     <td colspan="2">
-                                                        <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_style_color' }}" id="{{ $key.'_'.$column->Field.'_style_color' }}" style="width:90%;">
+                                                        <input type="text" class="form-input" name="{{ $table_selected.'_'.$column->Field.'_style_color' }}" id="{{ $table_selected.'_'.$column->Field.'_style_color' }}" style="width:90%;">
                                                     </td>
                                                 </tr>
 
@@ -174,15 +168,15 @@
                                                 </tr>
                                                 <tr>
                                                     <td colspan="2">
-                                                        <select name="{{ $key.'_'.$column->Field.'_anidado' }}" id="{{ $key.'_'.$column->Field.'_anidado' }}" class="form-select form-select-transparent" aria-label="Seleccione una opción">
+                                                        <select name="{{ $table_selected.'_'.$column->Field.'_anidado' }}" id="{{ $table_selected.'_'.$column->Field.'_anidado' }}" class="form-select form-select-transparent" aria-label="Seleccione una opción">
                                                             <option value="">---</option>
-                                                            @foreach($crud_table as $columnDepend)
+                                                            @foreach($table_selected_columns as $columnDepend)
                                                             <option value="{{ $columnDepend->Field }}">{{ $columnDepend->Field}}</option>
                                                             @endforeach
                                                         </select>
                                                     </td>
                                                     <td colspan="3">
-                                                        <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_select_rules' }}" id="{{ $key.'_'.$column->Field.'_select_rules' }}" style="width:90%;">
+                                                        <input type="text" class="form-input" name="{{ $table_selected.'_'.$column->Field.'_select_rules' }}" id="{{ $table_selected.'_'.$column->Field.'_select_rules' }}" style="width:90%;">
                                                     </td>
                                                 </tr>
 
@@ -192,10 +186,10 @@
                                                 </tr>
                                                 <tr>
                                                     <td colspan="3">
-                                                        <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_crud_anidado_rules' }}" id="{{ $key.'_'.$column->Field.'_crud_anidado_rules' }}" style="width:90%;">
+                                                        <input type="text" class="form-input" name="{{ $table_selected.'_'.$column->Field.'_crud_anidado_rules' }}" id="{{ $table_selected.'_'.$column->Field.'_crud_anidado_rules' }}" style="width:90%;">
                                                     </td>
                                                     <td colspan="2">
-                                                        <input type="text" class="form-input" name="{{ $key.'_'.$column->Field.'_dependiente_oculto_rules' }}" id="{{ $key.'_'.$column->Field.'_dependiente_oculto_rules' }}" style="width:90%;">
+                                                        <input type="text" class="form-input" name="{{ $table_selected.'_'.$column->Field.'_dependiente_oculto_rules' }}" id="{{ $table_selected.'_'.$column->Field.'_dependiente_oculto_rules' }}" style="width:90%;">
                                                     </td>
                                                 </tr>
                                                 <tr class="bg-warning">
@@ -204,7 +198,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td colspan="3">
-                                                        <select name="{{ $key.'_'.$column->Field.'_show_fk' }}" id="{{ $key.'_'.$column->Field.'_show_fk' }}" class="form-select form-select-transparent" aria-label="Seleccione una opción">
+                                                        <select name="{{ $table_selected.'_'.$column->Field.'_show_fk' }}" id="{{ $table_selected.'_'.$column->Field.'_show_fk' }}" class="form-select form-select-transparent" aria-label="Seleccione una opción">
                                                             <option value="">---</option>
                                                             @foreach($cruds_generated as $crud)
                                                             <option value="{{ $crud->id }}">{{ $crud->alias_opcion }} | {{ $crud->nombre_componente }} | {{ $crud->nombre }}</option>
@@ -212,7 +206,7 @@
                                                         </select>
                                                     </td>
                                                     <td colspan="2">
-                                                        <select name="{{ $key.'_'.$column->Field.'_show_fk_permisos' }}[]" id="{{ $key.'_'.$column->Field.'_show_fk_permisos' }}" class="form-select form-select-transparent py-5 select2" aria-label="Seleccione una opción" data-control="select2" multiple="multiple">
+                                                        <select name="{{ $table_selected.'_'.$column->Field.'_show_fk_permisos' }}[]" id="{{ $table_selected.'_'.$column->Field.'_show_fk_permisos' }}" class="form-select form-select-transparent py-5 select2" aria-label="Seleccione una opción" data-control="select2" multiple="multiple">
                                                             <option value="">---</option>
                                                             @foreach($options_crud as $option)
                                                             <option value="{{ $option }}">{{ $option }}</option>
@@ -329,7 +323,7 @@
                         </table>
 
                     </div>
-                    @endforeach
+
                 </div>
 
                 <div class="row">

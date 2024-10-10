@@ -23,25 +23,35 @@
             <!--begin::Card title-->
 
             <!--begin::Card toolbar-->
-            <div class="card-toolbar">
+            <div class="card-toolbar w-50">
                 <!--begin::Toolbar-->
-                <div class="d-flex justify-content-end" data-kt-crud-table-toolbar="base">
-
-                    <!--begin::Add crud-->
-                    
-                    <a href="{{ url('/admin/crudRefreshAll' ) }}" class="btn btn-primary me-5">
-                        {!! getIcon('arrows-circle', 'fs-2', '', 'i') !!}
-                        Refresh All
-                    </a>
-                    
-                    <!--end::Add crud-->
-
-                    <!--begin::Add crud-->
-                    <a href="{{ url('/admin/crud/create' ) }}" class="btn btn-primary">
-                        {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                        Agregar CRUD
-                    </a>
-                    <!--end::Add crud-->
+                <div class="d-flex justify-content-end w-100" data-kt-crud-table-toolbar="base">
+                    <div class="row w-100">
+                        <div class="col-3">
+                            <!--begin::Refresh-->
+                            <a href="{{ url('/admin/crudRefreshAll' ) }}" class="btn btn-primary me-1">
+                                {!! getIcon('arrows-circle', 'fs-2', '', 'i') !!}
+                                Refresh
+                            </a>
+                            <!--end::Refresh-->
+                        </div>
+                        <div class="col-3">
+                            <!--begin::Add crud-->
+                            <button type="button" id="createCrud" name="createCrud" class="btn btn-primary me-1">
+                                {!! getIcon('plus', 'fs-2', '', 'i') !!}
+                                Agregar
+                            </button>
+                            <!--end::Add crud-->
+                        </div>
+                        <div class="col-6 d-none" id="tableSelectDiv" name="tableSelectDiv">
+                            <select class="form-select form-select-transparent " name="tableSelect" id="tableSelect">
+                                <option value="">-Seleccione una tabla-</option>
+                                @foreach($tables as $table)
+                                <option value="{{ $table }}">{{ $table }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <!--end::Toolbar-->
 
@@ -70,6 +80,18 @@
     <script>
         document.getElementById('mySearchInput').addEventListener('keyup', function() {
             window.LaravelDataTables['crud-table'].search(this.value).draw();
+        });
+
+        document.getElementById('createCrud').addEventListener('click', function() {
+            console.log('createCrud');
+            document.getElementById('tableSelectDiv').classList.remove('d-none');
+        });
+
+        document.getElementById('tableSelect').addEventListener('change', function() {
+            var tableSelected = this.value;
+            console.log('tableSelect -- ' + tableSelect);
+
+            window.location.replace("{{ url('/admin/crud/create' ) }}/" + tableSelected);
         });
     </script>
     @endpush

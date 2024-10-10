@@ -12,7 +12,18 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\HtmlString;
 
 class CrudDataTable extends DataTable
-{
+{    
+    //protected $tables;
+
+    public function __construct(
+        $tables = null,
+    ) {
+        Log::info('CrudDataTable - __construct');
+
+        //$this->tables = $tables;
+        //Log::info($this->tables);
+    }
+
     /**
      * Build the DataTable class.
      *

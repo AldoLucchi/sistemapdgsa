@@ -17,6 +17,12 @@ class CrudController extends Controller
 {
     private $crudService;
     private $generadorCrudService;
+    protected $options_crud = [
+        'create' => 'create',
+        'read' => 'read',
+        'update' => 'update',
+        'delete' => 'delete',
+    ];
 
     public function __construct(
         CrudService $crudService,
@@ -31,26 +37,43 @@ class CrudController extends Controller
      */
     public function index(CrudDataTable $dataTable)
     {
-        return $dataTable->render('admin.crud.list');
+        $tables = $this->getTablesAvailables();
+        $data = [
+            "tables" => $tables['cruds_availables']
+        ];
+
+        return $dataTable->render('admin.crud.list', $data);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create($table_selected)
     {
+        $tables = $this->getTablesAvailables();
+        
+        $table_selected_columns = DB::select("SHOW COLUMNS FROM " . $table_selected);
+        $cruds_generated = Crud::all();
+
+        $data = [
+            'table_selected' => $table_selected,
+            'table_selected_columns' => $table_selected_columns,
+            "cruds_availables" => $tables['cruds_availables'],
+            'cruds_generated' => $cruds_generated,
+            'options_crud' => $this->options_crud,
+        ];
+
+        return view('admin.crud.create', $data);
+    }
+
+    public function getTablesAvailables()
+    {
+
         $cruds_created = []; //Crud::pluck('name')->toArray();
         $cruds_availables = $cruds_filtered =  $cruds_filtered_columns = [];
         $tables = DB::select('SHOW TABLES'); // returns an array of stdObjects  
         $tables_excluded_env = env('CRUD_TABLES_EXCLUDED', 'addresses,cruds,failed_jobs,migrations,model_has_permissions,model_has_roles,password_resets,permissions,personal_access_tokens,role_has_permissions,roles');
         $tables_excluded = explode(',', $tables_excluded_env);
-
-        $options_crud = [
-            'create' => 'create',
-            'read' => 'read',
-            'update' => 'update',
-            'delete' => 'delete',
-        ];
 
         $cruds_generated = Crud::all();
         $tables_in = 'Tables_in_' . env('DB_DATABASE');
@@ -63,7 +86,7 @@ class CrudController extends Controller
                 $cruds_availables[$i] = $crud_table->$tables_in;
                 if (!array_search($table_name, $cruds_created)) {
                     $cruds_filtered[$i] = $crud_table->$tables_in ?? '';
-                    $cruds_filtered_columns[$table_name] = DB::select("SHOW COLUMNS FROM " . $table_name);
+                    // $cruds_filtered_columns[$table_name] = DB::select("SHOW COLUMNS FROM " . $table_name);
                 }
             }
         }
@@ -73,10 +96,9 @@ class CrudController extends Controller
             'cruds_filtered' => $cruds_filtered,
             'cruds_filtered_columns' => $cruds_filtered_columns,
             'cruds_generated' => $cruds_generated,
-            'options_crud' => $options_crud,
         ];
 
-        return view('admin.crud.create', $data);
+        return $data;
     }
 
     /**
@@ -126,19 +148,14 @@ class CrudController extends Controller
         Log::info('CrudController - edit');
 
         $crud = Crud::find($crud_id);
-        $crud_campos = ((isset($crud->campos) && $crud->campos )?json_decode($crud->campos):[]);
+        $crud_campos = ((isset($crud->campos) && $crud->campos) ? json_decode($crud->campos) : []);
         $cruds_created = []; //Crud::pluck('name')->toArray();
         $cruds_availables = $cruds_filtered =  $cruds_filtered_columns = [];
         $tables = DB::select('SHOW TABLES'); // returns an array of stdObjects  
         $tables_excluded_env = env('CRUD_TABLES_EXCLUDED', 'addresses,cruds,failed_jobs,migrations,model_has_permissions,model_has_roles,password_resets,permissions,personal_access_tokens,role_has_permissions,roles');
         $tables_excluded = explode(',', $tables_excluded_env);
 
-        $options_crud = [
-            'create' => 'create',
-            'read' => 'read',
-            'update' => 'update',
-            'delete' => 'delete',
-        ];
+
 
         $cruds_generated = Crud::all();
 
@@ -163,7 +180,7 @@ class CrudController extends Controller
             'cruds_filtered' => $cruds_filtered,
             'cruds_filtered_columns' => $cruds_filtered_columns,
             'cruds_generated' => $cruds_generated,
-            'options_crud' => $options_crud,
+            'options_crud' => $this->options_crud,
         ];
         Log::info($data);
 
