@@ -21,15 +21,7 @@ Route::name('admin.')->group(function () {
     Route::put('/admin/crud', [CrudController::class, 'update'])->name('crud.update');
     Route::get('/admin/crudRefresh/{id}', [CrudController::class, 'crudRefresh'])->name('crud.crudRefresh');
     Route::get('/admin/crudRefreshAll', [CrudController::class, 'crudRefreshAll'])->name('crud.crudRefreshAll');
-
-    /*
-    Route::get('/admin/menu', [Menues97Controller::class, 'index'])->name('menu.index');
-    Route::get('/admin/opcion', [Opciones98Controller::class, 'index'])->name('opcion.index');
-    Route::get('/admin/menuOpcion', [OpcionesMenues99Controller::class, 'index'])->name('menuOpcion.index');
-    Route::get('/admin/menuCrud', [CrudsGeneradosMenues100Controller::class, 'index'])->name('menuCrud.index');
-    Route::get('/admin/menuAsignado', [MenuesAsignados101Controller::class, 'index'])->name('menuAsignado.index');
-    */
-    //Route::resource('/user-management/users', UserManagementController::class);
+    
     Route::resource('/admin/menu', Menues97Controller::class);
     Route::resource('/admin/opcion', Opciones98Controller::class);
     Route::resource('/admin/menuOpcion', OpcionesMenues99Controller::class);
