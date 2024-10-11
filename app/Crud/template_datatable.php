@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Facades\Log;
+use ProtoneMedia\LaravelCrossEloquentSearch\Search;
+
 
 class %OBJETO_DATATABLE% extends DataTable
 {
@@ -77,8 +79,27 @@ class %OBJETO_DATATABLE% extends DataTable
         %DATATABLE_QUERY_FILTERS%
 
         if ($this->filters && isset($this->filters["texto"])) {
-            $this->filters["texto"] = strtolower($this->filters["texto"]);
-            $query->whereRaw("LOWER( CONCAT_WS(%DATATABLE_QUERY_FILTERS_DYNAMIC_TEXTO%) ) LIKE '%". $this->filters["texto"]."%' ");
+            Log::info("%OBJETO_DATATABLE% - filters texto");
+            Log::info("%OBJETO_DATATABLE% - filters texto -".$this->filters["texto"]);
+
+            $resultBuscar = Search::new()
+            ->add(%OBJETO%::class, [%DATATABLE_QUERY_FILTERS_DYNAMIC_TEXTO_FIELDS%])
+            //->beginWithWildcard()
+            //->endWithWildcard()
+            ->orderByRelevance()
+            ->search($this->filters["texto"]);
+
+            $resultBuscarArray = json_decode($resultBuscar);
+            $resultBuscarArrayIds = [];
+
+            foreach ($resultBuscarArray as $item) {
+                $resultBuscarArrayIds[] = $item->%FIELD_ID%;
+            }
+
+            $query->whereIn('%FIELD_ID%', $resultBuscarArrayIds);
+
+            //$this->filters["texto"] = strtolower($this->filters["texto"]);
+            //$query->whereRaw("LOWER( CONCAT_WS(%DATATABLE_QUERY_FILTERS_DYNAMIC_TEXTO%) ) LIKE '%". $this->filters["texto"]."%' ");
         }
         
 

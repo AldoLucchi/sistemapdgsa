@@ -1399,6 +1399,7 @@ class GeneradorCrudService
         ';
 
         $template_filters_texto = $data['table_column_id'] . ",' ',";
+        $template_filters_texto_fields =  "'".$data['table_column_id'] . "','";
 
         foreach ($table_columns as $column) {
             $datatable_column_field_name = $column['name'];
@@ -1480,6 +1481,7 @@ class GeneradorCrudService
 
             if ($column['type_html'] == 'text') {
                 $template_filters_texto .= $column['name'] . ",' ',";
+                $template_filters_texto_fields .= $column['name'] . "','";
             }
         }
 
@@ -1496,7 +1498,9 @@ class GeneradorCrudService
         $template = str_replace('%DATATABLE_QUERY_FILTERS%', $template_datatable_queries_all, $template);
         $template = str_replace('%DATATABLE_QUERY_FILTERS_DYNAMIC%', $filters, $template);
         $template_filters_texto = substr($template_filters_texto, 0, -1);
+        $template_filters_texto_fields = substr($template_filters_texto_fields, 0, -2);
         $template = str_replace('%DATATABLE_QUERY_FILTERS_DYNAMIC_TEXTO%', $template_filters_texto, $template);
+        $template = str_replace('%DATATABLE_QUERY_FILTERS_DYNAMIC_TEXTO_FIELDS%', $template_filters_texto_fields, $template);
 
         fwrite($file, $template);
         fclose($file);
