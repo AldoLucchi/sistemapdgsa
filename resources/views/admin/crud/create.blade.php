@@ -95,10 +95,10 @@
                                             <table class="my-5 table table-bordered   border  border-primary">
                                                 <tr class="bg-primary">
                                                     <td><b>Indice</td>
-                                                    <td><b>Incluir <br>campo</b></td>
-                                                    <td><b>Incluir <br>list</b></td>
+                                                    <td><b>Incluir campo</b></td>
+                                                    <td><b>Incluir list</b></td>
                                                     <td><b>Alias</b></td>
-                                                    <td><b>Texto <br> Ayuda</b></td>
+                                                    <td><b>Texto Ayuda</b></td>
                                                 </tr>
                                                 <tr>
                                                     <td>
@@ -118,8 +118,8 @@
                                                     </td>
                                                 </tr>
                                                 <tr class="bg-primary">
-                                                    <td><b>Validación <br>Regex</b></td>
-                                                    <td><b>Validación <br>maxlength</b></td>
+                                                    <td><b>Validació Regex</b></td>
+                                                    <td><b>Validación maxlength</b></td>
                                                     <td><b>Requerido</b></td>
                                                     <td><b>Readonly</b></td>
                                                     <td><b>Hidden</b></td>
@@ -145,8 +145,8 @@
 
 
                                                 <tr class="bg-success">
-                                                    <td colspan="3"><b>Seleccionar <br>FK</b></td>
-                                                    <td colspan="2"><b>Style <br>Color</b></td>
+                                                    <td colspan="3"><b>Seleccionar FK</b></td>
+                                                    <td colspan="2"><b>Style Color</b></td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="3">
@@ -163,11 +163,13 @@
                                                 </tr>
 
                                                 <tr class="bg-danger">
-                                                    <td colspan="2"><b>Campo Anidado<br>FK</b></td>
-                                                    <td colspan="3"><b>Reglas select <br>FK</b></td>
+                                                    <td colspan="1"><b>Campo Anidado FK</b></td>
+                                                    <td colspan="2"><b>Reglas SQL select FK</b></td>
+                                                    <td colspan="2"><b>Reglas select FK</b></td>
+
                                                 </tr>
                                                 <tr>
-                                                    <td colspan="2">
+                                                    <td colspan="1">
                                                         <select name="{{ $table_selected.'_'.$column->Field.'_anidado' }}" id="{{ $table_selected.'_'.$column->Field.'_anidado' }}" class="form-select form-select-transparent" aria-label="Seleccione una opción">
                                                             <option value="">---</option>
                                                             @foreach($table_selected_columns as $columnDepend)
@@ -175,14 +177,19 @@
                                                             @endforeach
                                                         </select>
                                                     </td>
-                                                    <td colspan="3">
+                                                    <td colspan="2">
+                                                        <input type="text" class="form-input" name="{{ $table_selected.'_'.$column->Field.'_select_rules_sql' }}" id="{{ $table_selected.'_'.$column->Field.'_select_rules_sql' }}" style="width:90%;">
+                                                    </td>
+                                                    <td colspan="2">
                                                         <input type="text" class="form-input" name="{{ $table_selected.'_'.$column->Field.'_select_rules' }}" id="{{ $table_selected.'_'.$column->Field.'_select_rules' }}" style="width:90%;">
                                                     </td>
+
+
                                                 </tr>
 
                                                 <tr class="bg-info">
-                                                    <td colspan="3"><b>Reglas <br>CRUD anidado</b></td>
-                                                    <td colspan="2"><b>Campo dependiente<br>oculto FK</b></td>
+                                                    <td colspan="3"><b>Reglas CRUD anidado</b></td>
+                                                    <td colspan="2"><b>Campo dependiente oculto FK</b></td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="3">
@@ -193,8 +200,8 @@
                                                     </td>
                                                 </tr>
                                                 <tr class="bg-warning">
-                                                    <td colspan="3"><b>Incluir <br>Acorddion en</b></td>
-                                                    <td colspan="2"><b>Permisos <br>Acorddion</b></td>
+                                                    <td colspan="3"><b>Incluir Acorddion en</b></td>
+                                                    <td colspan="2"><b>Permisos Acorddion</b></td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="3">
@@ -296,7 +303,13 @@
                             </tr>
                             <tr class="bg-danger">
                                 <td>
+                                    Reglas SQL Select FK: (requiere Seleccionar FK) para setear una o más reglas de filtrado, en formato SQL
+                                </td>
+                            </tr>
+                            <tr class="bg-danger">
+                                <td>
                                     Reglas Select FK: (requiere Seleccionar FK) para setear una o más reglas de filtrado, el formato es el siguiente: campo,operador,valor;campo,operador,valor
+                                    <br> Nota: si Reglas SQL Select FK esta seteado, esta validación queda obsoleta.
                                 </td>
                             </tr>
 
