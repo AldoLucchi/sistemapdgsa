@@ -29,20 +29,6 @@
 <!--begin::Input group-->
 <div class="mb-7 col-12 col-lg-6">
     <!--begin::Label-->
-    <label class="fw-semibold fs-6 mb-5">Rules</label>
-    <!--end::Label-->
-    @error('reglas')
-    <span class="text-danger">{{ $message }}</span>
-    @enderror
-    <!--begin::Crud-->
-    <input type="text" class="form-control" name="reglas" id="reglas" placeholder="" value="{{ (isset($crud)?$crud->reglas:'') }}" />
-    <!--end::Crud-->
-</div>
-<!--end::Input group-->
-
-<!--begin::Input group-->
-<div class="mb-7 col-12 col-lg-6">
-    <!--begin::Label-->
     <label class="fw-semibold fs-6 mb-5">Rules SQL</label>
     <!--end::Label-->
     @error('reglas_sql')
@@ -56,6 +42,21 @@
     <!--end::Crud-->
 </div>
 <!--end::Input group-->
+
+<!--begin::Input group-->
+<div class="mb-7 col-12 col-lg-6">
+    <!--begin::Label-->
+    <label class="fw-semibold fs-6 mb-5">Rules</label>
+    <!--end::Label-->
+    @error('reglas')
+    <span class="text-danger">{{ $message }}</span>
+    @enderror
+    <!--begin::Crud-->
+    <input type="text" class="form-control" name="reglas" id="reglas" placeholder="" value="{{ (isset($crud)?$crud->reglas:'') }}" />
+    <!--end::Crud-->
+</div>
+<!--end::Input group-->
+
 
 <!--begin::Input group-->
 <div class="mb-7 col-12 col-lg-6">
