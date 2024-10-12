@@ -42,6 +42,7 @@ class GeneradorCrudService
             $alias_opcion = $request['alias_opcion'];
             $alias_opcion_individual = $request['alias_opcion_individual'];
             $rules = $request['reglas'];
+            $rules_sql = $request['reglas_sql'];
             $row_url_custom = $request['row_url_custom'];
             $crud_permisos =  null;
             if (isset($request['crud_permisos']) && $request['crud_permisos']) {
@@ -333,6 +334,7 @@ class GeneradorCrudService
                 'table_name_label_alias' => $alias_opcion,
                 'table_name_label_individual' => $alias_opcion_individual,
                 'rules' => $rules,
+                'rules_sql' => $rules_sql,
                 'row_url_custom' => $row_url_custom,
                 'crud_permisos' => $crud_permisos,
                 'crud_permisos_create' => $crud_permisos_create,
@@ -687,16 +689,16 @@ class GeneradorCrudService
     }
 
 
-    public function getVariablesCrudAnidadoController($rules)
+    public function getVariablesCrudAnidadoController($rulesCrudAnidado)
     {
         Log::info('GeneradorCrudService - getVariablesCrudAnidadoController');
-        Log::info($rules);
+        Log::info($rulesCrudAnidado);
 
-        $rules = explode(';', $rules);
+        $rulesCrudAnidado = explode(';', $rulesCrudAnidado);
 
         $variables = '';
 
-        foreach ($rules as $rule) {
+        foreach ($rulesCrudAnidado as $rule) {
             if ($rule) {
                 $items = explode(',', $rule);
                 $operator_field = $items[0];
@@ -721,16 +723,16 @@ class GeneradorCrudService
         return $variables;
     }
 
-    public function getInsertCrudAnidadoController($rules)
+    public function getInsertCrudAnidadoController($rulesCrudAnidado)
     {
         Log::info('GeneradorCrudService - getInsertCrudAnidadoController');
-        Log::info($rules);
+        Log::info($rulesCrudAnidado);
 
-        $rules = explode(';', $rules);
+        $rulesCrudAnidado = explode(';', $rulesCrudAnidado);
 
         $inserts = '';
 
-        foreach ($rules as $rule) {
+        foreach ($rulesCrudAnidado as $rule) {
             if ($rule) {
                 $items = explode(',', $rule);
                 $operator_field = $items[0];
@@ -1369,7 +1371,12 @@ class GeneradorCrudService
 
         $filters_rules = '';
 
-        if (isset($data['rules']) && $data['rules']) {
+        if (isset($data['rules_sql']) && $data['rules_sql']) {
+            $filters_rules .= '
+            $query->whereRaw(\'' . $data['rules_sql'] . '\');
+            ';
+        }
+        elseif (isset($data['rules']) && $data['rules']) {
             $rules_array = explode(';', $data['rules']);
             foreach ($rules_array as $rule) {
                 $rule_array = explode(',', $rule);
@@ -2118,14 +2125,14 @@ class GeneradorCrudService
         return false;
     }
 
-    public function getCrudAnidado($rules)
+    public function getCrudAnidado($rulesCrudAnidado)
     {
         Log::info('GeneradorCrudService - getCrudAnidado');
-        Log::info($rules);
+        Log::info($rulesCrudAnidado);
 
         $crud_anidado = '';
         $crud_anidado_js = '';
-        $rules = explode(';', $rules);
+        $rulesCrudAnidado = explode(';', $rulesCrudAnidado);
         $template_fields_select_crud_anidado = file_get_contents('../app/Crud/template_view_field_select_crud_anidado.php');
         $template_fields_select_crud_anidado_js = file_get_contents('../app/Crud/template_view_field_select_crud_anidado_js.php');
 
@@ -2133,7 +2140,7 @@ class GeneradorCrudService
         $js_validation = '';
         $js_validation_add = '';
 
-        foreach ($rules as $rule) {
+        foreach ($rulesCrudAnidado as $rule) {
             if ($rule) {
                 $items = explode(',', $rule);
                 $operator_field = $items[0];

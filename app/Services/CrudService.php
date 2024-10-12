@@ -80,6 +80,7 @@ class CrudService
             'status' => $request['estatus'],
             'crud_permisos' => $crud_permisos,
             'reglas' => $request['reglas'],
+            'reglas_sql' => $request['reglas_sql'],
             'row_url_custom' => $request['row_url_custom'],
             'campos' => $campos,
         ];

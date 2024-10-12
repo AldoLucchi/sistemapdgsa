@@ -30,6 +30,7 @@ class Crud extends Model
         'campos',
         'crud_permisos',
         'reglas',
+        'reglas_sql',
         'row_url_custom',
     ];
 

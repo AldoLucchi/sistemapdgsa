@@ -1,5 +1,5 @@
 <!--begin::Input group-->
-<div class="mb-7 col-12 col-lg-4">
+<div class="mb-7 col-12 col-lg-6">
     <!--begin::Label-->
     <label class="required fw-semibold fs-6 mb-5">Alias opción</label>
     <!--end::Label-->
@@ -13,7 +13,7 @@
 <!--end::Input group-->
 
 <!--begin::Input group-->
-<div class="mb-7 col-12 col-lg-4">
+<div class="mb-7 col-12 col-lg-6">
     <!--begin::Label-->
     <label class="required fw-semibold fs-6 mb-5">Alias individual</label>
     <!--end::Label-->
@@ -27,7 +27,7 @@
 <!--end::Input group-->
 
 <!--begin::Input group-->
-<div class="mb-7 col-12 col-lg-4">
+<div class="mb-7 col-12 col-lg-6">
     <!--begin::Label-->
     <label class="fw-semibold fs-6 mb-5">Rules</label>
     <!--end::Label-->
@@ -41,7 +41,24 @@
 <!--end::Input group-->
 
 <!--begin::Input group-->
-<div class="mb-7 col-12 col-lg-4">
+<div class="mb-7 col-12 col-lg-6">
+    <!--begin::Label-->
+    <label class="fw-semibold fs-6 mb-5">Rules SQL</label>
+    <!--end::Label-->
+    @error('reglas_sql')
+    <span class="text-danger">{{ $message }}</span>
+    @enderror
+    <!--begin::Crud-->
+    <input type="text" class="form-control" name="reglas_sql" id="reglas_sql" placeholder="" value="{{ (isset($crud)?$crud->reglas_sql:'') }}" />
+
+    <label class="tex-secondary">Usar comillas dobles según corresponda</label>
+
+    <!--end::Crud-->
+</div>
+<!--end::Input group-->
+
+<!--begin::Input group-->
+<div class="mb-7 col-12 col-lg-6">
     <!--begin::Label-->
     <label class="fw-semibold fs-6 mb-5">CRUD permisos</label>
     <!--end::Label-->
@@ -60,7 +77,7 @@
 <!--end::Input group-->
 
 <!--begin::Input group-->
-<div class="mb-7 col-12 col-lg-4">
+<div class="mb-7 col-12 col-lg-6">
     <!--begin::Label-->
     <label class="fw-semibold fs-6 mb-5">Row Url Custom</label>
     <!--end::Label-->

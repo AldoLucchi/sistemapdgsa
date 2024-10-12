@@ -42,9 +42,9 @@
                 @csrf
                 <div class="row">
                     <!--begin::Input group-->
-                    <div class="mb-7 col-12 col-lg-4">
+                    <div class="mb-7 col-12 ">
                         <!--begin::Label-->
-                        <label class="required fw-semibold fs-6 mb-5">Tabla</label>
+                        <label class="required fw-semibold fs-6 mb-5">Tabla / Nombre</label>
                         <!--end::Label-->
                         @error('nombre')
                         <span class="text-danger">{{ $message }}</span>
