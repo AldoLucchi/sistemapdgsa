@@ -31,6 +31,11 @@ texto.addEventListener("keypress", function(event) {
         redirectFiltros();
     }
 });
+
+const texto_search = document.getElementById("texto_search");
+texto_search.addEventListener("click", function(event) {
+        redirectFiltros();    
+});
         
 %VIEW_LIST_FILTROS_JAVASCRIPT_ENTER%
 
