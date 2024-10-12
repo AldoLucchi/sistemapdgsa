@@ -104,6 +104,7 @@ class GeneradorCrudService
                 $column_select_style_color = $table_crud . '_' . $colum->Field . '_style_color';
                 $column_select_anidado = $table_crud . '_' . $colum->Field . '_anidado';
                 $column_select_rules = $table_crud . '_' . $colum->Field . '_select_rules';
+                $column_select_rules_sql = $table_crud . '_' . $colum->Field . '_select_rules_sql';
 
                 $column_select_crud_anidado_rules = $table_crud . '_' . $colum->Field . '_crud_anidado_rules';
                 $column_select_dependiente_oculto_rules = $table_crud . '_' . $colum->Field . '_dependiente_oculto_rules';
@@ -213,6 +214,10 @@ class GeneradorCrudService
 
                     if (isset($request[$column_select_rules]) && !empty($request[$column_select_rules]) &&  $column_select_rules && $column_select_rules != 'NULL' && $column_select_rules != NULL) {
                         $table_column_detail['select_rules'] = $request[$column_select_rules];
+                    }
+
+                    if (isset($request[$column_select_rules_sql]) && !empty($request[$column_select_rules_sql]) &&  $column_select_rules_sql && $column_select_rules_sql != 'NULL' && $column_select_rules_sql != NULL) {
+                        $table_column_detail['select_rules_sql'] = $request[$column_select_rules_sql];
                     }
 
                     if (isset($request[$column_select_crud_anidado_rules]) && !empty($request[$column_select_crud_anidado_rules]) &&  $column_select_crud_anidado_rules && $column_select_crud_anidado_rules != 'NULL' && $column_select_crud_anidado_rules != NULL) {
@@ -559,7 +564,13 @@ class GeneradorCrudService
                 $' . $model_name_fk . ' = \App\Models\\' . $model_name_fk . '::select("*"); 
                 ';
 
-                if (isset($column['select_rules'])) {
+                if (isset($column['select_rules_sql'])) {
+
+                    $tabla_get  .= '
+                            $' . $model_name_fk . ' = $' . $model_name_fk . '->whereRaw("' .$column['select_rules_sql']. '");
+                        ';
+                }
+                elseif (isset($column['select_rules'])) {
                     $select_rules_array = explode(';', $column['select_rules']);
                     foreach ($select_rules_array as $rule) {
                         $rule_array = explode(',', $rule);
@@ -567,7 +578,7 @@ class GeneradorCrudService
                             $' . $model_name_fk . ' = $' . $model_name_fk . '->where("' . $rule_array[0] . '", "' . $rule_array[1] . '","' . $rule_array[2] . '");
                         ';
                     }
-                    //$condition = 'whereIn("' . $column_id_fk . '",[' . $column['select_rules'] . '])';
+                    
                 }
 
 
@@ -1305,18 +1316,18 @@ class GeneradorCrudService
                     $value = $register->' . $column_name . ';';
 
                 if (isset($column['style_color']) && $column['style_color']) {
-                    $style_color_array = explode(';',$column['style_color']);
-                    foreach($style_color_array as $style_color_validation){
-                        $style_color_parts = explode(',',$style_color_validation);
+                    $style_color_array = explode(';', $column['style_color']);
+                    foreach ($style_color_array as $style_color_validation) {
+                        $style_color_parts = explode(',', $style_color_validation);
                         $campo = $style_color_parts[0];
                         $valor = $style_color_parts[2];
                         $color = $style_color_parts[3];
-                        
-                        $return .=    'if($register->'.$campo.' == '.$valor .'){
-                            $value = new HtmlString( \'<div class="badge badge-outline badge-lg badge-'.$color .'">\'.$register->'.$column_name.'.\'</div>\');
+
+                        $return .=    'if($register->' . $campo . ' == ' . $valor . '){
+                            $value = new HtmlString( \'<div class="badge badge-outline badge-lg badge-' . $color . '">\'.$register->' . $column_name . '.\'</div>\');
                         }
                         ';
-                    }                    
+                    }
                 }
 
                 $return .= '}
@@ -1373,10 +1384,9 @@ class GeneradorCrudService
 
         if (isset($data['rules_sql']) && $data['rules_sql']) {
             $filters_rules .= '
-            $query->whereRaw(\'' . $data['rules_sql'] . '\');
+            $query->whereRaw("' . $data['rules_sql'] . '");
             ';
-        }
-        elseif (isset($data['rules']) && $data['rules']) {
+        } elseif (isset($data['rules']) && $data['rules']) {
             $rules_array = explode(';', $data['rules']);
             foreach ($rules_array as $rule) {
                 $rule_array = explode(',', $rule);
@@ -1406,7 +1416,7 @@ class GeneradorCrudService
         ';
 
         $template_filters_texto = $data['table_column_id'] . ",' ',";
-        $template_filters_texto_fields =  "'".$data['table_column_id'] . "','";
+        $template_filters_texto_fields =  "'" . $data['table_column_id'] . "','";
 
         foreach ($table_columns as $column) {
             $datatable_column_field_name = $column['name'];
@@ -2078,6 +2088,7 @@ class GeneradorCrudService
                 $crud_campos[$tablaCampo . '_select'] = $campo['select'];
                 $crud_campos[$tablaCampo . '_style_color'] = (isset($campo['style_color']) ? $campo['style_color'] : null);
                 $crud_campos[$tablaCampo . '_select_rules'] = (isset($campo['select_rules']) ? $campo['select_rules'] : null);
+                $crud_campos[$tablaCampo . '_select_rules_sql'] = (isset($campo['select_rules_sql']) ? $campo['select_rules_sql'] : null);
                 $crud_campos[$tablaCampo . '_anidado'] = (isset($campo['anidado']) ? $campo['anidado'] : null);
 
                 $crud_campos[$tablaCampo . '_crud_anidado_rules'] = (isset($campo['crud_anidado_rules']) ? $campo['crud_anidado_rules'] : null);

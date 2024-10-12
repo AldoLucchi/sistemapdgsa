@@ -72,7 +72,7 @@
     <tr class="bg-danger">
         <td>
             Reglas SQL Select FK: (requiere Seleccionar FK) para setear una o más reglas de filtrado, en formato SQL
-            <br>Nota: Usar comillas dobles según corresponda
+            <br>Nota: Usar comillas simples según corresponda
         </td>
     </tr>
     <tr class="bg-danger">

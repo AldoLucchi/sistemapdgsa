@@ -53,7 +53,7 @@ class CrudService
             $campos .=  '{"field": "' . $colum->Field . '", "type": "' . $colum->Type . '", "null": "' . $colum->Null . '", "key": "' . $colum->Key . '", "default": "' . $colum->Default . '", "extra": "' . $colum->Extra . '", ';
             $campos .=  '"incluir_campo": ' . $incluir_campo . ', "incluir_list": ' . $incluir_list . ', "indice": ' . $indice . ', "alias": "' . $alias . '", "help": "' . $help . '", ';
             $campos .= '"required": ' . $required  . ', "readonly": ' . $readonly . ', "hidden": ' . $hidden . ', "maxlength": "' . $maxlength . '", "regex": "' . $regex . '", "style_color": "' . $style_color . '",';
-            $campos .=  '"select": "' . $select . '",  "anidado": "' . $anidado . '",  "select_rules": "' . $select_rules . '",'. '",  "select_rules_sql": "' . $select_rules_sql . '",';
+            $campos .=  '"select": "' . $select . '",  "anidado": "' . $anidado . '",  "select_rules": "' . $select_rules .  '",  "select_rules_sql": "' . $select_rules_sql . '",';
             $campos .=  '"crud_anidado_rules": "' . $crud_anidado_rules . '", "dependiente_oculto_rules": "' . $dependiente_oculto_rules . '",';
             $campos .=  '"show_fk": "' . $show_fk . '",  "show_fk_permisos": "' . $show_fk_permisos . '" },';
         }
@@ -64,6 +64,7 @@ class CrudService
         Log::info($campos);
 
         if (!json_validate($campos)) {
+            Log::info('CrudServices - store - campos - json_validate false');
             return false;
         }
 

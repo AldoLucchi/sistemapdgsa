@@ -37,7 +37,7 @@
     <!--begin::Crud-->
     <input type="text" class="form-control" name="reglas_sql" id="reglas_sql" placeholder="" value="{{ (isset($crud)?$crud->reglas_sql:'') }}" />
 
-    <label class="tex-secondary">Usar comillas dobles según corresponda</label>
+    <label class="tex-secondary">Usar comillas simples según corresponda</label>
 
     <!--end::Crud-->
 </div>
