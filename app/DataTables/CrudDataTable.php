@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\HtmlString;
 
 class CrudDataTable extends DataTable
-{    
+{
     //protected $tables;
 
     public function __construct(
@@ -49,7 +49,25 @@ class CrudDataTable extends DataTable
             ->editColumn('estatus', function (Crud $crud) {
                 return   mb_convert_encoding(($crud->estatus ? 'ON' : 'OFF'), 'UTF-8', 'UTF-8');
             })
-            ->editColumn('accordions', function (Crud $crud) use ($cruds) {
+            ->editColumn('crud_accordion_incluido_en', function (Crud $crud) {
+                $accordions = '';
+
+                $campos_array = json_decode($crud->campos);
+                if ($campos_array) {
+                    foreach ($campos_array as $campo) {
+                        if ($campo->show_fk) {
+                            $crud_accordion = Crud::find($campo->show_fk);
+                            if ($crud_accordion) {
+                                $accordions .= $crud_accordion->nombre_componente . ', ';
+                            }
+                        }
+                    }
+                }
+
+
+                return mb_convert_encoding($accordions, 'UTF-8', 'UTF-8');
+            })
+            ->editColumn('accordions_incluidos', function (Crud $crud) use ($cruds) {
                 $accordions = '';
                 foreach ($cruds as $crud_generado) {
                     $campos_array = json_decode($crud_generado->campos);
@@ -87,7 +105,7 @@ class CrudDataTable extends DataTable
      */
     public function html(): HtmlBuilder
     {
-        $pageLength = env('PAGINATE_QUANTITY',10);
+        $pageLength = env('PAGINATE_QUANTITY', 10);
         return $this->builder()
             ->setTableId('crud-table')
             ->columns($this->getColumns())
@@ -111,7 +129,8 @@ class CrudDataTable extends DataTable
             Column::make('alias_opcion')->name('alias_opcion'),
             Column::make('nombre_componente')->name('nombre_componente'),
             Column::make('estatus')->name('estatus'),
-            Column::make('accordions')->name('accordions'),
+            Column::make('crud_accordion_incluido_en')->name('crud_accordion_incluido_en'),
+            Column::make('accordions_incluidos')->name('accordions_incluidos'),
             Column::make('created_at')->title('Created Date')->addClass('text-nowrap'),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')

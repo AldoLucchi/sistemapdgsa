@@ -45,6 +45,7 @@ class CrudService
             $select_rules_sql = (isset($request[$table_name . '_' . $colum->Field . '_select_rules_sql']) ? $request[$table_name . '_' . $colum->Field . '_select_rules_sql'] : null);
 
             $show_fk = (isset($request[$table_name . '_' . $colum->Field . '_show_fk']) ? $request[$table_name . '_' . $colum->Field . '_show_fk'] : null);
+            $show_indice_fk = (isset($request[$table_name . '_' . $colum->Field . '_show_indice_fk']) ? $request[$table_name . '_' . $colum->Field . '_show_indice_fk'] : null);
             $show_fk_permisos = (isset($request[$table_name . '_' . $colum->Field . '_show_fk_permisos']) ? $request[$table_name . '_' . $colum->Field . '_show_fk_permisos'] : null);
             if ($show_fk_permisos) {
                 $show_fk_permisos = implode(',', $show_fk_permisos);
@@ -55,7 +56,7 @@ class CrudService
             $campos .= '"required": ' . $required  . ', "readonly": ' . $readonly . ', "hidden": ' . $hidden . ', "maxlength": "' . $maxlength . '", "regex": "' . $regex . '", "style_color": "' . $style_color . '",';
             $campos .=  '"select": "' . $select . '",  "anidado": "' . $anidado . '",  "select_rules": "' . $select_rules .  '",  "select_rules_sql": "' . $select_rules_sql . '",';
             $campos .=  '"crud_anidado_rules": "' . $crud_anidado_rules . '", "dependiente_oculto_rules": "' . $dependiente_oculto_rules . '",';
-            $campos .=  '"show_fk": "' . $show_fk . '",  "show_fk_permisos": "' . $show_fk_permisos . '" },';
+            $campos .=  '"show_fk": "' . $show_fk . '", "show_indice_fk": ' . $show_indice_fk. ',  "show_fk_permisos": "' . $show_fk_permisos . '" },';
         }
         $campos = substr($campos, 0, -1);
         $campos .= ']';

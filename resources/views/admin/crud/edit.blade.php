@@ -238,17 +238,21 @@
                                                     </td>
                                                 </tr>
                                                 <tr class="bg-warning">
-                                                    <td colspan=3><b>Incluir Acorddion en:</b></td>
-                                                    <td colspan=2><b>Permisos Acorddion</b></td>
+                                                <td colspan="2"><b>Incluir Acorddion en</b></td>
+                                                    <td colspan="1"><b>Índice Acorddion </b></td>
+                                                    <td colspan="2"><b>Permisos Acorddion</b></td>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan=3>
+                                                    <td colspan=2>
                                                         <select name="{{ $key.'_'.$column->Field.'_show_fk' }}" id="{{ $key.'_'.$column->Field.'_show_fk' }}" class="form-select form-select-transparent" aria-label="Seleccione una opción">
                                                             <option value="">---</option>
                                                             @foreach($cruds_generated as $crud_gen)
                                                             <option value="{{ $crud_gen->id }}" {{ ($campoPreference && isset($campoPreference->show_fk) && $campoPreference->show_fk == $crud_gen->id )?'selected':'' }}>{{ $crud_gen->alias_opcion }} | {{ $crud_gen->nombre_componente }} | {{ $crud_gen->nombre }}</option>
                                                             @endforeach
                                                         </select>
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" class="form-input" name="{{ $key.'_'.$column->Field.'_show_indice_fk' }}" id="{{ $key.'_'.$column->Field.'_show_indice_fk' }}" size="2" value="{{ ($campoPreference && isset($campoPreference->show_indice_fk))?$campoPreference->show_indice_fk:'1' }}">
                                                     </td>
                                                     <td colspan=2>
                                                         <select name="{{ $key.'_'.$column->Field.'_show_fk_permisos' }}[]" id="{{ $key.'_'.$column->Field.'_show_fk_permisos' }}" class="form-select form-select-transparent py-5 select2" aria-label="Seleccione una opción" data-control="select2" multiple="multiple">

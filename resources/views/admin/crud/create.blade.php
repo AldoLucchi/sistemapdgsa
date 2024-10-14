@@ -200,17 +200,21 @@
                                                     </td>
                                                 </tr>
                                                 <tr class="bg-warning">
-                                                    <td colspan="3"><b>Incluir Acorddion en</b></td>
+                                                    <td colspan="2"><b>Incluir Acorddion en</b></td>
+                                                    <td colspan="1"><b>Índice Acorddion </b></td>
                                                     <td colspan="2"><b>Permisos Acorddion</b></td>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan="3">
+                                                    <td colspan="2">
                                                         <select name="{{ $table_selected.'_'.$column->Field.'_show_fk' }}" id="{{ $table_selected.'_'.$column->Field.'_show_fk' }}" class="form-select form-select-transparent" aria-label="Seleccione una opción">
                                                             <option value="">---</option>
                                                             @foreach($cruds_generated as $crud)
                                                             <option value="{{ $crud->id }}">{{ $crud->alias_opcion }} | {{ $crud->nombre_componente }} | {{ $crud->nombre }}</option>
                                                             @endforeach
                                                         </select>
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" class="form-input" name="{{ $table_selected.'_'.$column->Field.'_show_indice_fk' }}" id="{{ $table_selected.'_'.$column->Field.'_show_indice_fk' }}" size="2" value="1">
                                                     </td>
                                                     <td colspan="2">
                                                         <select name="{{ $table_selected.'_'.$column->Field.'_show_fk_permisos' }}[]" id="{{ $table_selected.'_'.$column->Field.'_show_fk_permisos' }}" class="form-select form-select-transparent py-5 select2" aria-label="Seleccione una opción" data-control="select2" multiple="multiple">

@@ -32,15 +32,6 @@
                             </a>
                             <!--end::Refresh-->
                         </div>
-                        
-                        <div class="col-6 " id="tableSelectDiv" name="tableSelectDiv">
-                            <select class="form-select form-select-transparent " name="tableSelect" id="tableSelect">
-                                <option value="">-Seleccione una tabla para agregar-</option>
-                                @foreach($tables as $table)
-                                <option value="{{ $table }}">{{ $table }}</option>
-                                @endforeach
-                            </select>
-                        </div>
                         <div class="col-3">
                             <!--begin::Add crud-->
                             <button type="button" id="createCrud" name="createCrud" class="btn btn-primary me-1">
@@ -49,6 +40,14 @@
                             </button>
                             <!--end::Add crud-->
                         </div>
+                        <div class="col-6  d-none" id="tableSelectDiv" name="tableSelectDiv">
+                            <select class="form-select form-select-transparent " name="tableSelect" id="tableSelect">
+                                <option value="">-Seleccione una tabla para agregar-</option>
+                                @foreach($tables as $table)
+                                <option value="{{ $table }}">{{ $table }}</option>
+                                @endforeach
+                            </select>
+                        </div>                       
                     </div>
                 </div>
                 <!--end::Toolbar-->
@@ -84,22 +83,24 @@
 
         document.getElementById('createCrud').addEventListener('click', function() {
             console.log('createCrud');
-            //document.getElementById('tableSelectDiv').classList.remove('d-none');
+            document.getElementById('tableSelectDiv').classList.remove('d-none');
+           /*
             var tableSelected =  document.getElementById('tableSelect').value;
             if(tableSelected ){
                 console.log('tableSelect -- ' + tableSelect);
                 window.location.replace("{{ url('/admin/crud/create' ) }}/" + tableSelected);
             }
+            */
         });
 
-        /*
+        
         document.getElementById('tableSelect').addEventListener('change', function() {
             var tableSelected = this.value;
             console.log('tableSelect -- ' + tableSelect);
 
             window.location.replace("{{ url('/admin/crud/create' ) }}/" + tableSelected);
         });
-        */
+        
     </script>
     @endpush
 
