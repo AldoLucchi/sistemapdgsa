@@ -19,9 +19,8 @@ use Illuminate\Support\Facades\Session;
 
 
 use App\Models\CrudsGenerados;
-
-
-
+use App\Models\Users;
+use App\Models\UsuariosRoles;
 
 //%RELATION_DATATABLE_VARIABLES_USE%
 
@@ -95,9 +94,9 @@ class Accesosdirectos69Controller extends Controller
   public function create()
   {
     $data = [
-
-      "CrudsGenerados" => CrudsGenerados::whereRaw("1 = 1")->get(),
-
+      "CrudsGenerados" => CrudsGenerados::orderBy('nombre_componente', 'ASC')->get(),
+      "roles" => UsuariosRoles::orderBy('rol', 'ASC')->get(),
+      "usuarios" => Users::orderBy('name', 'ASC')->get(),
     ];
 
     return view('cruds/Accesosdirectos69.create', $data);
@@ -165,8 +164,9 @@ class Accesosdirectos69Controller extends Controller
       'documentos' => $documentos,
       'Accesosdirectos69' => Accesosdirectos69::find($Accesosdirectos69),
 
-      "CrudsGenerados" => CrudsGenerados::whereRaw("1 = 1")->get(),
-
+      "CrudsGenerados" => CrudsGenerados::orderBy('nombre_componente', 'ASC')->get(),
+      "roles" => UsuariosRoles::orderBy('rol', 'ASC')->get(),
+      "usuarios" => Users::orderBy('name', 'ASC')->get(),
 
       //%RELATION_DATATABLE_VARIABLES_DATA%
     ];
@@ -190,7 +190,9 @@ class Accesosdirectos69Controller extends Controller
 
       'Accesosdirectos69' => Accesosdirectos69::find($Accesosdirectos69),
 
-      "CrudsGenerados" => CrudsGenerados::whereRaw("1 = 1")->get(),
+      "CrudsGenerados" => CrudsGenerados::orderBy('nombre_componente', 'ASC')->get(),
+      "roles" => UsuariosRoles::orderBy('rol', 'ASC')->get(),
+      "usuarios" => Users::orderBy('name', 'ASC')->get(),
 
     ];
 

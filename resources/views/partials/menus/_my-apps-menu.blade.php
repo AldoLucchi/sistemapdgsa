@@ -24,29 +24,41 @@
 				<div class="row g-2">
 
 					@if(session()->has('accesos_directos'))
-					@foreach(session()->get('accesos_directos') as $acceso_directo)
-					
-					@if(!$acceso_directo->idcrud)
-					<!--begin::Col-->
-					<div class="col-4">
-						<a href="{{ url($acceso_directo->url.'?idproyecto='.session()->get('idproyecto')) }}" class="d-flex flex-column flex-center text-center text-gray-800 text-hover-primary bg-hover-light rounded py-4 px-3 mb-3" target="_blank">
-							<img src="{{ '/images/'.$acceso_directo->icono   }}" class="w-25px h-25px mb-2" alt="" />
-							<span class="fw-semibold">{{ $acceso_directo->titulo }}</span>
-						</a>
-					</div>
-					<!--end::Col-->
-					@elseif($acceso_directo->idcrud && request()->segment(2) && request()->segment(2) == $acceso_directo->CrudDetalle->nombre_componente && request()->segment(3) )
-					<!--begin::Col-->
-					<div class="col-4">
-						<a href="{{ url($acceso_directo->url.request()->segment(3).'&idproyecto='.session()->get('idproyecto') ) }}" class="d-flex flex-column flex-center text-center text-gray-800 text-hover-primary bg-hover-light rounded py-4 px-3 mb-3" target="_blank">
-							<img src="{{ '/images/'.$acceso_directo->icono   }}" class="w-25px h-25px mb-2" alt="" />
-							<span class="fw-semibold">{{ $acceso_directo->titulo }}</span>
-						</a>
-					</div>
-					<!--end::Col-->					
-					@endif
-					@endforeach
-					
+						@foreach(session()->get('accesos_directos') as $acceso_directo)	
+							@if(!$acceso_directo->idrol || $acceso_directo->idrol == session()->get('idrol'))							
+								@if(!$acceso_directo->idusuario || $acceso_directo->idusuario == session()->get('idusuario'))	
+									@php
+										$urlHref = '#';
+									@endphp	
+									@if(!$acceso_directo->idcrud)
+										@php
+											$urlHref = url($acceso_directo->url.'?idproyecto='.session()->get('idproyecto'));
+										@endphp		
+										<!--begin::Col-->
+										<div class="col-4">
+											<a href="{{ $urlHref }}" class="d-flex flex-column flex-center text-center text-gray-800 text-hover-primary bg-hover-light rounded py-4 px-3 mb-3" target="_blank">
+												<img src="{{ '/images/'.$acceso_directo->icono   }}" class="w-25px h-25px mb-2" alt="" />
+												<span class="fw-semibold">{{ $acceso_directo->titulo }}</span>
+											</a>
+										</div>
+										<!--end::Col-->							
+									@elseif($acceso_directo->idcrud && request()->segment(2) && request()->segment(2) == $acceso_directo->CrudDetalle->nombre_componente && request()->segment(3) )
+										@php
+											$urlHref = url($acceso_directo->url.request()->segment(3).'&idproyecto='.session()->get('idproyecto') );
+										@endphp	
+										<!--begin::Col-->
+										<div class="col-4">
+											<a href="{{ $urlHref }}" class="d-flex flex-column flex-center text-center text-gray-800 text-hover-primary bg-hover-light rounded py-4 px-3 mb-3" target="_blank">
+												<img src="{{ '/images/'.$acceso_directo->icono   }}" class="w-25px h-25px mb-2" alt="" />
+												<span class="fw-semibold">{{ $acceso_directo->titulo }}</span>
+											</a>
+										</div>
+										<!--end::Col-->												
+									@endif
+									
+								@endif
+							@endif
+						@endforeach					
 					@endif
 
 				</div>

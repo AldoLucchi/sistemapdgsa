@@ -12,7 +12,8 @@ class Accesosdirectos69 extends Model
     protected $table = "vtc_accesosdirectos";
 
     protected $fillable = [
-        'idaccesodirecto', 'titulo', 'idtipo', 'icono', 'url', 'idcrud',
+        'idaccesodirecto', 'titulo', 'idaccesodirectotipo', 'icono', 'url', 'idcrud', 'idrol', 'idusuario' 
+        // 'idtipo',
     ];
 
     /**
