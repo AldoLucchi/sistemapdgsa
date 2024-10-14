@@ -567,10 +567,9 @@ class GeneradorCrudService
                 if (isset($column['select_rules_sql'])) {
 
                     $tabla_get  .= '
-                            $' . $model_name_fk . ' = $' . $model_name_fk . '->whereRaw("' .$column['select_rules_sql']. '");
+                            $' . $model_name_fk . ' = $' . $model_name_fk . '->whereRaw("' . $column['select_rules_sql'] . '");
                         ';
-                }
-                elseif (isset($column['select_rules'])) {
+                } elseif (isset($column['select_rules'])) {
                     $select_rules_array = explode(';', $column['select_rules']);
                     foreach ($select_rules_array as $rule) {
                         $rule_array = explode(',', $rule);
@@ -578,7 +577,6 @@ class GeneradorCrudService
                             $' . $model_name_fk . ' = $' . $model_name_fk . '->where("' . $rule_array[0] . '", "' . $rule_array[1] . '","' . $rule_array[2] . '");
                         ';
                     }
-                    
                 }
 
 
@@ -1021,6 +1019,7 @@ class GeneradorCrudService
             $column_text_help = "";
             $column_anidado = "";
             $column_hidden = "";
+            $column_disabled = "";
 
             if (isset($column['alias'])) {
                 $show_column_name_alias = $column['alias'];
@@ -1035,7 +1034,11 @@ class GeneradorCrudService
                 $column_required = "required";
                 $column_required_icon = '<label class="text-danger">*</label>';
             }
-            if (in_array($column['name'], $columns_oculto_depends) || (isset($column['hidden']) && $column['hidden'])) {
+            if (in_array($column['name'], $columns_oculto_depends)) {
+                $column_hidden = "display:none;";
+                $column_disabled = 'disabled="true"';
+            }
+            if ((isset($column['hidden']) && $column['hidden'])) {
                 $column_hidden = "display:none;";
             }
 
@@ -1226,6 +1229,7 @@ class GeneradorCrudService
             }
 
             $template = str_replace('%FIELD_HIDDEN%', $column_hidden, $template);
+            $template = str_replace('%FIELD_DISABLED%', $column_disabled, $template);
             $template = str_replace('%FIELD_READONLY%', $column_readonly, $template);
             $template = str_replace('%FIELD_REQUIRED%', $column_required, $template);
             $template = str_replace('%FIELD_REQUIRED_ICON%', $column_required_icon, $template);
