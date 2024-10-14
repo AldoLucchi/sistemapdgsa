@@ -1120,13 +1120,18 @@ class GeneradorCrudService
 
                             foreach ($detalle_campos_oculto as $detalle_campo_oculto) {
                                 $campo_dependiente_oculto_var .= '
-                                var ' . $detalle_campo_oculto . 'OcultoElement = document.getElementById("div_' . $detalle_campo_oculto . '");';
+                                var ' . $detalle_campo_oculto . 'OcultoElement = document.getElementById("div_' . $detalle_campo_oculto . '");
+                                var ' . $detalle_campo_oculto . 'DisableElement = document.getElementById("' . $detalle_campo_oculto . '");
+                                ';
 
                                 $campo_dependiente_oculto_none .= '
-                                ' . $detalle_campo_oculto . 'OcultoElement.style.display = "none";';
+                                ' . $detalle_campo_oculto . 'OcultoElement.style.display = "none";
+                                ' . $detalle_campo_oculto . 'DisableElement.disabled = true;
+                                ';
 
                                 $campo_dependiente_oculto_block .= '
                                 ' . $detalle_campo_oculto . 'OcultoElement.style.display = "block";
+                                ' . $detalle_campo_oculto . 'DisableElement.disabled = false;
                                 ';
                             }
 
