@@ -214,7 +214,7 @@
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <input type="number" class="form-input" name="{{ $table_selected.'_'.$column->Field.'_show_indice_fk' }}" id="{{ $table_selected.'_'.$column->Field.'_show_indice_fk' }}" size="2" value="1">
+                                                        <input type="number" class="form-input" name="{{ $table_selected.'_'.$column->Field.'_show_fk_indice' }}" id="{{ $table_selected.'_'.$column->Field.'_show_fk_indice' }}" min="1" max="9" step="1" value="1">
                                                     </td>
                                                     <td colspan="2">
                                                         <select name="{{ $table_selected.'_'.$column->Field.'_show_fk_permisos' }}[]" id="{{ $table_selected.'_'.$column->Field.'_show_fk_permisos' }}" class="form-select form-select-transparent py-5 select2" aria-label="Seleccione una opción" data-control="select2" multiple="multiple">

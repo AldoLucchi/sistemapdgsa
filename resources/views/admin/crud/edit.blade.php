@@ -252,7 +252,7 @@
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <input type="number" class="form-input" name="{{ $key.'_'.$column->Field.'_show_indice_fk' }}" id="{{ $key.'_'.$column->Field.'_show_indice_fk' }}" size="2" value="{{ ($campoPreference && isset($campoPreference->show_indice_fk))?$campoPreference->show_indice_fk:'1' }}">
+                                                        <input type="number" class="form-input" name="{{ $key.'_'.$column->Field.'_show_fk_indice' }}" id="{{ $key.'_'.$column->Field.'_show_fk_indice' }}" min="1" max="9" step="1" value="{{ ($campoPreference && isset($campoPreference->show_fk_indice))?$campoPreference->show_fk_indice:'1' }}">
                                                     </td>
                                                     <td colspan=2>
                                                         <select name="{{ $key.'_'.$column->Field.'_show_fk_permisos' }}[]" id="{{ $key.'_'.$column->Field.'_show_fk_permisos' }}" class="form-select form-select-transparent py-5 select2" aria-label="Seleccione una opción" data-control="select2" multiple="multiple">

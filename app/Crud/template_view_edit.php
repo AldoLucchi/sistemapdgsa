@@ -101,25 +101,7 @@
         <!--end::Card body-->
     </div>
 
-    @push('scripts')
-
-    <!-- %RELATIONS_DATATABLE_SCRIPTS_1% -->
-
-    <!-- %RELATIONS_DATATABLE_SCRIPTS_2% -->
-
-    <!-- %RELATIONS_DATATABLE_SCRIPTS_3% -->
-
-    <!-- %RELATIONS_DATATABLE_SCRIPTS_4% -->
-
-    <!-- %RELATIONS_DATATABLE_SCRIPTS_5% -->
-
-    <!-- %RELATIONS_DATATABLE_SCRIPTS_6% -->
-
-    <!-- %RELATIONS_DATATABLE_SCRIPTS_7% -->
-
-    <!-- %RELATIONS_DATATABLE_SCRIPTS_8% -->
-
-    <!-- %RELATIONS_DATATABLE_SCRIPTS_9% -->
+    @push('scripts')    
 
     <!-- %RELATIONS_DATATABLE_SCRIPTS% -->
 

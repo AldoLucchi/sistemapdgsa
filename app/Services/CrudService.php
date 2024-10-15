@@ -45,7 +45,7 @@ class CrudService
             $select_rules_sql = (isset($request[$table_name . '_' . $colum->Field . '_select_rules_sql']) ? $request[$table_name . '_' . $colum->Field . '_select_rules_sql'] : null);
 
             $show_fk = (isset($request[$table_name . '_' . $colum->Field . '_show_fk']) ? $request[$table_name . '_' . $colum->Field . '_show_fk'] : null);
-            $show_indice_fk = (isset($request[$table_name . '_' . $colum->Field . '_show_indice_fk']) ? $request[$table_name . '_' . $colum->Field . '_show_indice_fk'] : null);
+            $show_fk_indice = (isset($request[$table_name . '_' . $colum->Field . '_show_fk_indice']) ? $request[$table_name . '_' . $colum->Field . '_show_fk_indice'] : null);
             $show_fk_permisos = (isset($request[$table_name . '_' . $colum->Field . '_show_fk_permisos']) ? $request[$table_name . '_' . $colum->Field . '_show_fk_permisos'] : null);
             if ($show_fk_permisos) {
                 $show_fk_permisos = implode(',', $show_fk_permisos);
@@ -56,7 +56,7 @@ class CrudService
             $campos .= '"required": ' . $required  . ', "readonly": ' . $readonly . ', "hidden": ' . $hidden . ', "maxlength": "' . $maxlength . '", "regex": "' . $regex . '", "style_color": "' . $style_color . '",';
             $campos .=  '"select": "' . $select . '",  "anidado": "' . $anidado . '",  "select_rules": "' . $select_rules .  '",  "select_rules_sql": "' . $select_rules_sql . '",';
             $campos .=  '"crud_anidado_rules": "' . $crud_anidado_rules . '", "dependiente_oculto_rules": "' . $dependiente_oculto_rules . '",';
-            $campos .=  '"show_fk": "' . $show_fk . '", "show_indice_fk": ' . $show_indice_fk. ',  "show_fk_permisos": "' . $show_fk_permisos . '" },';
+            $campos .=  '"show_fk": "' . $show_fk . '", "show_fk_indice": ' . $show_fk_indice. ',  "show_fk_permisos": "' . $show_fk_permisos . '" },';
         }
         $campos = substr($campos, 0, -1);
         $campos .= ']';
@@ -65,7 +65,9 @@ class CrudService
         Log::info($campos);
 
         if (!json_validate($campos)) {
-            Log::info('CrudServices - store - campos - json_validate false');
+            $message_crud_error = 'CrudServices - store - campos - json_validate false';
+            Log::info($message_crud_error);            
+            session(['message-crud-error' => $message_crud_error]);
             return false;
         }
 
@@ -104,6 +106,7 @@ class CrudService
             return $crud;
         } catch (Exception $e) {
             Log::info('CrudServices - store - Exception ' . $e->getMessage());
+            session(['message-crud-error' => 'CrudServices - store - Exception ' . $e->getMessage()]);
 
             return false;
         }
@@ -143,6 +146,7 @@ class CrudService
             return $crud;
         } catch (Exception $e) {
             Log::info('CrudServices - update - Exception ' . $e->getMessage());
+            session(['message-crud-error' => 'CrudServices - update - Exception ' . $e->getMessage()]);
 
             return false;
         }

@@ -111,6 +111,7 @@ class GeneradorCrudService
 
                 $column_show_fk = $table_crud . '_' . $colum->Field . '_show_fk';
                 $column_show_fk_permisos = $table_crud . '_' . $colum->Field . '_show_fk_permisos';
+                $column_show_fk_indice = $table_crud . '_' . $colum->Field . '_show_fk_indice';
 
                 $type_html = 'text'; //varchar text
 
@@ -227,17 +228,20 @@ class GeneradorCrudService
                     if (isset($request[$column_select_dependiente_oculto_rules]) && !empty($request[$column_select_dependiente_oculto_rules]) &&  $column_select_dependiente_oculto_rules && $column_select_dependiente_oculto_rules != 'NULL' && $column_select_dependiente_oculto_rules != NULL) {
                         $table_column_detail['dependiente_oculto_rules'] = $request[$column_select_dependiente_oculto_rules];
                     }
-
-                    //
-
                 }
 
                 if (isset($request[$column_show_fk]) && !empty($request[$column_show_fk]) &&  $column_show_fk && $column_show_fk != 'NULL' && $column_show_fk != NULL) {
                     $table_column_detail['select_crud_relation'] = $request[$column_show_fk];
                     $tables_crud_relation_fk[$colum->Field]['crud'] = $request[$column_show_fk];
+
                     if (isset($request[$column_show_fk_permisos]) && !empty($request[$column_show_fk_permisos]) &&  $column_show_fk_permisos && $column_show_fk_permisos != 'NULL' && $column_show_fk_permisos != NULL) {
                         $table_column_detail['select_crud_relation_permisos'] = $request[$column_show_fk_permisos];
                         $tables_crud_relation_fk[$colum->Field]['permisos'] = $request[$column_show_fk_permisos];
+                    }
+
+                    if (isset($request[$column_show_fk_indice]) && !empty($request[$column_show_fk_indice]) &&  $column_show_fk_indice && $column_show_fk_indice != 'NULL' && $column_show_fk_indice != NULL) {
+                        $table_column_detail['select_crud_relation_indice'] = $request[$column_show_fk_indice];
+                        $tables_crud_relation_fk[$colum->Field]['indice'] = $request[$column_show_fk_indice];
                     }
                 }
 
@@ -314,9 +318,6 @@ class GeneradorCrudService
                     $table_name_fk_format .= ucfirst($tring);
                 }
 
-                //crud relation
-                //$crud_relation =
-
                 //data fk
                 $table_fk_data = [
                     'table_fullname_fk' => $table_fk,
@@ -366,6 +367,7 @@ class GeneradorCrudService
             return true;
         } catch (Exception $e) {
             Log::info('GeneradorCrudService - store - Exception ' . $e->getMessage());
+            session(['message-crud-error' => 'GeneradorCrudService - store - Exception ' . $e->getMessage()]);
 
             return false;
         }
@@ -1724,6 +1726,7 @@ class GeneradorCrudService
         foreach ($data['tables_crud_relation_fk'] as $keyCrud => $crud_relation) {
             $crud = Crud::find($crud_relation['crud']);
             $permisos = (isset($crud_relation['permisos']) ? $crud_relation['permisos'] : null);
+            $indice = (isset($crud_relation['indice']) ? $crud_relation['indice'] : 1);
             Log::info($keyCrud);
             Log::info($crud_relation);
 
@@ -1737,10 +1740,11 @@ class GeneradorCrudService
                 $datatableName = $crud->nombre_componente . 'DataTable';
                 $componentName = $crud->nombre_componente;
                 $viewShowName = 'show';
+                $fileControllerName = '../app/Http/Controllers/Crud/' . $controllerName . '.php';
 
-                if (file_exists('../app/Http/Controllers/Crud/' . $controllerName . '.php')) {
+                if (file_exists($fileControllerName)) {
                     Log::info('GeneradorCrudService - generateCrudRelations - controller - exist');
-                    $template_controller = file_get_contents('../app/Http/Controllers/Crud/' . $controllerName . '.php');
+                    $template_controller = file_get_contents($fileControllerName);
 
                     //$search_datatable = 'use App\DataTables\\' . $tableNameDatatable . ';';
                     $create = false;
@@ -1834,15 +1838,22 @@ class GeneradorCrudService
                     $template_edit = file_get_contents('../resources/views/cruds/' . $componentName . '/edit.blade.php');
                     $search = 'datatable_' . $crudName;
 
+                    Log::info('GeneradorCrudService - generateCrudRelations -  search - '.$search);
+
                     if (!str_contains($template_edit, $search)) {
                         $template_datatable = '
                     @include("cruds.' . $componentName . '.datatable_' . $crudName . '")
     
-                    <!-- %RELATIONS_DATATABLE% -->
+                    <!-- %RELATIONS_DATATABLE_' . $indice . '% -->
                     ';
 
-                        $template_edit = str_replace("<!-- %RELATIONS_DATATABLE% -->", $template_datatable, $template_edit);
-                        $template_show = str_replace("<!-- %RELATIONS_DATATABLE% -->", $template_datatable, $template_show);
+                        $relation_datatable_indice = "<!-- %RELATIONS_DATATABLE_".$indice."% -->";
+
+                        Log::info('GeneradorCrudService - generateCrudRelations -  relation_datatable_indice - '.$relation_datatable_indice);
+
+
+                        $template_edit = str_replace($relation_datatable_indice, $template_datatable, $template_edit);
+                        $template_show = str_replace($relation_datatable_indice, $template_datatable, $template_show);
 
                         $template_datatable_script = '                  
                     {{$dataTable' . $crudName . '->scripts()}}
@@ -1862,7 +1873,7 @@ class GeneradorCrudService
                         fclose($file_show);
                     }
                 } else {
-                    Log::info('GeneradorCrudService - generateCrudRelations - controller - no exist');
+                    Log::info('GeneradorCrudService - generateCrudRelations - controller - no exist - ' . $fileControllerName);
                 }
             }
         }
@@ -2107,6 +2118,7 @@ class GeneradorCrudService
 
                 $crud_campos[$tablaCampo . '_show_fk'] = (isset($campo['show_fk']) ? $campo['show_fk'] : null);
                 $crud_campos[$tablaCampo . '_show_fk_permisos'] = (isset($campo['show_fk_permisos']) ? $campo['show_fk_permisos'] : null);
+                $crud_campos[$tablaCampo . '_show_fk_indice'] = (isset($campo['show_fk_indice']) ? $campo['show_fk_indice'] : null);
             }
 
             $result = $this->store($crud_campos);

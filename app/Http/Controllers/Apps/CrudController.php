@@ -114,6 +114,9 @@ class CrudController extends Controller
             'alias_opcion' => 'required',
         ]);
 
+        $message_crud_error = '';
+        session()->put('message-crud-error', '');
+
         try {
             $request['estatus'] = 1;
             $crud = $this->crudService->store($request->all());
@@ -131,11 +134,21 @@ class CrudController extends Controller
                 }
             }
 
-            return redirect('/admin/crud')->with('message-error', 'Ha ocurrido un error al intentar guardar los datos del CRUD. Por favor, revise los valores ingresados en los campos');
+            
+            if(session()->has('message-crud-error')){
+                $message_crud_error = session()->get('message-crud-error');
+            }
+
+            return redirect('/admin/crud')->with('message-error', 'Ha ocurrido un error al intentar guardar los datos del CRUD. Por favor, revise los valores ingresados en los campos. '.$message_crud_error );
         } catch (Exception $e) {
             return redirect('/admin/crud')->with('message-error', $e->getMessage());
         }
-        return redirect('/admin/crud')->with('message-error', 'No se ha podido completar la generación de CRUD');
+
+        if(session()->has('message-crud-error')){
+            $message_crud_error = session()->get('message-crud-error');
+        }
+
+        return redirect('/admin/crud')->with('message-error', 'No se ha podido completar la generación de CRUD. '.$message_crud_error);
     }
 
 
