@@ -76,7 +76,23 @@
                     </div>
                 </div>
 
-                <!-- %RELATIONS_DATATABLE% -->
+                <!-- %RELATIONS_DATATABLE_1% -->
+
+                <!-- %RELATIONS_DATATABLE_2% -->                
+
+                <!-- %RELATIONS_DATATABLE_3% -->                
+
+                <!-- %RELATIONS_DATATABLE_4% -->
+                 
+                <!-- %RELATIONS_DATATABLE_5% -->
+                 
+                <!-- %RELATIONS_DATATABLE_6% -->
+                 
+                <!-- %RELATIONS_DATATABLE_7% -->
+                 
+                <!-- %RELATIONS_DATATABLE_8% -->
+                 
+                <!-- %RELATIONS_DATATABLE_9% -->                
 
             </div>
         </div>
@@ -85,7 +101,24 @@
 
     @push('scripts')
 
-     <!-- %RELATIONS_DATATABLE_SCRIPTS% -->
+    <!-- %RELATIONS_DATATABLE_SCRIPTS_1% -->
+
+    <!-- %RELATIONS_DATATABLE_SCRIPTS_2% -->
+
+    <!-- %RELATIONS_DATATABLE_SCRIPTS_3% -->
+
+    <!-- %RELATIONS_DATATABLE_SCRIPTS_4% -->
+
+    <!-- %RELATIONS_DATATABLE_SCRIPTS_5% -->
+
+    <!-- %RELATIONS_DATATABLE_SCRIPTS_6% -->
+
+    <!-- %RELATIONS_DATATABLE_SCRIPTS_7% -->
+
+    <!-- %RELATIONS_DATATABLE_SCRIPTS_8% -->
+
+    <!-- %RELATIONS_DATATABLE_SCRIPTS_9% -->
+
     @include('cruds.%OBJETO_VIEW%.scripts')
     @endpush
 

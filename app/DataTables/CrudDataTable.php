@@ -113,7 +113,7 @@ class CrudDataTable extends DataTable
             ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
-            ->orderBy(0, 'desc')
+            ->orderBy(0)
             ->pageLength($pageLength)
             ->drawCallback("function() {" . file_get_contents(resource_path('views/admin/crud/columns/_draw-scripts.js')) . "}");
     }
@@ -124,13 +124,13 @@ class CrudDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('id')->name('id'),
-            Column::make('nombre')->name('nombre'),
-            Column::make('alias_opcion')->name('alias_opcion'),
-            Column::make('nombre_componente')->name('nombre_componente'),
-            Column::make('estatus')->name('estatus'),
-            Column::make('crud_accordion_incluido_en')->name('crud_accordion_incluido_en'),
-            Column::make('accordions_incluidos')->name('accordions_incluidos'),
+            Column::make('id')->title('id'),
+            Column::make('nombre')->title('nombre'),
+            Column::make('alias_opcion')->title('alias opcion'),
+            Column::make('nombre_componente')->title('nombre componente'),
+            Column::make('estatus')->title('estatus'),
+            Column::make('crud_accordion_incluido_en')->title('crud accordion incluido en')->orderable(false),
+            Column::make('accordions_incluidos')->title('accordions incluidos')->orderable(false),
             Column::make('created_at')->title('Created Date')->addClass('text-nowrap'),
             Column::computed('action')
                 ->addClass('text-end text-nowrap')

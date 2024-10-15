@@ -1429,12 +1429,14 @@ class GeneradorCrudService
 
         foreach ($table_columns as $column) {
             $datatable_column_field_name = $column['name'];
+            $datatable_column_field_title = $column['name'];
             if (isset($column['alias']) && $column['name'] != $data['table_column_id']) {
-                $datatable_column_field_name = $column['alias'];
+                $datatable_column_field_title = $column['alias'];
             }
 
             $template_columns_replace = $template_columns;
             $template_columns_replace = str_replace('%FIELD%', $datatable_column_field_name, $template_columns_replace);
+            $template_columns_replace = str_replace('%FIELD_TITLE%', $datatable_column_field_title, $template_columns_replace);
             $template_columns_all .=  $template_columns_replace;
 
             if (isset($column['incluir_list'])) {

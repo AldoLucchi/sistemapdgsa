@@ -37,7 +37,7 @@
     <!--begin::Crud-->
     <input type="text" class="form-control" name="reglas_sql" id="reglas_sql" placeholder="" value="{{ (isset($crud)?$crud->reglas_sql:'') }}" />
 
-    <label class="tex-secondary">Usar comillas simples según corresponda</label>
+    <label class="tex-secondary">Usar comillas simples según corresponda. Y en caso de utilizar OR, usarlo dentro de paréntesis.</label>
 
     <!--end::Crud-->
 </div>

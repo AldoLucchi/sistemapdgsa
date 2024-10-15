@@ -109,7 +109,7 @@
             <td>Reglas SQL Select FK:</td>
             <td>
                 (requiere Seleccionar FK) para setear una o más reglas de filtrado, en formato SQL
-                <br>Nota: Usar comillas simples según corresponda
+                <br>Nota: Usar comillas simples según corresponda. Y en caso de utilizar OR, usarlo dentro de paréntesis.
             </td>
             <td></td>
         </tr>
