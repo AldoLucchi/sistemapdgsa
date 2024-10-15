@@ -84,6 +84,8 @@
                  
                 <!-- %RELATIONS_DATATABLE_9% -->  
 
+                 <!-- %RELATIONS_DATATABLE% -->
+
             </div>
 
             <!--end::Table-->
@@ -110,6 +112,8 @@
     <!-- %RELATIONS_DATATABLE_SCRIPTS_8% -->
 
     <!-- %RELATIONS_DATATABLE_SCRIPTS_9% -->
+
+    <!-- %RELATIONS_DATATABLE_SCRIPTS% -->
 
     @include('cruds.%OBJETO_VIEW%.scripts')
     @endpush

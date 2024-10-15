@@ -92,8 +92,10 @@ class %OBJETO_DATATABLE% extends DataTable
             $resultBuscarArray = json_decode($resultBuscar);
             $resultBuscarArrayIds = [];
 
-            foreach ($resultBuscarArray as $item) {
-                $resultBuscarArrayIds[] = $item->%FIELD_ID%;
+            foreach ($resultBuscarArray as $key => $item) {
+                if($key <= env('SEARCH_LIMIT',6)){
+                    $resultBuscarArrayIds[] = $item->%FIELD_ID%;
+                }
             }
 
             $query->whereIn('%FIELD_ID%', $resultBuscarArrayIds);
@@ -130,7 +132,7 @@ class %OBJETO_DATATABLE% extends DataTable
             ->dom('rt' . "<'row'<'col-sm-12 col-md-5'l><'col-sm-12 col-md-7'p>>",)
             ->addTableClass('table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold')
             ->setTableHeadClass('text-start text-muted fw-bold fs-7 text-uppercase gs-0')
-            ->orderBy(0, 'desc')
+            ->orderBy(0)
             ->pageLength($pageLength)
             ->drawCallback("function() {" . file_get_contents(resource_path('views/cruds/%OBJETO_VIEW%/columns/_draw-scripts.js')) . "}");
     }

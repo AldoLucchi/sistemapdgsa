@@ -94,6 +94,8 @@
                  
                 <!-- %RELATIONS_DATATABLE_9% -->                
 
+                <!-- %RELATIONS_DATATABLE% -->   
+
             </div>
         </div>
         <!--end::Card body-->
@@ -118,6 +120,8 @@
     <!-- %RELATIONS_DATATABLE_SCRIPTS_8% -->
 
     <!-- %RELATIONS_DATATABLE_SCRIPTS_9% -->
+
+    <!-- %RELATIONS_DATATABLE_SCRIPTS% -->
 
     @include('cruds.%OBJETO_VIEW%.scripts')
     @endpush
