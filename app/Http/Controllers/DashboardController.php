@@ -61,6 +61,11 @@ class DashboardController extends Controller
 
         if ($user->rol) {
             Session::put('rolvisibilidad', $user->rol->idvisibilidad);
+            $rolexclude = null;
+            if($user->rol->exclude){
+                $rolexclude = explode(',',$user->rol->exclude);
+            }
+            Session::put('rolexclude', $rolexclude);
         }
 
         if (Session::has('idproyecto') && Session::get('idproyecto')) {

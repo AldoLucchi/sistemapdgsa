@@ -1454,10 +1454,22 @@ class GeneradorCrudService
 
 
             if ($column['name'] == 'idusuario') {
-                $template_queries_replace = "if(Session::has('rolvisibilidad') && Session::get('rolvisibilidad') && Session::get('rolvisibilidad') > 1){";
-                $template_queries_replace .= $template_datatable_queries;
-                $template_queries_replace = str_replace('%FIELD%', $column['name'], $template_queries_replace);
-                $template_queries_replace .= "}";
+                $template_queries_replace = '
+                if(Session::has("rolvisibilidad") && Session::get("rolvisibilidad") && Session::get("rolvisibilidad") > 1){
+                    $rolexclude = null;
+                    if (Session::has("rolexclude") && Session::get("rolexclude")) {
+                        $rolexclude = Session::get("rolexclude");
+                    }
+                    if (!$rolexclude || !in_array("'.$data['table_fullname'].'", $rolexclude)) {
+                        if (Session::has("idusuario") && Session::get("idusuario")) {
+                            $query->where("idusuario", Session::get("idusuario"));
+                        }
+                    } 
+                }                   
+                ';
+                //$template_queries_replace .= $template_datatable_queries;
+                //$template_queries_replace = str_replace('%FIELD%', $column['name'], $template_queries_replace);
+                //$template_queries_replace .= "}";
 
                 $template_datatable_queries_all .=  $template_queries_replace;
             }
