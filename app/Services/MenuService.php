@@ -27,7 +27,7 @@ class MenuService
 
         $menues = [];
 
-        $menu_asignados_all = MenuesAsignados101::all();
+        $menu_asignados_all = MenuesAsignados101::orderBy('posicion', 'ASC')->get();
         $user = Auth::user();
         $id_proyecto_seleccionado = session()->get('idproyecto');
 
