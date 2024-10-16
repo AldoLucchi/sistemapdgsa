@@ -115,7 +115,7 @@ class %OBJETO_CONTROLLER% extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
       $rutaCrud = '/crud/%OBJETO_ROUTE%';
 
@@ -237,7 +237,7 @@ class %OBJETO_CONTROLLER% extends Controller
      * @param  %OBJETO% $%OBJETO_VARIABLE%
      * @return \Illuminate\Http\Response
      */
-    public function edit($%OBJETO_VARIABLE%)
+    public function edit(Request $request, $%OBJETO_VARIABLE%)
     {
       $rutaCrud = '/crud/%OBJETO_ROUTE%';
 

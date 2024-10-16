@@ -1983,10 +1983,16 @@ class GeneradorCrudService
 
         $content = str_replace('%OBJETO_ROUTE%', $data['crud_name'], $content);
 
+        $accion_no_disponible = '
+        if(!isset($request["redirect_url"])){
+            return redirect($rutaCrud)->with("message-error","Acción no disponible");
+        }
+        ';
+
         if (!$data['crud_permisos_create']) {
             $content = str_replace('%OBJETO_CREATE%', 'd-none', $content);
             $content = str_replace('%OBJETO_CREATE_CHECK%', 'false', $content);
-            $content = str_replace('%OBJETO_CONTROLLER_CREATE%', 'return redirect($rutaCrud)->with("message-error","Acción no disponible");', $content);
+            $content = str_replace('%OBJETO_CONTROLLER_CREATE%', $accion_no_disponible, $content);
         } else {
             $content = str_replace('%OBJETO_CREATE%', '', $content);
             $content = str_replace('%OBJETO_CREATE_CHECK%', 'true', $content);
@@ -1995,7 +2001,7 @@ class GeneradorCrudService
         if (!$data['crud_permisos_read']) {
             $content = str_replace('%OBJETO_READ%', 'd-none', $content);
             $content = str_replace('%OBJETO_READ_CHECK%', 'false', $content);
-            $content = str_replace('%OBJETO_CONTROLLER_READ%', 'return redirect($rutaCrud)->with("message-error","Acción no disponible");', $content);
+            $content = str_replace('%OBJETO_CONTROLLER_READ%', $accion_no_disponible, $content);
         } else {
             $content = str_replace('%OBJETO_READ%', '', $content);
             $content = str_replace('%OBJETO_READ_CHECK%', 'true', $content);
@@ -2004,7 +2010,7 @@ class GeneradorCrudService
         if (!$data['crud_permisos_update']) {
             $content = str_replace('%OBJETO_UPDATE%', 'd-none', $content);
             $content = str_replace('%OBJETO_UPDATE_CHECK%', 'false', $content);
-            $content = str_replace('%OBJETO_CONTROLLER_UPDATE%', 'return redirect($rutaCrud)->with("message-error","Acción no disponible");', $content);
+            $content = str_replace('%OBJETO_CONTROLLER_UPDATE%', $accion_no_disponible, $content);
         } else {
             $content = str_replace('%OBJETO_UPDATE%', '', $content);
             $content = str_replace('%OBJETO_UPDATE_CHECK%', 'true', $content);
@@ -2013,7 +2019,7 @@ class GeneradorCrudService
         if (!$data['crud_permisos_delete']) {
             $content = str_replace('%OBJETO_DELETE%', 'd-none', $content);
             $content = str_replace('%OBJETO_DELETE_CHECK%', 'false', $content);
-            $content = str_replace('%OBJETO_CONTROLLER_DELETE%', 'return redirect($rutaCrud)->with("message-error","Acción no disponible");', $content);
+            $content = str_replace('%OBJETO_CONTROLLER_DELETE%', $accion_no_disponible, $content);
         } else {
             $content = str_replace('%OBJETO_DELETE%', '', $content);
             $content = str_replace('%OBJETO_DELETE_CHECK%', 'true', $content);
