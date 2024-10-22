@@ -1310,14 +1310,13 @@ class GeneradorCrudService
         });
 
         foreach ($table_columns as $column) {
-            $datatable_column = $column['name'];
             $datatable_column_name = $column['name'];
             if (isset($column['alias']) && $column['name'] != $data['table_column_id']) {
                 $datatable_column_name = $column['alias'];
             }
             if (isset($column['select'])) {
                 $template_fields_replace = $template_fields;
-                $template_fields_replace = str_replace('%FIELD%', $datatable_column, $template_fields_replace);
+                $template_fields_replace = str_replace('%FIELD%', $datatable_column_name, $template_fields_replace);
                 $model_name = $data['tables_fk'][$column['name']]['table_name_fk'];
                 $column_name = $data['tables_fk'][$column['name']]['table_column_fk_name'];
 
